@@ -1,0 +1,265 @@
+import { useState } from "react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Heart, Check, Users, GraduationCap, Home, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+
+const Donate = () => {
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(5000);
+  const [customAmount, setCustomAmount] = useState("");
+  const [donorInfo, setDonorInfo] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  const donationTiers = [
+    { amount: 2000, label: "₦2,000", impact: "School supplies for 1 child" },
+    { amount: 5000, label: "₦5,000", impact: "Week of meals for a family" },
+    { amount: 10000, label: "₦10,000", impact: "Vocational training materials" },
+    { amount: 25000, label: "₦25,000", impact: "Monthly scholarship for 1 student" },
+  ];
+
+  const impactAreas = [
+    {
+      icon: GraduationCap,
+      title: "Education",
+      description: "Support scholarships and educational materials",
+    },
+    {
+      icon: Users,
+      title: "Empowerment",
+      description: "Fund vocational training and microloans",
+    },
+    {
+      icon: Home,
+      title: "Shelter",
+      description: "Provide safe housing for abuse survivors",
+    },
+    {
+      icon: Heart,
+      title: "General Fund",
+      description: "Support all our programs and initiatives",
+    },
+  ];
+
+  const handleDonate = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!donorInfo.name.trim() || !donorInfo.email.trim()) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const amount = customAmount ? parseInt(customAmount) : selectedAmount;
+    
+    if (!amount || amount < 1000) {
+      toast.error("Minimum donation amount is ₦1,000");
+      return;
+    }
+
+    // Here you would integrate with Paystack, Flutterwave, or Stripe
+    toast.success(`Thank you for your donation of ₦${amount.toLocaleString()}! Redirecting to payment...`);
+    
+    // Payment integration would go here
+  };
+
+  return (
+    <div className="min-h-screen">
+      <Navigation />
+      <main>
+        {/* Hero Section */}
+        <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full blur-glass border border-accent/20 mb-4">
+                <Sparkles className="h-5 w-5 text-accent" />
+                <span className="text-sm font-medium">Every Gift Makes a Difference</span>
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold">
+                Support Our <span className="text-primary">Mission</span>
+              </h1>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Your generosity transforms lives. Help us empower widows, educate orphans, and build stronger communities.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Donation Form */}
+        <section className="py-24 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+              {/* Left: Donation Form */}
+              <div className="animate-fade-in-up">
+                <Card className="border-0 shadow-soft">
+                  <CardContent className="p-8">
+                    <h2 className="text-3xl font-bold mb-6">Make a Donation</h2>
+                    
+                    <form onSubmit={handleDonate} className="space-y-6">
+                      {/* Donation Amount */}
+                      <div className="space-y-4">
+                        <label className="text-sm font-medium">Select Amount</label>
+                        <div className="grid grid-cols-2 gap-3">
+                          {donationTiers.map((tier) => (
+                            <button
+                              key={tier.amount}
+                              type="button"
+                              onClick={() => {
+                                setSelectedAmount(tier.amount);
+                                setCustomAmount("");
+                              }}
+                              className={`p-4 rounded-lg border-2 transition-smooth text-left ${
+                                selectedAmount === tier.amount && !customAmount
+                                  ? "border-primary bg-primary/5"
+                                  : "border-border hover:border-primary/50"
+                              }`}
+                            >
+                              <div className="font-bold text-lg">{tier.label}</div>
+                              <div className="text-xs text-muted-foreground mt-1">{tier.impact}</div>
+                            </button>
+                          ))}
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <label htmlFor="customAmount" className="text-sm font-medium">
+                            Or Enter Custom Amount (₦)
+                          </label>
+                          <Input
+                            id="customAmount"
+                            type="number"
+                            placeholder="Enter amount"
+                            value={customAmount}
+                            onChange={(e) => {
+                              setCustomAmount(e.target.value);
+                              setSelectedAmount(null);
+                            }}
+                            min="1000"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Donor Information */}
+                      <div className="space-y-4 pt-4 border-t border-border">
+                        <h3 className="font-semibold">Your Information</h3>
+                        <div className="space-y-2">
+                          <label htmlFor="name" className="text-sm font-medium">
+                            Full Name *
+                          </label>
+                          <Input
+                            id="name"
+                            placeholder="John Doe"
+                            value={donorInfo.name}
+                            onChange={(e) => setDonorInfo({ ...donorInfo, name: e.target.value })}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label htmlFor="email" className="text-sm font-medium">
+                            Email Address *
+                          </label>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="john@example.com"
+                            value={donorInfo.email}
+                            onChange={(e) => setDonorInfo({ ...donorInfo, email: e.target.value })}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label htmlFor="phone" className="text-sm font-medium">
+                            Phone Number (Optional)
+                          </label>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            placeholder="0802 330 0639"
+                            value={donorInfo.phone}
+                            onChange={(e) => setDonorInfo({ ...donorInfo, phone: e.target.value })}
+                          />
+                        </div>
+                      </div>
+
+                      <Button type="submit" variant="cta" size="lg" className="w-full">
+                        <Heart className="mr-2 h-5 w-5" />
+                        Proceed to Payment
+                      </Button>
+                      
+                      <p className="text-xs text-muted-foreground text-center">
+                        Secure payment processing. Your donation is tax-deductible.
+                      </p>
+                    </form>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Right: Impact Areas & Info */}
+              <div className="space-y-8 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+                <Card className="border-0 shadow-soft bg-gradient-to-br from-primary/5 to-accent/5">
+                  <CardContent className="p-8">
+                    <h3 className="text-2xl font-bold mb-6">Where Your Money Goes</h3>
+                    <div className="space-y-4">
+                      {impactAreas.map((area, index) => (
+                        <div key={index} className="flex items-start gap-4 p-4 rounded-lg hover:bg-background/50 transition-smooth">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 shrink-0">
+                            <area.icon className="h-6 w-6 text-primary" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold mb-1">{area.title}</h4>
+                            <p className="text-sm text-muted-foreground">{area.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-soft">
+                  <CardContent className="p-8">
+                    <h3 className="text-2xl font-bold mb-6">Why Donate?</h3>
+                    <ul className="space-y-4">
+                      {[
+                        "100% of donations go directly to programs",
+                        "Tax-deductible receipts provided",
+                        "Transparent financial reporting",
+                        "Direct impact on lives",
+                        "Monthly updates on progress",
+                        "Option for recurring donations",
+                      ].map((benefit, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-soft bg-gradient-to-br from-accent/10 to-primary/10">
+                  <CardContent className="p-8 text-center space-y-4">
+                    <Heart className="h-12 w-12 text-accent mx-auto" />
+                    <h3 className="text-xl font-bold">Prefer Other Methods?</h3>
+                    <p className="text-sm text-muted-foreground">
+                      You can also donate via bank transfer or mobile money
+                    </p>
+                    <Button variant="outline" size="sm">
+                      View Alternative Methods
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Donate;

@@ -16,12 +16,12 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Call Us",
-      content: "+234 XXX XXX XXXX",
+      content: "0802 330 0639 / 0907 666 4049",
     },
     {
       icon: Mail,
       title: "Email Us",
-      content: "info@regamosfoundation.org",
+      content: "regamosfoundation@gmail.com",
     },
   ];
 
