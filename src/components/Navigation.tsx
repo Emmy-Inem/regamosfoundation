@@ -34,7 +34,7 @@ const Navigation = () => {
     >
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={logo} alt="Regamos Foundation" className="h-12 w-auto transition-smooth group-hover:scale-105" />
+          <img src={logo} alt="Regamos Foundation" className="h-16 md:h-20 w-auto transition-smooth group-hover:scale-105" />
         </Link>
 
         {/* Desktop Navigation */}

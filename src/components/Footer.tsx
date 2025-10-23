@@ -25,7 +25,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* About */}
           <div className="space-y-6">
-            <img src={logo} alt="Regamos Foundation" className="h-16 w-auto brightness-0 invert" />
+            <img src={logo} alt="Regamos Foundation" className="h-20 md:h-24 w-auto brightness-0 invert" />
             <p className="text-sm leading-relaxed opacity-90">
               Empowering widows, orphans, abused girls, and youth through education, empowerment, and community development.
             </p>
@@ -110,16 +110,27 @@ const Footer = () => {
 
             <div>
               <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
-              <div className="flex gap-2">
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const email = (e.target as HTMLFormElement).email.value;
+                if (email) {
+                  import("sonner").then(({ toast }) => {
+                    toast.success("Thank you for subscribing!");
+                  });
+                  (e.target as HTMLFormElement).reset();
+                }
+              }} className="flex gap-2">
                 <Input
                   type="email"
+                  name="email"
                   placeholder="Your email"
                   className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/60"
+                  required
                 />
-                <Button variant="secondary" size="sm">
+                <Button type="submit" variant="secondary" size="sm">
                   Subscribe
                 </Button>
-              </div>
+              </form>
             </div>
           </div>
         </div>

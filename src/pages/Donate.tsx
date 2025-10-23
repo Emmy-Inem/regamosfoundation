@@ -4,7 +4,15 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Heart, Check, Users, GraduationCap, Home, Sparkles } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Heart, Check, Users, GraduationCap, Home, Sparkles, Copy } from "lucide-react";
 import { toast } from "sonner";
 
 const Donate = () => {
@@ -247,9 +255,63 @@ const Donate = () => {
                     <p className="text-sm text-muted-foreground">
                       You can also donate via bank transfer or mobile money
                     </p>
-                    <Button variant="outline" size="sm">
-                      View Alternative Methods
-                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          View Alternative Methods
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Alternative Donation Methods</DialogTitle>
+                          <DialogDescription>
+                            Choose your preferred payment method below
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4 pt-4">
+                          <div className="space-y-2">
+                            <h4 className="font-semibold">Bank Transfer</h4>
+                            <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
+                              <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Bank Name:</span>
+                                <span className="font-medium">Access Bank</span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Account Name:</span>
+                                <span className="font-medium">Regamos Foundation</span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Account Number:</span>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">1234567890</span>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-6 w-6 p-0"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText("1234567890");
+                                      toast.success("Account number copied!");
+                                    }}
+                                  >
+                                    <Copy className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <h4 className="font-semibold">Contact Us</h4>
+                            <p className="text-sm text-muted-foreground">
+                              For other payment methods or questions, please contact us:
+                            </p>
+                            <div className="text-sm space-y-1">
+                              <p>📞 0802 330 0639 / 0907 666 4049</p>
+                              <p>📧 regamosfoundation@gmail.com</p>
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </CardContent>
                 </Card>
               </div>

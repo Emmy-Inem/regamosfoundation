@@ -1,13 +1,18 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, User, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import educationImg from "@/assets/education.jpg";
 import empowermentImg from "@/assets/empowerment.jpg";
 import communityImg from "@/assets/community.jpg";
 
 const Blog = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [visiblePosts, setVisiblePosts] = useState(6);
   const blogPosts = [
     {
       title: "Empowering Widows: A Path to Economic Independence",
@@ -67,6 +72,12 @@ const Blog = () => {
 
   const categories = ["All", "Empowerment", "Education", "Community", "Youth Development", "Mental Health"];
 
+  const filteredPosts = selectedCategory === "All" 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === selectedCategory);
+
+  const displayedPosts = filteredPosts.slice(0, visiblePosts);
+
   return (
     <div className="min-h-screen">
       <Navigation />
@@ -89,12 +100,16 @@ const Blog = () => {
         <section className="py-8 bg-background sticky top-20 z-40 blur-glass border-b border-border">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap gap-3 justify-center">
-              {categories.map((category, index) => (
+              {categories.map((category) => (
                 <Button
-                  key={index}
-                  variant={index === 0 ? "cta" : "outline"}
+                  key={category}
+                  variant={selectedCategory === category ? "cta" : "outline"}
                   size="sm"
                   className="transition-smooth"
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setVisiblePosts(6);
+                  }}
                 >
                   {category}
                 </Button>
@@ -107,7 +122,7 @@ const Blog = () => {
         <section className="py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              {blogPosts.map((post, index) => (
+              {displayedPosts.map((post, index) => (
                 <Card
                   key={index}
                   className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth animate-fade-in-up cursor-pointer"
@@ -141,7 +156,11 @@ const Blog = () => {
                       {post.title}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">{post.excerpt}</p>
-                    <Button variant="link" className="p-0 h-auto group">
+                    <Button 
+                      variant="link" 
+                      className="p-0 h-auto group"
+                      onClick={() => toast.info("Full blog post coming soon!")}
+                    >
                       Read More
                       <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-smooth" />
                     </Button>
@@ -151,11 +170,17 @@ const Blog = () => {
             </div>
 
             {/* Load More */}
-            <div className="text-center mt-12 animate-fade-in">
-              <Button variant="outline" size="lg">
-                Load More Posts
-              </Button>
-            </div>
+            {visiblePosts < filteredPosts.length && (
+              <div className="text-center mt-12 animate-fade-in">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => setVisiblePosts(prev => prev + 6)}
+                >
+                  Load More Posts
+                </Button>
+              </div>
+            )}
           </div>
         </section>
 
@@ -168,16 +193,28 @@ const Blog = () => {
                 <p className="text-xl text-muted-foreground">
                   Subscribe to our newsletter for the latest stories and updates from Regamos Foundation
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto pt-4">
-                  <input
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const email = (e.target as HTMLFormElement).email.value;
+                    if (email) {
+                      toast.success("Thank you for subscribing!");
+                      (e.target as HTMLFormElement).reset();
+                    }
+                  }}
+                  className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto pt-4"
+                >
+                  <Input
                     type="email"
+                    name="email"
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 rounded-lg border border-input bg-background"
+                    className="flex-1"
+                    required
                   />
-                  <Button variant="cta" size="lg">
+                  <Button type="submit" variant="cta" size="lg">
                     Subscribe
                   </Button>
-                </div>
+                </form>
               </CardContent>
             </Card>
           </div>
