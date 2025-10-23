@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -54,7 +55,7 @@ const Donate = () => {
     },
   ];
 
-  const handleDonate = (e: React.FormEvent) => {
+  const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -70,10 +71,30 @@ const Donate = () => {
       return;
     }
 
-    // Here you would integrate with Paystack, Flutterwave, or Stripe
-    toast.success(`Thank you for your donation of ₦${amount.toLocaleString()}! Redirecting to payment...`);
-    
-    // Payment integration would go here
+    try {
+      const { error } = await supabase
+        .from('donations')
+        .insert([{
+          donor_name: donorInfo.name,
+          email: donorInfo.email,
+          phone: donorInfo.phone,
+          amount: amount,
+          frequency: 'one-time',
+          payment_status: 'pending',
+        }]);
+
+      if (error) throw error;
+
+      toast.success(`Thank you for your donation of ₦${amount.toLocaleString()}! Redirecting to payment...`);
+      
+      // Reset form
+      setDonorInfo({ name: "", email: "", phone: "" });
+      setCustomAmount("");
+      setSelectedAmount(5000);
+    } catch (error) {
+      console.error('Error processing donation:', error);
+      toast.error("Failed to process donation. Please try again.");
+    }
   };
 
   return (

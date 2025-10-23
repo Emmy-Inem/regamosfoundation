@@ -5,8 +5,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Heart, Users } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
   const contactInfo = [
     {
       icon: MapPin,
@@ -25,9 +36,32 @@ const Contact = () => {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic here
+    
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([{
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          message: `${formData.subject}\n\n${formData.message}`,
+        }]);
+
+      if (error) throw error;
+
+      toast.success("Message sent successfully! We'll get back to you soon.");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   return (
@@ -63,32 +97,64 @@ const Contact = () => {
                           <label htmlFor="firstName" className="text-sm font-medium">
                             First Name
                           </label>
-                          <Input id="firstName" placeholder="John" required />
+                          <Input 
+                            id="firstName" 
+                            placeholder="John" 
+                            value={formData.firstName}
+                            onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                            required 
+                          />
                         </div>
                         <div className="space-y-2">
                           <label htmlFor="lastName" className="text-sm font-medium">
                             Last Name
                           </label>
-                          <Input id="lastName" placeholder="Doe" required />
+                          <Input 
+                            id="lastName" 
+                            placeholder="Doe" 
+                            value={formData.lastName}
+                            onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                            required 
+                          />
                         </div>
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-medium">
                           Email
                         </label>
-                        <Input id="email" type="email" placeholder="john@example.com" required />
+                        <Input 
+                          id="email" 
+                          type="email" 
+                          placeholder="john@example.com" 
+                          value={formData.email}
+                          onChange={(e) => setFormData({...formData, email: e.target.value})}
+                          required 
+                        />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="subject" className="text-sm font-medium">
                           Subject
                         </label>
-                        <Input id="subject" placeholder="How can we help?" required />
+                        <Input 
+                          id="subject" 
+                          placeholder="How can we help?" 
+                          value={formData.subject}
+                          onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                          required 
+                        />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="message" className="text-sm font-medium">
                           Message
                         </label>
-                        <Textarea id="message" placeholder="Tell us more..." rows={6} required />
+                        <Textarea 
+                          id="message" 
+                          placeholder="Tell us more..." 
+                          rows={6} 
+                          value={formData.message}
+                          onChange={(e) => setFormData({...formData, message: e.target.value})}
+                          required 
+                        />
                       </div>
                       <Button type="submit" variant="cta" size="lg" className="w-full">
                         Send Message

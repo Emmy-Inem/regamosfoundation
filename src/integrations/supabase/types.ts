@@ -14,7 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blog_posts: {
+        Row: {
+          author: string | null
+          category: string
+          content: string
+          created_at: string
+          excerpt: string
+          id: string
+          image_url: string | null
+          published_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          category: string
+          content: string
+          created_at?: string
+          excerpt: string
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          category?: string
+          content?: string
+          created_at?: string
+          excerpt?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      donations: {
+        Row: {
+          amount: number
+          created_at: string
+          donor_name: string
+          email: string
+          frequency: string
+          id: string
+          payment_method: string | null
+          payment_status: string | null
+          phone: string | null
+          transaction_reference: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          donor_name: string
+          email: string
+          frequency: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string | null
+          phone?: string | null
+          transaction_reference?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          donor_name?: string
+          email?: string
+          frequency?: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string | null
+          phone?: string | null
+          transaction_reference?: string | null
+        }
+        Relationships: []
+      }
+      members: {
+        Row: {
+          email: string
+          full_name: string
+          id: string
+          joined_at: string
+          membership_type: string
+          motivation: string | null
+          phone: string
+          skills: string | null
+          status: string | null
+        }
+        Insert: {
+          email: string
+          full_name: string
+          id?: string
+          joined_at?: string
+          membership_type: string
+          motivation?: string | null
+          phone: string
+          skills?: string | null
+          status?: string | null
+        }
+        Update: {
+          email?: string
+          full_name?: string
+          id?: string
+          joined_at?: string
+          membership_type?: string
+          motivation?: string | null
+          phone?: string
+          skills?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
+      newsletter_subscriptions: {
+        Row: {
+          email: string
+          id: string
+          subscribed_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          subscribed_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          subscribed_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

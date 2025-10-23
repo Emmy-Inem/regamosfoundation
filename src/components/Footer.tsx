@@ -3,8 +3,13 @@ import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import logo from "@/assets/logo.png";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const Footer = () => {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+
   const quickLinks = [
     { name: "About Us", path: "/about" },
     { name: "Programs", path: "/programs" },
@@ -18,6 +23,31 @@ const Footer = () => {
     { name: "Volunteer", path: "/contact" },
     { name: "Partner With Us", path: "/contact" },
   ];
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const { error } = await supabase
+        .from('newsletter_subscriptions')
+        .insert([{ email: newsletterEmail }]);
+
+      if (error) {
+        if (error.code === '23505') {
+          toast.info("You're already subscribed!");
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success("Thank you for subscribing!");
+      }
+      
+      setNewsletterEmail("");
+    } catch (error) {
+      console.error('Error subscribing:', error);
+      toast.error("Failed to subscribe. Please try again.");
+    }
+  };
 
   return (
     <footer className="bg-primary text-primary-foreground">
@@ -110,21 +140,14 @@ const Footer = () => {
 
             <div>
               <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const email = (e.target as HTMLFormElement).email.value;
-                if (email) {
-                  import("sonner").then(({ toast }) => {
-                    toast.success("Thank you for subscribing!");
-                  });
-                  (e.target as HTMLFormElement).reset();
-                }
-              }} className="flex gap-2">
+              <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
                 <Input
                   type="email"
                   name="email"
                   placeholder="Your email"
                   className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/60"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
                   required
                 />
                 <Button type="submit" variant="secondary" size="sm">

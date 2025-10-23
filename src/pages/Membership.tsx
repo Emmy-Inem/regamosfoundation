@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Users, Check, Heart, BookOpen, Briefcase, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 const membershipSchema = z.object({
   firstName: z.string().trim().min(2, "First name must be at least 2 characters").max(50),
@@ -61,7 +62,7 @@ const Membership = () => {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!selectedCategory) {
@@ -76,7 +77,26 @@ const Membership = () => {
         category: selectedCategory,
       });
 
-      // Here you would send the data to your backend
+      const { error } = await supabase
+        .from('members')
+        .insert([{
+          full_name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          phone: formData.phone,
+          membership_type: selectedCategory,
+          motivation: formData.reason,
+          skills: formData.address,
+          status: 'pending',
+        }]);
+
+      if (error) {
+        if (error.code === '23505') {
+          toast.error("This email is already registered. Please use a different email.");
+          return;
+        }
+        throw error;
+      }
+
       toast.success("Application submitted successfully! Check your email for payment instructions.");
       
       // Reset form
@@ -93,6 +113,9 @@ const Membership = () => {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];
         toast.error(firstError.message);
+      } else {
+        console.error('Error submitting membership:', error);
+        toast.error("Failed to submit application. Please try again.");
       }
     }
   };
