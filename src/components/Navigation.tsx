@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import logo from "@/assets/logo.png";
 
 const Navigation = () => {
@@ -10,6 +11,7 @@ const Navigation = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
+  const { user, signOut, isAdmin } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,6 +51,7 @@ const Navigation = () => {
     { name: "Impact", path: "/impact" },
     { name: "Blog", path: "/blog" },
     { name: "Contact", path: "/contact" },
+    ...(isAdmin ? [{ name: "Admin", path: "/admin" }] : []),
   ];
 
   return (
@@ -84,6 +87,24 @@ const Navigation = () => {
           <Button variant="cta" size="sm" asChild>
             <Link to="/donate">Donate Now</Link>
           </Button>
+          {user ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => signOut()}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          ) : (
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/auth" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Login
+              </Link>
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -119,6 +140,26 @@ const Navigation = () => {
               <Button variant="cta" asChild onClick={() => setIsMobileMenuOpen(false)}>
                 <Link to="/donate">Donate Now</Link>
               </Button>
+              {user ? (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    signOut();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Button>
+              ) : (
+                <Button variant="outline" asChild onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/auth" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Login
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>
