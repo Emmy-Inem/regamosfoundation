@@ -44,11 +44,12 @@ export function useAuth() {
     const { data, error } = await supabase
       .from('user_roles')
       .select('role')
-      .eq('user_id', userId)
-      .single();
+      .eq('user_id', userId);
     
-    if (data && !error) {
-      setUserRole(data.role);
+    if (data && !error && data.length > 0) {
+      // Check if user has admin role
+      const adminRole = data.find(r => r.role === 'admin');
+      setUserRole(adminRole ? 'admin' : data[0].role);
     }
   };
 
