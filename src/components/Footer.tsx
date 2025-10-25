@@ -18,10 +18,10 @@ const Footer = () => {
   ];
 
   const supportLinks = [
-    { name: "Donate", path: "/donate" },
-    { name: "Become a Member", path: "/membership" },
-    { name: "Volunteer", path: "/contact" },
-    { name: "Partner With Us", path: "/contact" },
+    { name: "Donate", path: "/donate", id: "donate" },
+    { name: "Become a Member", path: "/membership", id: "membership" },
+    { name: "Volunteer", path: "/contact", id: "volunteer" },
+    { name: "Partner With Us", path: "/contact", id: "partner" },
   ];
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
@@ -109,7 +109,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-6">Get Involved</h3>
             <ul className="space-y-3">
               {supportLinks.map((link) => (
-                <li key={link.path}>
+                <li key={link.id}>
                   <Link to={link.path} className="text-sm opacity-90 hover:text-accent hover:opacity-100 transition-smooth">
                     {link.name}
                   </Link>

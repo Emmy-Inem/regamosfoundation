@@ -30,10 +30,12 @@ const Admin = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth');
-    } else if (!authLoading && !isAdmin) {
-      navigate('/');
+    if (!authLoading) {
+      if (!user) {
+        navigate('/auth', { replace: true });
+      } else if (!isAdmin) {
+        navigate('/', { replace: true });
+      }
     }
   }, [user, authLoading, isAdmin, navigate]);
 
@@ -184,12 +186,16 @@ const Admin = () => {
     },
   });
 
-  if (authLoading || !isAdmin) {
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
+  }
+
+  if (!user || !isAdmin) {
+    return null;
   }
 
   return (
