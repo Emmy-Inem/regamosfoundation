@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,15 +16,18 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   const { signIn, signUp, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const nextPath = searchParams.get('next') || '/';
+
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate(nextPath, { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, navigate, nextPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +47,7 @@ const Auth = () => {
             title: 'Welcome back!',
             description: 'You have successfully logged in.',
           });
-          navigate('/');
+          navigate(nextPath, { replace: true });
         }
       } else {
         if (!fullName.trim()) {
@@ -69,7 +72,7 @@ const Auth = () => {
             title: 'Account created!',
             description: 'Welcome to Regamos Foundation.',
           });
-          navigate('/');
+          navigate(nextPath, { replace: true });
         }
       }
     } catch (error: any) {

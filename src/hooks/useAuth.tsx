@@ -6,6 +6,7 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [roleLoading, setRoleLoading] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
@@ -17,22 +18,28 @@ export function useAuth() {
         
         // Fetch user role when session changes
         if (session?.user) {
+          setRoleLoading(true);
           setTimeout(() => {
-            fetchUserRole(session.user.id);
+            fetchUserRole(session.user!.id).finally(() => setRoleLoading(false));
           }, 0);
         } else {
           setUserRole(null);
+          setRoleLoading(false);
         }
       }
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        fetchUserRole(session.user.id);
+        setRoleLoading(true);
+        await fetchUserRole(session.user.id);
+        setRoleLoading(false);
+      } else {
+        setUserRole(null);
       }
       setLoading(false);
     });
@@ -40,7 +47,7 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const fetchUserRole = async (userId: string) => {
+  const fetchUserRole = async (userId: string): Promise<void> => {
     const { data, error } = await supabase
       .from('user_roles')
       .select('role')
@@ -50,6 +57,8 @@ export function useAuth() {
       // Check if user has admin role
       const adminRole = data.find(r => r.role === 'admin');
       setUserRole(adminRole ? 'admin' : data[0].role);
+    } else {
+      setUserRole(null);
     }
   };
 
@@ -85,7 +94,7 @@ export function useAuth() {
   return {
     user,
     session,
-    loading,
+    loading: loading || roleLoading,
     userRole,
     signUp,
     signIn,

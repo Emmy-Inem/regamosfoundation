@@ -24,20 +24,20 @@ import {
 import { Badge } from '@/components/ui/badge';
 
 const Admin = () => {
-  const { user, loading: authLoading, isAdmin } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!authLoading) {
-      if (!user) {
-        navigate('/auth', { replace: true });
-      } else if (!isAdmin) {
-        navigate('/', { replace: true });
-      }
+    if (loading) return;
+    
+    if (!user) {
+      navigate('/auth?next=/admin', { replace: true });
+    } else if (!isAdmin) {
+      navigate('/', { replace: true });
     }
-  }, [user, authLoading, isAdmin, navigate]);
+  }, [loading, user, isAdmin, navigate]);
 
   const { data: donations, isLoading: donationsLoading } = useQuery({
     queryKey: ['admin-donations'],
@@ -186,7 +186,7 @@ const Admin = () => {
     },
   });
 
-  if (authLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
