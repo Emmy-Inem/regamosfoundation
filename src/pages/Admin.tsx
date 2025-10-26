@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { Loader2, Trash2, CheckCircle, XCircle, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -85,6 +85,19 @@ const Admin = () => {
         .from('newsletter_subscriptions')
         .select('*')
         .order('subscribed_at', { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+    enabled: isAdmin,
+  });
+
+  const { data: blogPosts, isLoading: blogPostsLoading } = useQuery({
+    queryKey: ['admin-blog-posts'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('published_at', { ascending: false });
       if (error) throw error;
       return data;
     },
@@ -186,6 +199,24 @@ const Admin = () => {
     },
   });
 
+  const deleteBlogPost = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-blog-posts'] });
+      toast({ title: 'Blog post deleted successfully' });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: 'Error deleting blog post', 
+        description: error.message,
+        variant: 'destructive'
+      });
+    },
+  });
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -210,6 +241,7 @@ const Admin = () => {
             <TabsTrigger value="members">Members</TabsTrigger>
             <TabsTrigger value="contacts">Contact Submissions</TabsTrigger>
             <TabsTrigger value="newsletters">Newsletter</TabsTrigger>
+            <TabsTrigger value="blog">Blog Posts</TabsTrigger>
           </TabsList>
 
           <TabsContent value="donations">
@@ -494,6 +526,89 @@ const Admin = () => {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Blog Posts Tab */}
+          <TabsContent value="blog">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
+                <div>
+                  <CardTitle>Blog Posts Management</CardTitle>
+                  <CardDescription>View and manage published blog posts</CardDescription>
+                </div>
+                <Button
+                  onClick={() => navigate('/blog-editor')}
+                  variant="default"
+                  size="sm"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Blog Post
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {blogPostsLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                  </div>
+                ) : !blogPosts || blogPosts.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-muted-foreground mb-4">No blog posts yet.</p>
+                    <Button onClick={() => navigate('/blog-editor')} variant="outline">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Your First Blog Post
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {blogPosts.map((post: any) => (
+                      <Card key={post.id} className="p-4 hover:bg-accent/50 transition-colors">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-3 mb-2 flex-wrap">
+                              <h3 className="font-semibold text-lg">{post.title}</h3>
+                              <Badge variant="outline">{post.category}</Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{post.excerpt}</p>
+                            <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+                              <span>By {post.author}</span>
+                              <span>•</span>
+                              <span>
+                                {new Date(post.published_at).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                })}
+                              </span>
+                            </div>
+                          </div>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="destructive" size="sm">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Blog Post</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete "{post.title}"? This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => deleteBlogPost.mutate(post.id)}>
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 )}
               </CardContent>
