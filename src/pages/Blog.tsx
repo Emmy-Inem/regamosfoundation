@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +13,7 @@ import empowermentImg from "@/assets/empowerment.jpg";
 import communityImg from "@/assets/community.jpg";
 
 const Blog = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -227,7 +229,7 @@ const Blog = () => {
                         <Button 
                           variant="link" 
                           className="p-0 h-auto group"
-                          onClick={() => toast.info("Full blog post coming soon!")}
+                          onClick={() => post.id && navigate(`/blog/${post.id}`)}
                         >
                           Read More
                           <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-smooth" />

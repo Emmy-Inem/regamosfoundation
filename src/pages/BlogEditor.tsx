@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +14,7 @@ import Footer from '@/components/Footer';
 import { Loader2, ArrowLeft } from 'lucide-react';
 
 const BlogEditor = () => {
+  const { id } = useParams();
   const { user, loading: authLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -33,31 +34,83 @@ const BlogEditor = () => {
     }
   }, [user, authLoading, isAdmin, navigate]);
 
+  useEffect(() => {
+    if (id && user && isAdmin) {
+      fetchPost();
+    }
+  }, [id, user, isAdmin]);
+
+  const fetchPost = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        setFormData({
+          title: data.title,
+          excerpt: data.excerpt,
+          content: data.content,
+          category: data.category,
+          author: data.author || 'Regamos Foundation',
+          image_url: data.image_url || '',
+        });
+      }
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to load blog post.',
+      });
+      navigate('/admin');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await supabase.from('blog_posts').insert([
-        {
-          ...formData,
-          published_at: new Date().toISOString(),
-        },
-      ]);
+      if (id) {
+        // Update existing post
+        const { error } = await supabase
+          .from('blog_posts')
+          .update(formData)
+          .eq('id', id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast({
-        title: 'Success!',
-        description: 'Blog post published successfully.',
-      });
+        toast({
+          title: 'Success!',
+          description: 'Blog post updated successfully.',
+        });
+      } else {
+        // Create new post
+        const { error } = await supabase.from('blog_posts').insert([
+          {
+            ...formData,
+            published_at: new Date().toISOString(),
+          },
+        ]);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Success!',
+          description: 'Blog post published successfully.',
+        });
+      }
 
       navigate('/blog');
     } catch (error: any) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.message || 'Failed to publish blog post.',
+        description: error.message || `Failed to ${id ? 'update' : 'publish'} blog post.`,
       });
     } finally {
       setLoading(false);
@@ -96,7 +149,9 @@ const BlogEditor = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-3xl">Create New Blog Post</CardTitle>
+              <CardTitle className="text-3xl">
+                {id ? 'Edit Blog Post' : 'Create New Blog Post'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -195,10 +250,10 @@ const BlogEditor = () => {
                     {loading ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Publishing...
+                        {id ? 'Updating...' : 'Publishing...'}
                       </>
                     ) : (
-                      'Publish Blog Post'
+                      id ? 'Update Blog Post' : 'Publish Blog Post'
                     )}
                   </Button>
                   <Button

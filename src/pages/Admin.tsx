@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, Trash2, CheckCircle, XCircle, Plus } from 'lucide-react';
+import { Loader2, Trash2, CheckCircle, XCircle, Plus, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -585,7 +585,15 @@ const Admin = () => {
                               </span>
                             </div>
                           </div>
-                          <AlertDialog>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => navigate(`/blog-editor/${post.id}`)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button variant="destructive" size="sm">
                                 <Trash2 className="h-4 w-4" />
@@ -607,7 +615,8 @@ const Admin = () => {
                             </AlertDialogContent>
                           </AlertDialog>
                         </div>
-                      </Card>
+                      </div>
+                    </Card>
                     ))}
                   </div>
                 )}
