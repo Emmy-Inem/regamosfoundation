@@ -1,24 +1,41 @@
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Target, Eye, Heart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const Mission = () => {
+  const { data: content } = useQuery({
+    queryKey: ["mission-content"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_content")
+        .select("*")
+        .eq("section", "mission");
+      if (error) throw error;
+      return data?.reduce((acc, item) => ({
+        ...acc,
+        [item.content_key]: item.content_value,
+      }), {} as Record<string, string>);
+    },
+  });
+
   const values = [
     {
       icon: Target,
       title: "Our Mission",
-      description:
+      description: content?.mission_text ||
         "To empower widows, orphans, abused girls, and youth through education, advocacy, and community development, fostering dignity and self-sufficiency.",
     },
     {
       icon: Eye,
       title: "Our Vision",
-      description:
+      description: content?.vision_text ||
         "A world where every vulnerable person has access to opportunities, support, and the resources needed to thrive and reach their full potential.",
     },
     {
       icon: Heart,
       title: "Our Values",
-      description:
+      description: content?.values_text ||
         "Compassion, integrity, empowerment, faith, and community - these core principles guide every action we take and every life we touch.",
     },
   ];
@@ -28,11 +45,12 @@ const Mission = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Love in <span className="text-primary">Action</span>
+            {content?.mission_title || (
+              <>Love in <span className="text-primary">Action</span></>
+            )}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Founded in 2018 and incorporated in 2020, we are committed to making a lasting impact 
-            in the lives of those who need it most.
+            {content?.mission_subtitle || "Founded in 2018 and incorporated in 2020, we are committed to making a lasting impact in the lives of those who need it most."}
           </p>
         </div>
 

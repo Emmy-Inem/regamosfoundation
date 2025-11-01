@@ -22,6 +22,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { ProgramsManagement } from '@/components/admin/ProgramsManagement';
+import { ImpactStoriesManagement } from '@/components/admin/ImpactStoriesManagement';
+import { ImpactStatsManagement } from '@/components/admin/ImpactStatsManagement';
+import { SiteContentManagement } from '@/components/admin/SiteContentManagement';
 
 const Admin = () => {
   const { user, loading, isAdmin } = useAuth();
@@ -236,12 +240,16 @@ const Admin = () => {
         <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
         
         <Tabs defaultValue="donations" className="space-y-4">
-          <TabsList>
+          <TabsList className="flex flex-wrap">
             <TabsTrigger value="donations">Donations</TabsTrigger>
             <TabsTrigger value="members">Members</TabsTrigger>
-            <TabsTrigger value="contacts">Contact Submissions</TabsTrigger>
+            <TabsTrigger value="contacts">Contact</TabsTrigger>
             <TabsTrigger value="newsletters">Newsletter</TabsTrigger>
-            <TabsTrigger value="blog">Blog Posts</TabsTrigger>
+            <TabsTrigger value="blog">Blog</TabsTrigger>
+            <TabsTrigger value="programs">Programs</TabsTrigger>
+            <TabsTrigger value="stories">Stories</TabsTrigger>
+            <TabsTrigger value="stats">Stats</TabsTrigger>
+            <TabsTrigger value="content">Content</TabsTrigger>
           </TabsList>
 
           <TabsContent value="donations">
@@ -620,6 +628,59 @@ const Admin = () => {
                     ))}
                   </div>
                 )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="programs">
+            <ProgramsManagement />
+          </TabsContent>
+
+          <TabsContent value="impact-stories">
+            <ImpactStoriesManagement />
+          </TabsContent>
+
+          <TabsContent value="impact-stats">
+            <ImpactStatsManagement />
+          </TabsContent>
+
+          <TabsContent value="site-content">
+            <SiteContentManagement />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <Card>
+              <CardContent className="p-6">
+                <h2 className="text-2xl font-bold mb-4">Analytics Dashboard</h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-2">Total Donations</h3>
+                      <p className="text-3xl font-bold text-primary">
+                        ₦{donations?.reduce((sum, d) => sum + Number(d.amount), 0).toLocaleString()}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        From {donations?.length} donations
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-2">Total Members</h3>
+                      <p className="text-3xl font-bold text-accent">{members?.length}</p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        {members?.filter(m => m.status === 'approved').length} approved
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-2">Newsletter Subscribers</h3>
+                      <p className="text-3xl font-bold text-primary">{newsletters?.length}</p>
+                      <p className="text-sm text-muted-foreground mt-2">Active subscribers</p>
+                    </CardContent>
+                  </Card>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

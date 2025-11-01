@@ -1,9 +1,49 @@
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Heart, Users, Sparkles } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import heroImage from "@/assets/hero-bg.jpg";
 
 const Hero = () => {
+  const { data: stats } = useQuery({
+    queryKey: ["hero-stats"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("impact_stats")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order")
+        .limit(3);
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: content } = useQuery({
+    queryKey: ["hero-content"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_content")
+        .select("*")
+        .eq("section", "hero");
+      if (error) throw error;
+      return data?.reduce((acc, item) => ({
+        ...acc,
+        [item.content_key]: item.content_value,
+      }), {} as Record<string, string>);
+    },
+  });
+
+  const defaultStats = [
+    { number: "500+", label: "Widows Empowered" },
+    { number: "1000+", label: "Youth Trained" },
+    { number: "50+", label: "Communities Reached" },
+  ];
+
+  const displayStats = stats && stats.length > 0 ? stats : defaultStats;
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -22,21 +62,26 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full blur-glass border border-primary/20 animate-scale-in">
             <Sparkles className="h-5 w-5 text-accent" />
-            <span className="text-sm font-medium">Transforming Lives Since 2018</span>
+            <span className="text-sm font-medium">
+              {content?.hero_badge || "Transforming Lives Since 2018"}
+            </span>
           </div>
 
           {/* Main Heading */}
           <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            Transforming Lives Through
-            <span className="block mt-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Empowerment
-            </span>
+            {content?.hero_heading || (
+              <>
+                Transforming Lives Through
+                <span className="block mt-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Empowerment
+                </span>
+              </>
+            )}
           </h1>
 
           {/* Description */}
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Regamos Foundation is a faith-based NGO dedicated to empowering widows, orphans, abused girls, 
-            and youth through education, skill development, and community support.
+            {content?.hero_description || "Regamos Foundation is a faith-based NGO dedicated to empowering widows, orphans, abused girls, and youth through education, skill development, and community support."}
           </p>
 
           {/* CTA Buttons */}
@@ -57,11 +102,7 @@ const Hero = () => {
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-16 max-w-3xl mx-auto">
-            {[
-              { number: "500+", label: "Widows Empowered" },
-              { number: "1000+", label: "Youth Trained" },
-              { number: "50+", label: "Communities Reached" },
-            ].map((stat, index) => (
+            {displayStats.map((stat, index) => (
               <div
                 key={index}
                 className="blur-glass rounded-lg p-6 shadow-soft hover:shadow-glow transition-smooth animate-scale-in"
