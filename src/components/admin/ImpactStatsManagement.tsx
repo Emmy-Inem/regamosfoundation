@@ -133,9 +133,9 @@ export function ImpactStatsManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Impact Statistics</h2>
-        <Button onClick={() => setShowForm(!showForm)}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-xl md:text-2xl font-bold">Impact Statistics</h2>
+        <Button onClick={() => setShowForm(!showForm)} className="w-full sm:w-auto">
           <Plus className="h-4 w-4 mr-2" />
           {showForm ? "Cancel" : "Add Stat"}
         </Button>
@@ -156,7 +156,7 @@ export function ImpactStatsManagement() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="number">Number</Label>
                   <Input
@@ -180,7 +180,7 @@ export function ImpactStatsManagement() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="icon_name">Icon Name</Label>
                   <Input
@@ -204,7 +204,7 @@ export function ImpactStatsManagement() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="display_order">Display Order</Label>
                   <Input
@@ -246,27 +246,28 @@ export function ImpactStatsManagement() {
       <div className="grid md:grid-cols-2 gap-4">
         {stats?.map((stat) => (
           <Card key={stat.id}>
-            <CardContent className="p-6">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="text-3xl font-bold text-primary mb-1">{stat.number}</div>
-                  <p className="text-muted-foreground">{stat.label}</p>
-                  <div className="mt-2 flex gap-2 text-sm">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                <div className="flex-1 w-full">
+                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">{stat.number}</div>
+                  <p className="text-sm sm:text-base text-muted-foreground">{stat.label}</p>
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs sm:text-sm">
                     <span className="bg-primary/10 px-2 py-1 rounded">{stat.stat_key}</span>
                     <span className="bg-muted px-2 py-1 rounded">Order: {stat.display_order}</span>
-                    <span className={`px-2 py-1 rounded ${stat.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    <span className={`px-2 py-1 rounded ${stat.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100'}`}>
                       {stat.is_active ? 'Active' : 'Inactive'}
                     </span>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="icon" onClick={() => handleEdit(stat)}>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <Button variant="outline" size="icon" onClick={() => handleEdit(stat)} className="flex-1 sm:flex-initial">
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="outline"
                     size="icon"
                     onClick={() => setDeleteId(stat.id)}
+                    className="flex-1 sm:flex-initial"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

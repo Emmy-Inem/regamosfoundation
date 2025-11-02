@@ -19,6 +19,8 @@ const Blog = () => {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showFilter, setShowFilter] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const categories = ["All", "Empowerment", "Education", "Community", "Youth Development", "Mental Health"];
 
@@ -76,6 +78,25 @@ const Blog = () => {
   useEffect(() => {
     fetchBlogPosts();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < 100) {
+        setShowFilter(true);
+      } else if (currentScrollY > lastScrollY) {
+        setShowFilter(false);
+      } else {
+        setShowFilter(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const fetchBlogPosts = async () => {
     try {
@@ -143,15 +164,19 @@ const Blog = () => {
         </section>
 
         {/* Category Filter */}
-        <section className="py-8 bg-background sticky top-20 z-40 blur-glass border-b border-border">
+        <section 
+          className={`py-6 md:py-8 bg-background sticky top-20 z-40 blur-glass border-b border-border transition-transform duration-300 ${
+            showFilter ? 'translate-y-0' : '-translate-y-full'
+          }`}
+        >
           <div className="container mx-auto px-4">
-            <div className="flex flex-wrap gap-3 justify-center">
+            <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
               {categories.map((category) => (
                 <Button
                   key={category}
                   variant={selectedCategory === category ? "cta" : "outline"}
                   size="sm"
-                  className="transition-smooth"
+                  className="transition-smooth text-xs md:text-sm"
                   onClick={() => {
                     setSelectedCategory(category);
                     setVisiblePosts(6);

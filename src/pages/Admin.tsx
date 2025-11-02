@@ -237,20 +237,22 @@ const Admin = () => {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       <main className="flex-1 container mx-auto px-4 py-20">
-        <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
+        <h1 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8">Admin Dashboard</h1>
         
         <Tabs defaultValue="donations" className="space-y-4">
-          <TabsList className="flex flex-wrap">
-            <TabsTrigger value="donations">Donations</TabsTrigger>
-            <TabsTrigger value="members">Members</TabsTrigger>
-            <TabsTrigger value="contacts">Contact</TabsTrigger>
-            <TabsTrigger value="newsletters">Newsletter</TabsTrigger>
-            <TabsTrigger value="blog">Blog</TabsTrigger>
-            <TabsTrigger value="programs">Programs</TabsTrigger>
-            <TabsTrigger value="stories">Stories</TabsTrigger>
-            <TabsTrigger value="stats">Stats</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto pb-2">
+            <TabsList className="inline-flex w-auto min-w-full justify-start">
+              <TabsTrigger value="donations" className="text-xs md:text-sm">Donations</TabsTrigger>
+              <TabsTrigger value="members" className="text-xs md:text-sm">Members</TabsTrigger>
+              <TabsTrigger value="contacts" className="text-xs md:text-sm">Contact</TabsTrigger>
+              <TabsTrigger value="newsletters" className="text-xs md:text-sm">Newsletter</TabsTrigger>
+              <TabsTrigger value="blog" className="text-xs md:text-sm">Blog</TabsTrigger>
+              <TabsTrigger value="programs" className="text-xs md:text-sm">Programs</TabsTrigger>
+              <TabsTrigger value="stories" className="text-xs md:text-sm">Stories</TabsTrigger>
+              <TabsTrigger value="stats" className="text-xs md:text-sm">Stats</TabsTrigger>
+              <TabsTrigger value="content" className="text-xs md:text-sm">Content</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="donations">
             <Card>
@@ -264,25 +266,72 @@ const Admin = () => {
                     <Loader2 className="h-8 w-8 animate-spin" />
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
+                  <div className="space-y-4 md:hidden">
+                    {donations?.map((donation) => (
+                      <Card key={donation.id} className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="font-semibold">{donation.donor_name}</p>
+                              <p className="text-sm text-muted-foreground">{donation.email}</p>
+                            </div>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Donation</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete this donation record? This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => deleteDonation.mutate(donation.id)}>
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Badge variant="default" className="font-semibold">₦{donation.amount}</Badge>
+                            <Badge variant="outline">{donation.frequency}</Badge>
+                            <Badge variant={donation.payment_status === 'completed' ? 'default' : 'secondary'}>
+                              {donation.payment_status}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(donation.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+                {donations && donations.length > 0 && (
+                  <div className="overflow-x-auto hidden md:block">
                     <table className="w-full">
                       <thead>
                         <tr className="border-b">
-                          <th className="text-left p-2">Name</th>
-                          <th className="text-left p-2">Email</th>
-                          <th className="text-left p-2">Amount</th>
-                          <th className="text-left p-2">Frequency</th>
-                          <th className="text-left p-2">Status</th>
-                          <th className="text-left p-2">Date</th>
-                          <th className="text-left p-2">Actions</th>
+                          <th className="text-left p-2 text-sm">Name</th>
+                          <th className="text-left p-2 text-sm">Email</th>
+                          <th className="text-left p-2 text-sm">Amount</th>
+                          <th className="text-left p-2 text-sm">Frequency</th>
+                          <th className="text-left p-2 text-sm">Status</th>
+                          <th className="text-left p-2 text-sm">Date</th>
+                          <th className="text-left p-2 text-sm">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {donations?.map((donation) => (
                           <tr key={donation.id} className="border-b hover:bg-accent/50">
-                            <td className="p-2">{donation.donor_name}</td>
-                            <td className="p-2">{donation.email}</td>
-                            <td className="p-2 font-semibold">${donation.amount}</td>
+                            <td className="p-2 text-sm">{donation.donor_name}</td>
+                            <td className="p-2 text-sm">{donation.email}</td>
+                            <td className="p-2 font-semibold text-sm">₦{donation.amount}</td>
                             <td className="p-2">
                               <Badge variant="outline">{donation.frequency}</Badge>
                             </td>
@@ -291,7 +340,7 @@ const Admin = () => {
                                 {donation.payment_status}
                               </Badge>
                             </td>
-                            <td className="p-2">
+                            <td className="p-2 text-sm">
                               {new Date(donation.created_at).toLocaleDateString()}
                             </td>
                             <td className="p-2">
@@ -339,55 +388,16 @@ const Admin = () => {
                     <Loader2 className="h-8 w-8 animate-spin" />
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="text-left p-2">Name</th>
-                          <th className="text-left p-2">Email</th>
-                          <th className="text-left p-2">Type</th>
-                          <th className="text-left p-2">Status</th>
-                          <th className="text-left p-2">Date</th>
-                          <th className="text-left p-2">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {members?.map((member) => (
-                          <tr key={member.id} className="border-b hover:bg-accent/50">
-                            <td className="p-2">{member.full_name}</td>
-                            <td className="p-2">{member.email}</td>
-                            <td className="p-2">
-                              <Badge>{member.membership_type}</Badge>
-                            </td>
-                            <td className="p-2">
-                              <div className="flex items-center gap-2">
-                                <Badge variant={member.status === 'approved' ? 'default' : member.status === 'pending' ? 'secondary' : 'destructive'}>
-                                  {member.status}
-                                </Badge>
-                                {member.status === 'pending' && (
-                                  <div className="flex gap-1">
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => updateMemberStatus.mutate({ id: member.id, status: 'approved' })}
-                                    >
-                                      <CheckCircle className="h-4 w-4 text-green-600" />
-                                    </Button>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => updateMemberStatus.mutate({ id: member.id, status: 'rejected' })}
-                                    >
-                                      <XCircle className="h-4 w-4 text-red-600" />
-                                    </Button>
-                                  </div>
-                                )}
+                  <>
+                    <div className="space-y-4 md:hidden">
+                      {members?.map((member) => (
+                        <Card key={member.id} className="p-4">
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <p className="font-semibold">{member.full_name}</p>
+                                <p className="text-sm text-muted-foreground">{member.email}</p>
                               </div>
-                            </td>
-                            <td className="p-2">
-                              {new Date(member.joined_at).toLocaleDateString()}
-                            </td>
-                            <td className="p-2">
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                   <Button variant="ghost" size="sm">
@@ -409,12 +419,119 @@ const Admin = () => {
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
                               </AlertDialog>
-                            </td>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              <Badge>{member.membership_type}</Badge>
+                              <Badge variant={member.status === 'approved' ? 'default' : member.status === 'pending' ? 'secondary' : 'destructive'}>
+                                {member.status}
+                              </Badge>
+                            </div>
+                            {member.status === 'pending' && (
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => updateMemberStatus.mutate({ id: member.id, status: 'approved' })}
+                                  className="flex-1"
+                                >
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                  Approve
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => updateMemberStatus.mutate({ id: member.id, status: 'rejected' })}
+                                  className="flex-1"
+                                >
+                                  <XCircle className="h-4 w-4 mr-1" />
+                                  Reject
+                                </Button>
+                              </div>
+                            )}
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(member.joined_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                    <div className="overflow-x-auto hidden md:block">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left p-2 text-sm">Name</th>
+                            <th className="text-left p-2 text-sm">Email</th>
+                            <th className="text-left p-2 text-sm">Type</th>
+                            <th className="text-left p-2 text-sm">Status</th>
+                            <th className="text-left p-2 text-sm">Date</th>
+                            <th className="text-left p-2 text-sm">Actions</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {members?.map((member) => (
+                            <tr key={member.id} className="border-b hover:bg-accent/50">
+                              <td className="p-2 text-sm">{member.full_name}</td>
+                              <td className="p-2 text-sm">{member.email}</td>
+                              <td className="p-2">
+                                <Badge>{member.membership_type}</Badge>
+                              </td>
+                              <td className="p-2">
+                                <div className="flex items-center gap-2">
+                                  <Badge variant={member.status === 'approved' ? 'default' : member.status === 'pending' ? 'secondary' : 'destructive'}>
+                                    {member.status}
+                                  </Badge>
+                                  {member.status === 'pending' && (
+                                    <div className="flex gap-1">
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => updateMemberStatus.mutate({ id: member.id, status: 'approved' })}
+                                      >
+                                        <CheckCircle className="h-4 w-4 text-green-600" />
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => updateMemberStatus.mutate({ id: member.id, status: 'rejected' })}
+                                      >
+                                        <XCircle className="h-4 w-4 text-red-600" />
+                                      </Button>
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="p-2 text-sm">
+                                {new Date(member.joined_at).toLocaleDateString()}
+                              </td>
+                              <td className="p-2">
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <Trash2 className="h-4 w-4 text-destructive" />
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Delete Member</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        Are you sure you want to delete this member? This action cannot be undone.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => deleteMember.mutate(member.id)}>
+                                        Delete
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -491,50 +608,87 @@ const Admin = () => {
                     <Loader2 className="h-8 w-8 animate-spin" />
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="text-left p-2">Email</th>
-                          <th className="text-left p-2">Subscribed Date</th>
-                          <th className="text-left p-2">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {newsletters?.map((sub) => (
-                          <tr key={sub.id} className="border-b hover:bg-accent/50">
-                            <td className="p-2">{sub.email}</td>
-                            <td className="p-2">
-                              {new Date(sub.subscribed_at).toLocaleDateString()}
-                            </td>
-                            <td className="p-2">
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button variant="ghost" size="sm">
-                                    <Trash2 className="h-4 w-4 text-destructive" />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>Delete Subscription</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Are you sure you want to delete this newsletter subscription? This action cannot be undone.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={() => deleteNewsletter.mutate(sub.id)}>
-                                      Delete
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </td>
+                  <>
+                    <div className="space-y-4 md:hidden">
+                      {newsletters?.map((sub) => (
+                        <Card key={sub.id} className="p-4">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <p className="font-semibold text-sm">{sub.email}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(sub.subscribed_at).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Subscription</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete this newsletter subscription? This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => deleteNewsletter.mutate(sub.id)}>
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                    <div className="overflow-x-auto hidden md:block">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left p-2 text-sm">Email</th>
+                            <th className="text-left p-2 text-sm">Subscribed Date</th>
+                            <th className="text-left p-2 text-sm">Actions</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {newsletters?.map((sub) => (
+                            <tr key={sub.id} className="border-b hover:bg-accent/50">
+                              <td className="p-2 text-sm">{sub.email}</td>
+                              <td className="p-2 text-sm">
+                                {new Date(sub.subscribed_at).toLocaleDateString()}
+                              </td>
+                              <td className="p-2">
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <Trash2 className="h-4 w-4 text-destructive" />
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Delete Subscription</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        Are you sure you want to delete this newsletter subscription? This action cannot be undone.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => deleteNewsletter.mutate(sub.id)}>
+                                        Delete
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -543,19 +697,22 @@ const Admin = () => {
           {/* Blog Posts Tab */}
           <TabsContent value="blog">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
-                <div>
-                  <CardTitle>Blog Posts Management</CardTitle>
-                  <CardDescription>View and manage published blog posts</CardDescription>
+              <CardHeader>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <CardTitle>Blog Posts Management</CardTitle>
+                    <CardDescription>View and manage published blog posts</CardDescription>
+                  </div>
+                  <Button
+                    onClick={() => navigate('/blog-editor')}
+                    variant="default"
+                    size="sm"
+                    className="w-full sm:w-auto"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Blog Post
+                  </Button>
                 </div>
-                <Button
-                  onClick={() => navigate('/blog-editor')}
-                  variant="default"
-                  size="sm"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Blog Post
-                </Button>
               </CardHeader>
               <CardContent>
                 {blogPostsLoading ? (
@@ -574,10 +731,10 @@ const Admin = () => {
                   <div className="space-y-4">
                     {blogPosts.map((post: any) => (
                       <Card key={post.id} className="p-4 hover:bg-accent/50 transition-colors">
-                        <div className="flex items-start justify-between gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-2 flex-wrap">
-                              <h3 className="font-semibold text-lg">{post.title}</h3>
+                              <h3 className="font-semibold text-base sm:text-lg">{post.title}</h3>
                               <Badge variant="outline">{post.category}</Badge>
                             </div>
                             <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{post.excerpt}</p>
@@ -593,18 +750,21 @@ const Admin = () => {
                               </span>
                             </div>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 sm:flex-col">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => navigate(`/blog-editor/${post.id}`)}
+                              className="flex-1 sm:flex-initial"
                             >
-                              <Edit className="h-4 w-4" />
+                              <Edit className="h-4 w-4 sm:mr-0" />
+                              <span className="sm:hidden ml-2">Edit</span>
                             </Button>
                             <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Button variant="destructive" size="sm">
-                                <Trash2 className="h-4 w-4" />
+                              <Button variant="destructive" size="sm" className="flex-1 sm:flex-initial">
+                                <Trash2 className="h-4 w-4 sm:mr-0" />
+                                <span className="sm:hidden ml-2">Delete</span>
                               </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
@@ -636,15 +796,15 @@ const Admin = () => {
             <ProgramsManagement />
           </TabsContent>
 
-          <TabsContent value="impact-stories">
+          <TabsContent value="stories">
             <ImpactStoriesManagement />
           </TabsContent>
 
-          <TabsContent value="impact-stats">
+          <TabsContent value="stats">
             <ImpactStatsManagement />
           </TabsContent>
 
-          <TabsContent value="site-content">
+          <TabsContent value="content">
             <SiteContentManagement />
           </TabsContent>
 

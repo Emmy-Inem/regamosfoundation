@@ -106,7 +106,7 @@ export function SiteContentManagement() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Site Content Management</h2>
+      <h2 className="text-xl md:text-2xl font-bold">Site Content Management</h2>
 
       {sections.map((section) => (
         <Card key={section.title}>
