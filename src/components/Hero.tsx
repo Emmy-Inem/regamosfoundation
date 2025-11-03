@@ -80,9 +80,13 @@ const Hero = () => {
           </h1>
 
           {/* Description */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            {content?.hero_description || "Regamos Foundation is a faith-based NGO dedicated to empowering widows, orphans, abused girls, and youth through education, skill development, and community support."}
-          </p>
+          <div className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed prose prose-lg max-w-none">
+            {content?.hero_description ? (
+              <span dangerouslySetInnerHTML={{ __html: content.hero_description }} />
+            ) : (
+              "Regamos Foundation is a faith-based NGO dedicated to empowering widows, orphans, abused girls, and youth through education, skill development, and community support."
+            )}
+          </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">

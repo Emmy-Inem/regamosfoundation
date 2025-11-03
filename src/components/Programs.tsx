@@ -119,7 +119,10 @@ const Programs = () => {
                   </div>
                   <CardContent className="p-8 space-y-4">
                     <h3 className="text-2xl font-semibold">{program.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{program.description}</p>
+                    <div 
+                      className="text-muted-foreground leading-relaxed prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: program.description }}
+                    />
                   </CardContent>
                 </Card>
               );

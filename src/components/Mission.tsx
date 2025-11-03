@@ -50,7 +50,11 @@ const Mission = () => {
             )}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {content?.mission_subtitle || "Founded in 2018 and incorporated in 2020, we are committed to making a lasting impact in the lives of those who need it most."}
+            {content?.mission_subtitle ? (
+              <span dangerouslySetInnerHTML={{ __html: content.mission_subtitle }} />
+            ) : (
+              "Founded in 2018 and incorporated in 2020, we are committed to making a lasting impact in the lives of those who need it most."
+            )}
           </p>
         </div>
 
@@ -66,7 +70,10 @@ const Mission = () => {
                   <value.icon className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-2xl font-semibold">{value.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{value.description}</p>
+                <div 
+                  className="text-muted-foreground leading-relaxed prose prose-sm max-w-none mx-auto"
+                  dangerouslySetInnerHTML={{ __html: value.description }}
+                />
               </CardContent>
             </Card>
           ))}

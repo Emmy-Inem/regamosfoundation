@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -132,9 +131,10 @@ const BlogDetail = () => {
                 {post.title}
               </h1>
 
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {post.excerpt}
-              </p>
+              <div 
+                className="text-xl text-muted-foreground leading-relaxed prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: post.excerpt }}
+              />
 
               <div className="flex gap-3 pt-2">
                 <Button
@@ -151,9 +151,10 @@ const BlogDetail = () => {
             {/* Content */}
             <Card className="border-0 shadow-soft">
               <CardContent className="p-8 md:p-12">
-                <div className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80">
-                  <ReactMarkdown>{post.content}</ReactMarkdown>
-                </div>
+                <div 
+                  className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
               </CardContent>
             </Card>
           </article>

@@ -24,6 +24,13 @@ const Blog = () => {
 
   const categories = ["All", "Empowerment", "Education", "Community", "Youth Development", "Mental Health"];
 
+  // Helper function to strip HTML tags for preview text
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
+
   const defaultPosts = [
     {
       title: "Empowering Widows: A Path to Economic Independence",
@@ -250,7 +257,9 @@ const Blog = () => {
                         <h3 className="text-xl font-semibold leading-tight group-hover:text-primary transition-smooth">
                           {post.title}
                         </h3>
-                        <p className="text-muted-foreground leading-relaxed">{post.excerpt}</p>
+                        <p className="text-muted-foreground leading-relaxed line-clamp-3">
+                          {stripHtml(post.excerpt)}
+                        </p>
                         <Button 
                           variant="link" 
                           className="p-0 h-auto group"
