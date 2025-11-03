@@ -4,7 +4,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
@@ -12,6 +11,8 @@ import { supabase } from '@/integrations/supabase/client';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Loader2, ArrowLeft } from 'lucide-react';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
+import { ImageUpload } from '@/components/ui/image-upload';
 
 const BlogEditor = () => {
   const { id } = useParams();
@@ -168,29 +169,20 @@ const BlogEditor = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="excerpt">Excerpt *</Label>
-                  <Textarea
-                    id="excerpt"
-                    placeholder="Brief summary of the blog post (shown in listings)"
-                    rows={3}
+                  <RichTextEditor
                     value={formData.excerpt}
-                    onChange={(e) => handleChange('excerpt', e.target.value)}
-                    required
+                    onChange={(value) => handleChange('excerpt', value)}
+                    placeholder="Brief summary of the blog post (shown in listings)"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="content">Content *</Label>
-                  <Textarea
-                    id="content"
-                    placeholder="Write your blog post content here (Markdown supported)"
-                    rows={15}
+                  <RichTextEditor
                     value={formData.content}
-                    onChange={(e) => handleChange('content', e.target.value)}
-                    required
+                    onChange={(value) => handleChange('content', value)}
+                    placeholder="Write your blog post content here with full formatting options"
                   />
-                  <p className="text-sm text-muted-foreground">
-                    Supports Markdown formatting (# for headers, ** for bold, etc.)
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -226,19 +218,12 @@ const BlogEditor = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="image_url">Image URL</Label>
-                  <Input
-                    id="image_url"
-                    type="url"
-                    placeholder="https://example.com/image.jpg"
-                    value={formData.image_url}
-                    onChange={(e) => handleChange('image_url', e.target.value)}
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Optional: Add a featured image URL for the blog post
-                  </p>
-                </div>
+                <ImageUpload
+                  label="Featured Image"
+                  value={formData.image_url}
+                  onChange={(url) => handleChange('image_url', url)}
+                  accept="image/*"
+                />
 
                 <div className="flex gap-4 pt-4">
                   <Button

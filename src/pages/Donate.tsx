@@ -295,7 +295,7 @@ const Donate = () => {
                             <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
                               <div className="flex justify-between items-center">
                                 <span className="text-muted-foreground">Bank Name:</span>
-                                <span className="font-medium">Access Bank</span>
+                                <span className="font-medium">Zenith Bank</span>
                               </div>
                               <div className="flex justify-between items-center">
                                 <span className="text-muted-foreground">Account Name:</span>
@@ -304,13 +304,13 @@ const Donate = () => {
                               <div className="flex justify-between items-center">
                                 <span className="text-muted-foreground">Account Number:</span>
                                 <div className="flex items-center gap-2">
-                                  <span className="font-medium">1234567890</span>
+                                  <span className="font-medium">1017935691</span>
                                   <Button
                                     size="sm"
                                     variant="ghost"
                                     className="h-6 w-6 p-0"
                                     onClick={() => {
-                                      navigator.clipboard.writeText("1234567890");
+                                      navigator.clipboard.writeText("1017935691");
                                       toast.success("Account number copied!");
                                     }}
                                   >

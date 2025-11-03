@@ -4,9 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { ImageUpload } from "@/components/ui/image-upload";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -172,12 +173,10 @@ export function ImpactStoriesManagement() {
 
               <div>
                 <Label htmlFor="story">Story</Label>
-                <Textarea
-                  id="story"
+                <RichTextEditor
                   value={formData.story}
-                  onChange={(e) => setFormData({ ...formData, story: e.target.value })}
-                  required
-                  rows={6}
+                  onChange={(value) => setFormData({ ...formData, story: value })}
+                  placeholder="Write the impact story with full formatting options"
                 />
               </div>
 
@@ -192,14 +191,11 @@ export function ImpactStoriesManagement() {
                 />
               </div>
 
-              <div>
-                <Label htmlFor="image_url">Image URL</Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                />
-              </div>
+              <ImageUpload
+                label="Story Image"
+                value={formData.image_url}
+                onChange={(url) => setFormData({ ...formData, image_url: url })}
+              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

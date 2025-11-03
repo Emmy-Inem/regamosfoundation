@@ -4,10 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 export function SiteContentManagement() {
   const queryClient = useQueryClient();
@@ -116,11 +116,10 @@ export function SiteContentManagement() {
               <div key={field.key} className="space-y-2">
                 <Label htmlFor={field.key}>{field.label}</Label>
                 {field.type === "textarea" ? (
-                  <Textarea
-                    id={field.key}
+                  <RichTextEditor
                     value={getContentValue(field.key)}
-                    onChange={(e) => setContentValue(field.key, e.target.value)}
-                    rows={4}
+                    onChange={(value) => setContentValue(field.key, value)}
+                    placeholder={`Enter ${field.label.toLowerCase()}`}
                   />
                 ) : (
                   <Input
