@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import logo from "@/assets/logo.png";
@@ -61,7 +61,7 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/share/1ABfZYGXHo/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-accent transition-smooth"
@@ -70,22 +70,31 @@ const Footer = () => {
                 <Facebook className="h-5 w-5" />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/Foundation_raf?t=pB8MEVChM6llrmaC6HmCjA&s=09"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-accent transition-smooth"
-                aria-label="Twitter"
+                aria-label="Twitter/X"
               >
                 <Twitter className="h-5 w-5" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/regamosfoundation?igsh=ZngzanV2ZTAzanJl"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-accent transition-smooth"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/regamosfoundation/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-accent transition-smooth"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
               </a>
             </div>
           </div>

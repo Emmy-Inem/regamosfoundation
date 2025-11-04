@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import TeamSection from "@/components/TeamSection";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Heart, Target, Award } from "lucide-react";
 
@@ -104,6 +105,9 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Team Section */}
+        <TeamSection />
       </main>
       <Footer />
     </div>

@@ -26,6 +26,10 @@ import { ProgramsManagement } from '@/components/admin/ProgramsManagement';
 import { ImpactStoriesManagement } from '@/components/admin/ImpactStoriesManagement';
 import { ImpactStatsManagement } from '@/components/admin/ImpactStatsManagement';
 import { SiteContentManagement } from '@/components/admin/SiteContentManagement';
+import AchievementsManagement from '@/components/admin/AchievementsManagement';
+import UpcomingProgramsManagement from '@/components/admin/UpcomingProgramsManagement';
+import TeamMembersManagement from '@/components/admin/TeamMembersManagement';
+import TestimonialsManagement from '@/components/admin/TestimonialsManagement';
 
 const Admin = () => {
   const { user, loading, isAdmin } = useAuth();
@@ -250,6 +254,10 @@ const Admin = () => {
               <TabsTrigger value="programs" className="text-xs md:text-sm">Programs</TabsTrigger>
               <TabsTrigger value="stories" className="text-xs md:text-sm">Stories</TabsTrigger>
               <TabsTrigger value="stats" className="text-xs md:text-sm">Stats</TabsTrigger>
+              <TabsTrigger value="achievements" className="text-xs md:text-sm">Achievements</TabsTrigger>
+              <TabsTrigger value="upcoming" className="text-xs md:text-sm">Upcoming</TabsTrigger>
+              <TabsTrigger value="team" className="text-xs md:text-sm">Team</TabsTrigger>
+              <TabsTrigger value="testimonials" className="text-xs md:text-sm">Testimonials</TabsTrigger>
               <TabsTrigger value="content" className="text-xs md:text-sm">Content</TabsTrigger>
             </TabsList>
           </div>
@@ -806,6 +814,22 @@ const Admin = () => {
 
           <TabsContent value="content">
             <SiteContentManagement />
+          </TabsContent>
+
+          <TabsContent value="achievements">
+            <AchievementsManagement />
+          </TabsContent>
+
+          <TabsContent value="upcoming">
+            <UpcomingProgramsManagement />
+          </TabsContent>
+
+          <TabsContent value="team">
+            <TeamMembersManagement />
+          </TabsContent>
+
+          <TabsContent value="testimonials">
+            <TestimonialsManagement />
           </TabsContent>
 
           <TabsContent value="analytics">
