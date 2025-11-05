@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,8 +66,14 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <>
+      <SEOHead 
+        title="Contact Us"
+        description="Get in touch with Regamos Foundation. Contact us to learn more about our programs, volunteer opportunities, or partnership possibilities."
+        url="https://regamosfoundation.lovable.app/contact"
+      />
+      <div className="min-h-screen">
+        <Navigation />
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
@@ -220,6 +227,7 @@ const Contact = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

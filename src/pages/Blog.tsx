@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, User, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -153,8 +154,14 @@ const Blog = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <>
+      <SEOHead 
+        title="Blog"
+        description="Read inspiring stories, updates, and insights from Regamos Foundation's journey of empowering communities and transforming lives."
+        url="https://regamosfoundation.lovable.app/blog"
+      />
+      <div className="min-h-screen">
+        <Navigation />
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
@@ -323,6 +330,7 @@ const Blog = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import TeamSection from "@/components/TeamSection";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Heart, Target, Award } from "lucide-react";
 
@@ -29,8 +30,14 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <>
+      <SEOHead 
+        title="About Us"
+        description="Learn about Regamos Foundation's mission to empower widows, orphans, abused girls, and youth through education and community development in Nigeria."
+        url="https://regamosfoundation.lovable.app/about"
+      />
+      <div className="min-h-screen">
+        <Navigation />
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
@@ -111,6 +118,7 @@ const About = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

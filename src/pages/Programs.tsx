@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import UpcomingProgramsSection from "@/components/UpcomingProgramsSection";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -107,8 +108,14 @@ const Programs = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <>
+      <SEOHead 
+        title="Our Programs"
+        description="Explore Regamos Foundation's comprehensive programs including education, widow empowerment, youth training, mental health support, and shelter services."
+        url="https://regamosfoundation.lovable.app/programs"
+      />
+      <div className="min-h-screen">
+        <Navigation />
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
@@ -207,6 +214,7 @@ const Programs = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

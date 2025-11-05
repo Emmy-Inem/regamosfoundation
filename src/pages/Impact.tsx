@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, GraduationCap, Heart, TrendingUp, Award, CheckCircle } from "lucide-react";
 import educationImg from "@/assets/education.jpg";
@@ -51,8 +52,14 @@ const Impact = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <>
+      <SEOHead 
+        title="Impact Stories"
+        description="Discover real stories of transformation through Regamos Foundation. See how we've empowered widows, educated youth, and strengthened communities."
+        url="https://regamosfoundation.lovable.app/impact"
+      />
+      <div className="min-h-screen">
+        <Navigation />
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
@@ -166,6 +173,7 @@ const Impact = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

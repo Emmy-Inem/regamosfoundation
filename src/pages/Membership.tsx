@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -121,8 +122,14 @@ const Membership = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <>
+      <SEOHead 
+        title="Membership"
+        description="Join the Regamos Foundation community. Become a member to support our mission and gain access to exclusive resources and support programs."
+        url="https://regamosfoundation.lovable.app/membership"
+      />
+      <div className="min-h-screen">
+        <Navigation />
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
@@ -346,6 +353,7 @@ const Membership = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

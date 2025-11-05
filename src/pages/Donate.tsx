@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -98,8 +99,14 @@ const Donate = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <>
+      <SEOHead 
+        title="Donate"
+        description="Support Regamos Foundation's mission to empower widows, orphans, and youth. Your donation creates lasting impact in communities across Nigeria."
+        url="https://regamosfoundation.lovable.app/donate"
+      />
+      <div className="min-h-screen">
+        <Navigation />
       <main>
         {/* Hero Section */}
         <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
@@ -342,6 +349,7 @@ const Donate = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

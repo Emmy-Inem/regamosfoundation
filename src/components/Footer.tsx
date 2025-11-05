@@ -168,8 +168,17 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-primary-foreground/20 text-center text-sm opacity-90">
+        <div className="pt-8 border-t border-primary-foreground/20 text-center text-sm opacity-90 space-y-3">
           <p>&copy; {new Date().getFullYear()} Regamos Foundation. All rights reserved.</p>
+          <div className="flex flex-wrap justify-center gap-4 text-xs">
+            <Link to="/privacy-policy" className="hover:text-accent transition-smooth">
+              Privacy Policy
+            </Link>
+            <span className="opacity-50">|</span>
+            <Link to="/terms-of-service" className="hover:text-accent transition-smooth">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
