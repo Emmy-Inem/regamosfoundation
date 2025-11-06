@@ -18,6 +18,9 @@ import BlogEditor from "./pages/BlogEditor";
 import BlogDetail from "./pages/BlogDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Volunteer from "./pages/Volunteer";
+import Partner from "./pages/Partner";
+import Payment from "./pages/Payment";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +46,9 @@ const App = () => (
           <Route path="/blog-editor/:id" element={<BlogEditor />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/volunteer" element={<Volunteer />} />
+          <Route path="/partner" element={<Partner />} />
+          <Route path="/payment" element={<Payment />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

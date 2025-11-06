@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
@@ -18,6 +19,7 @@ import { Heart, Check, Users, GraduationCap, Home, Sparkles, Copy } from "lucide
 import { toast } from "sonner";
 
 const Donate = () => {
+  const navigate = useNavigate();
   const [selectedAmount, setSelectedAmount] = useState<number | null>(5000);
   const [customAmount, setCustomAmount] = useState("");
   const [donorInfo, setDonorInfo] = useState({
@@ -86,12 +88,17 @@ const Donate = () => {
 
       if (error) throw error;
 
-      toast.success(`Thank you for your donation of ₦${amount.toLocaleString()}! Redirecting to payment...`);
-      
-      // Reset form
-      setDonorInfo({ name: "", email: "", phone: "" });
-      setCustomAmount("");
-      setSelectedAmount(5000);
+      // Navigate to payment page with donation details
+      navigate("/payment", {
+        state: {
+          amount: amount.toString(),
+          donorInfo: {
+            name: donorInfo.name,
+            email: donorInfo.email,
+            phone: donorInfo.phone,
+          }
+        }
+      });
     } catch (error) {
       console.error('Error processing donation:', error);
       toast.error("Failed to process donation. Please try again.");

@@ -9,6 +9,7 @@ import { Mail, Phone, MapPin, Heart, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -201,7 +202,9 @@ const Contact = () => {
                       <p className="text-muted-foreground">
                         Join our community of dedicated volunteers making a real difference in people's lives.
                       </p>
-                      <Button variant="cta" className="w-full">Learn More</Button>
+                      <Button variant="cta" className="w-full" asChild>
+                        <Link to="/volunteer">Learn More</Link>
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -216,7 +219,9 @@ const Contact = () => {
                       <p className="text-muted-foreground">
                         Collaborate with us to create sustainable impact and empower communities together.
                       </p>
-                      <Button variant="cta" className="w-full">Get Started</Button>
+                      <Button variant="cta" className="w-full" asChild>
+                        <Link to="/partner">Get Started</Link>
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
