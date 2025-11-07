@@ -8,11 +8,14 @@ import { Building2, Copy, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   
   const donationAmount = location.state?.amount || "0";
   const donorInfo = location.state?.donorInfo || {};
@@ -33,6 +36,41 @@ const Payment = () => {
   const handlePaymentConfirmation = () => {
     toast.success("Thank you for your donation! We'll confirm your payment shortly.");
     navigate("/");
+  };
+
+  const handleCardPayment = async () => {
+    setIsProcessingPayment(true);
+    try {
+      const paymentReference = `REG-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+      
+      const { data, error } = await supabase.functions.invoke('initialize-monnify-payment', {
+        body: {
+          amount: donationAmount,
+          customerName: donorInfo.name,
+          customerEmail: donorInfo.email,
+          paymentReference,
+          paymentDescription: 'Donation to Regamos Foundation',
+        },
+      });
+
+      if (error) {
+        console.error('Payment initialization error:', error);
+        toast.error('Failed to initialize payment. Please try again.');
+        return;
+      }
+
+      if (data.success && data.checkoutUrl) {
+        // Redirect to Monnify checkout page
+        window.location.href = data.checkoutUrl;
+      } else {
+        toast.error('Failed to initialize payment. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error processing payment:', error);
+      toast.error('An error occurred. Please try again.');
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   return (
@@ -153,22 +191,51 @@ const Payment = () => {
 
                   <TabsContent value="card" className="mt-6">
                     <Card className="border-0 shadow-soft">
-                      <CardContent className="p-8 text-center space-y-6">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mx-auto">
-                          <Building2 className="h-8 w-8 text-muted-foreground" />
+                      <CardContent className="p-8 space-y-6">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10">
+                            <Building2 className="h-6 w-6 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold">Pay with Card</h3>
+                            <p className="text-muted-foreground text-sm">Secure payment via Monnify</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-xl font-bold mb-2">Card Payment Coming Soon</h3>
-                          <p className="text-muted-foreground">
-                            We're working on integrating card payments. For now, please use bank transfer.
-                          </p>
+
+                        <div className="space-y-4">
+                          <div className="p-4 rounded-lg bg-muted/50 space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">Amount</span>
+                              <span className="font-semibold text-xl">₦{parseInt(donationAmount).toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">Payment Method</span>
+                              <span className="font-semibold">Card / Bank Transfer</span>
+                            </div>
+                          </div>
+
+                          <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                            <p className="text-sm">
+                              <strong>Secure Payment:</strong> You'll be redirected to Monnify's secure payment page to complete your transaction.
+                            </p>
+                          </div>
                         </div>
+
                         <Button 
-                          variant="outline" 
-                          size="lg"
-                          onClick={() => document.querySelector<HTMLButtonElement>('[value="bank-transfer"]')?.click()}
+                          variant="cta" 
+                          size="lg" 
+                          className="w-full"
+                          onClick={handleCardPayment}
+                          disabled={isProcessingPayment}
                         >
-                          Switch to Bank Transfer
+                          {isProcessingPayment ? (
+                            <>
+                              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                              Processing...
+                            </>
+                          ) : (
+                            'Proceed to Payment'
+                          )}
                         </Button>
                       </CardContent>
                     </Card>
