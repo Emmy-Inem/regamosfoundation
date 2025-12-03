@@ -1,1 +1,7 @@
 project_id = "hlffhiutjqguedgnnblj"
+
+[functions.initialize-monnify-payment]
+verify_jwt = false
+
+[functions.send-newsletter-welcome]
+verify_jwt = false
