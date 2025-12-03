@@ -24,8 +24,13 @@ const Footer = () => {
     { name: "Partner With Us", path: "/contact", id: "partner" },
   ];
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     
     try {
       const { error } = await supabase
@@ -39,13 +44,25 @@ const Footer = () => {
           throw error;
         }
       } else {
-        toast.success("Thank you for subscribing!");
+        // Send welcome email via edge function
+        try {
+          await supabase.functions.invoke('send-newsletter-welcome', {
+            body: { email: newsletterEmail }
+          });
+        } catch (emailError) {
+          console.error('Error sending welcome email:', emailError);
+          // Don't fail the subscription if email fails
+        }
+        
+        toast.success("Thank you for subscribing! Check your email for a welcome message.");
       }
       
       setNewsletterEmail("");
     } catch (error) {
       console.error('Error subscribing:', error);
       toast.error("Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -159,8 +176,8 @@ const Footer = () => {
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   required
                 />
-                <Button type="submit" variant="secondary" size="sm">
-                  Subscribe
+                <Button type="submit" variant="secondary" size="sm" disabled={isSubmitting}>
+                  {isSubmitting ? "..." : "Subscribe"}
                 </Button>
               </form>
             </div>
