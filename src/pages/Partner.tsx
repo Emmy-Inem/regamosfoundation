@@ -9,8 +9,10 @@ import { Handshake, Target, TrendingUp, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const Partner = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: "",
     contactName: "",
@@ -22,6 +24,8 @@ const Partner = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     
     try {
       const { error } = await supabase
@@ -47,6 +51,8 @@ const Partner = () => {
     } catch (error) {
       console.error('Error submitting partnership form:', error);
       toast.error("Failed to submit inquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -202,8 +208,15 @@ const Partner = () => {
                           required 
                         />
                       </div>
-                      <Button type="submit" variant="cta" size="lg" className="w-full">
-                        Submit Partnership Inquiry
+                      <Button type="submit" variant="cta" size="lg" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          'Submit Partnership Inquiry'
+                        )}
                       </Button>
                     </form>
                   </CardContent>

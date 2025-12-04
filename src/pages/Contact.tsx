@@ -10,8 +10,10 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -40,6 +42,8 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     
     try {
       const { error } = await supabase
@@ -63,6 +67,8 @@ const Contact = () => {
     } catch (error) {
       console.error('Error submitting contact form:', error);
       toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -164,8 +170,15 @@ const Contact = () => {
                           required 
                         />
                       </div>
-                      <Button type="submit" variant="cta" size="lg" className="w-full">
-                        Send Message
+                      <Button type="submit" variant="cta" size="lg" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          'Send Message'
+                        )}
                       </Button>
                     </form>
                   </CardContent>

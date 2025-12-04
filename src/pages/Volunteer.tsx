@@ -9,8 +9,10 @@ import { Heart, Users, Calendar, Award } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const Volunteer = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -21,6 +23,8 @@ const Volunteer = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     
     try {
       const { error } = await supabase
@@ -47,6 +51,8 @@ const Volunteer = () => {
     } catch (error) {
       console.error('Error submitting volunteer form:', error);
       toast.error("Failed to submit application. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -190,8 +196,15 @@ const Volunteer = () => {
                           required 
                         />
                       </div>
-                      <Button type="submit" variant="cta" size="lg" className="w-full">
-                        Submit Application
+                      <Button type="submit" variant="cta" size="lg" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          'Submit Application'
+                        )}
                       </Button>
                     </form>
                   </CardContent>

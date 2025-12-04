@@ -23,7 +23,7 @@ const Payment = () => {
   const bankDetails = {
     bankName: "Zenith Bank",
     accountName: "Regamos Foundation",
-    accountNumber: "1234567890", // Replace with actual account number
+    accountNumber: "1017935691",
   };
 
   const copyToClipboard = (text: string) => {
