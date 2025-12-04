@@ -15,13 +15,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Heart, Check, Users, GraduationCap, Home, Sparkles, Copy } from "lucide-react";
+import { Heart, Check, Users, GraduationCap, Home, Sparkles, Copy, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const Donate = () => {
   const navigate = useNavigate();
   const [selectedAmount, setSelectedAmount] = useState<number | null>(5000);
   const [customAmount, setCustomAmount] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [donorInfo, setDonorInfo] = useState({
     name: "",
     email: "",
@@ -60,6 +61,7 @@ const Donate = () => {
 
   const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     
     // Basic validation
     if (!donorInfo.name.trim() || !donorInfo.email.trim()) {
@@ -74,6 +76,7 @@ const Donate = () => {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const { error } = await supabase
         .from('donations')
@@ -102,6 +105,8 @@ const Donate = () => {
     } catch (error) {
       console.error('Error processing donation:', error);
       toast.error("Failed to process donation. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -228,9 +233,18 @@ const Donate = () => {
                         </div>
                       </div>
 
-                      <Button type="submit" variant="cta" size="lg" className="w-full">
-                        <Heart className="mr-2 h-5 w-5" />
-                        Proceed to Payment
+                      <Button type="submit" variant="cta" size="lg" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <Heart className="mr-2 h-5 w-5" />
+                            Proceed to Payment
+                          </>
+                        )}
                       </Button>
                       
                       <p className="text-xs text-muted-foreground text-center">

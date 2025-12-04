@@ -20,8 +20,8 @@ const Footer = () => {
   const supportLinks = [
     { name: "Donate", path: "/donate", id: "donate" },
     { name: "Become a Member", path: "/membership", id: "membership" },
-    { name: "Volunteer", path: "/contact", id: "volunteer" },
-    { name: "Partner With Us", path: "/contact", id: "partner" },
+    { name: "Volunteer", path: "/volunteer", id: "volunteer" },
+    { name: "Partner With Us", path: "/partner", id: "partner" },
   ];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
