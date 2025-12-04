@@ -12,3 +12,14 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://regamosfoundation.lovable.app/sitemap.xml
+
+# Disallow admin and auth pages
+Disallow: /admin
+Disallow: /auth
+Disallow: /payment
+
+# Crawl delay for non-major bots
+Crawl-delay: 1
