@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import SEOHead from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, User, ArrowLeft, Share2 } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Share2, Facebook, Twitter, MessageCircle, Link2, Linkedin } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -47,18 +48,37 @@ const BlogDetail = () => {
     }
   };
 
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const encodedUrl = encodeURIComponent(currentUrl);
+  const encodedTitle = encodeURIComponent(post?.title || '');
+  const encodedExcerpt = encodeURIComponent(post?.excerpt?.replace(/<[^>]*>/g, '') || '');
+
+  const shareLinks = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+    whatsapp: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
+    linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}&summary=${encodedExcerpt}`,
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(currentUrl);
+    toast.success('Link copied to clipboard!');
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
         title: post?.title,
-        text: post?.excerpt,
-        url: window.location.href,
+        text: post?.excerpt?.replace(/<[^>]*>/g, ''),
+        url: currentUrl,
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copied to clipboard!');
+      handleCopyLink();
     }
   };
+
+  // Strip HTML for meta description
+  const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
 
   if (loading) {
     return (
@@ -78,6 +98,15 @@ const BlogDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead 
+        title={post.title}
+        description={stripHtml(post.excerpt).substring(0, 160)}
+        keywords={`${post.category}, regamos foundation, nigeria ngo, ${post.title.toLowerCase()}`}
+        image={post.image_url || undefined}
+        url={currentUrl}
+        type="article"
+        author={post.author || 'Regamos Foundation'}
+      />
       <Navigation />
       <main className="flex-1 py-20">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -136,14 +165,52 @@ const BlogDetail = () => {
                 dangerouslySetInnerHTML={{ __html: post.excerpt }}
               />
 
-              <div className="flex gap-3 pt-2">
+              {/* Social Sharing Buttons */}
+              <div className="flex flex-wrap gap-2 pt-4">
+                <span className="text-sm text-muted-foreground self-center mr-2">Share:</span>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={handleShare}
+                  className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white border-0"
+                  onClick={() => window.open(shareLinks.facebook, '_blank', 'width=600,height=400')}
                 >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Share
+                  <Facebook className="h-4 w-4 mr-2" />
+                  Facebook
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white border-0"
+                  onClick={() => window.open(shareLinks.twitter, '_blank', 'width=600,height=400')}
+                >
+                  <Twitter className="h-4 w-4 mr-2" />
+                  Twitter
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-[#25D366] hover:bg-[#25D366]/90 text-white border-0"
+                  onClick={() => window.open(shareLinks.whatsapp, '_blank')}
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  WhatsApp
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white border-0"
+                  onClick={() => window.open(shareLinks.linkedin, '_blank', 'width=600,height=400')}
+                >
+                  <Linkedin className="h-4 w-4 mr-2" />
+                  LinkedIn
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyLink}
+                >
+                  <Link2 className="h-4 w-4 mr-2" />
+                  Copy Link
                 </Button>
               </div>
             </div>
