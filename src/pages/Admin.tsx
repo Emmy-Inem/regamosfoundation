@@ -30,6 +30,7 @@ import AchievementsManagement from '@/components/admin/AchievementsManagement';
 import UpcomingProgramsManagement from '@/components/admin/UpcomingProgramsManagement';
 import TeamMembersManagement from '@/components/admin/TeamMembersManagement';
 import TestimonialsManagement from '@/components/admin/TestimonialsManagement';
+import { EmailCampaignManagement } from '@/components/admin/EmailCampaignManagement';
 
 const Admin = () => {
   const { user, loading, isAdmin } = useAuth();
@@ -259,6 +260,7 @@ const Admin = () => {
               <TabsTrigger value="team" className="text-xs md:text-sm">Team</TabsTrigger>
               <TabsTrigger value="testimonials" className="text-xs md:text-sm">Testimonials</TabsTrigger>
               <TabsTrigger value="content" className="text-xs md:text-sm">Content</TabsTrigger>
+              <TabsTrigger value="email" className="text-xs md:text-sm">Email</TabsTrigger>
             </TabsList>
           </div>
 
@@ -830,6 +832,10 @@ const Admin = () => {
 
           <TabsContent value="testimonials">
             <TestimonialsManagement />
+          </TabsContent>
+
+          <TabsContent value="email">
+            <EmailCampaignManagement />
           </TabsContent>
 
           <TabsContent value="analytics">
