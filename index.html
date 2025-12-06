@@ -6,6 +6,11 @@
     <meta name="theme-color" content="#1F8A55" />
     <meta name="msapplication-TileColor" content="#1F8A55" />
     
+    <!-- Verification Meta Tags -->
+    <!-- Replace with your actual verification codes -->
+    <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" />
+    <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" />
+    
     <!-- Primary Meta Tags -->
     <title>Regamos Foundation - Transforming Lives Through Empowerment | Nigeria NGO</title>
     <meta name="title" content="Regamos Foundation - Transforming Lives Through Empowerment | Nigeria NGO" />
@@ -28,14 +33,22 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://regamosfoundation.lovable.app" />
     
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Favicon and Icons -->
+    <!-- Complete Favicon Set -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
     <link rel="manifest" href="/manifest.json" />
     
     <!-- Open Graph / Facebook -->
@@ -123,6 +136,14 @@
       "publisher": {
         "@type": "Organization",
         "name": "Regamos Foundation"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://regamosfoundation.lovable.app/blog?search={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
       }
     }
     </script>
