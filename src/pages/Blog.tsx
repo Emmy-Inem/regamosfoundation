@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, User, ArrowRight } from "lucide-react";
+import { Calendar, User, ArrowRight, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useBlogSearch } from "@/hooks/useBlogSearch";
 import educationImg from "@/assets/education.jpg";
 import empowermentImg from "@/assets/empowerment.jpg";
 import communityImg from "@/assets/community.jpg";
 
 const Blog = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -83,6 +85,27 @@ const Blog = () => {
     },
   ];
 
+  const displayPosts = blogPosts.length > 0 ? blogPosts : defaultPosts;
+  const { searchQuery, setSearchQuery, searchResults, clearSearch, resultCount } = useBlogSearch(displayPosts);
+
+  // Initialize search from URL
+  useEffect(() => {
+    const urlSearch = searchParams.get('search');
+    if (urlSearch) {
+      setSearchQuery(urlSearch);
+    }
+  }, [searchParams, setSearchQuery]);
+
+  // Update URL when search changes
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    if (value) {
+      setSearchParams({ search: value });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   useEffect(() => {
     fetchBlogPosts();
   }, []);
@@ -122,11 +145,9 @@ const Blog = () => {
     }
   };
 
-  const displayPosts = blogPosts.length > 0 ? blogPosts : defaultPosts;
-
   const filteredPosts = selectedCategory === "All" 
-    ? displayPosts 
-    : displayPosts.filter(post => post.category === selectedCategory);
+    ? searchResults 
+    : searchResults.filter(post => post.category === selectedCategory);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -173,6 +194,33 @@ const Blog = () => {
               <p className="text-xl text-muted-foreground leading-relaxed">
                 Stories, updates, and insights from our journey of empowerment
               </p>
+              
+              {/* Search Bar */}
+              <div className="max-w-md mx-auto pt-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search articles..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="pl-10 pr-10"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => handleSearchChange('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  )}
+                </div>
+                {searchQuery && (
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Found {resultCount} article{resultCount !== 1 ? 's' : ''} matching "{searchQuery}"
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </section>

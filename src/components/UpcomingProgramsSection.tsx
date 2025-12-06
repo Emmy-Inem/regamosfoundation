@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Calendar, MapPin, ExternalLink } from "lucide-react";
+import EventSchema from "@/components/schemas/EventSchema";
 
 const UpcomingProgramsSection = () => {
   const { data: programs, isLoading } = useQuery({
@@ -54,8 +55,29 @@ const UpcomingProgramsSection = () => {
     }
   };
 
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
+
   return (
     <section className="py-20 bg-muted/30">
+      {/* Event Schema for each program */}
+      {programs.map((program) => (
+        <EventSchema
+          key={`schema-${program.id}`}
+          name={program.title}
+          description={stripHtml(program.description)}
+          startDate={program.start_date}
+          endDate={program.end_date || undefined}
+          location={program.location}
+          image={program.image_url || undefined}
+          url={program.registration_url || undefined}
+          status={program.status === 'ongoing' ? 'EventScheduled' : 'EventScheduled'}
+        />
+      ))}
+      
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Upcoming Programs & Events</h2>

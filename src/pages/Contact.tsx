@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import FAQSchema from "@/components/schemas/FAQSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +12,29 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+
+const contactFaqs = [
+  {
+    question: "How can I donate to Regamos Foundation?",
+    answer: "You can donate through our website using card payment or bank transfer to our Zenith Bank account (1017935691). Visit our Donate page for more options."
+  },
+  {
+    question: "How can I become a volunteer?",
+    answer: "Visit our Volunteer page and fill out the application form. We welcome volunteers with various skills and availability. We'll contact you after reviewing your application."
+  },
+  {
+    question: "What programs does Regamos Foundation offer?",
+    answer: "We offer programs for widow empowerment, orphan care, youth development, education support, community development, and skills training across Nigeria."
+  },
+  {
+    question: "How can I partner with Regamos Foundation?",
+    answer: "Organizations interested in partnerships can visit our Partner page or contact us directly at regamosfoundation@gmail.com. We welcome corporate sponsors, NGOs, and government agencies."
+  },
+  {
+    question: "Is my donation tax-deductible?",
+    answer: "Regamos Foundation is a registered non-profit organization in Nigeria. We provide donation receipts upon request that may be used for tax purposes depending on your jurisdiction."
+  }
+];
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -79,6 +103,7 @@ const Contact = () => {
         description="Get in touch with Regamos Foundation. Contact us to learn more about our programs, volunteer opportunities, or partnership possibilities."
         url="https://regamosfoundation.lovable.app/contact"
       />
+      <FAQSchema faqs={contactFaqs} />
       <div className="min-h-screen">
         <Navigation />
       <main>
