@@ -13,7 +13,8 @@ Allow: /
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemaps - Dynamic sitemap includes all blog posts
+Sitemap: https://hlffhiutjqguedgnnblj.supabase.co/functions/v1/sitemap
 Sitemap: https://regamosfoundation.lovable.app/sitemap.xml
 
 # Disallow admin and auth pages
