@@ -9,38 +9,38 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 15%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 15%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 152 65% 25%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 152 65% 35%;
+    --primary: 152 65% 33%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 45 100% 45%;
-    --secondary-foreground: 152 65% 25%;
+    --secondary-foreground: 0 0% 10%;
 
     --muted: 150 15% 96%;
-    --muted-foreground: 152 15% 50%;
+    --muted-foreground: 0 0% 40%;
 
     --accent: 45 100% 45%;
-    --accent-foreground: 152 65% 25%;
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 150 15% 90%;
     --input: 150 15% 90%;
-    --ring: 152 65% 35%;
+    --ring: 152 65% 33%;
 
     --radius: 1.5625rem;
 
     --gradient-gold: 45 100% 45%, 45 100% 55%;
-    --gradient-green: 152 65% 35%, 152 65% 45%;
-    --shadow-soft: 0 10px 40px -10px hsla(152, 65%, 35%, 0.1);
+    --gradient-green: 152 65% 33%, 152 65% 43%;
+    --shadow-soft: 0 10px 40px -10px hsla(152, 65%, 33%, 0.1);
     --shadow-glow: 0 0 40px hsla(45, 100%, 45%, 0.3);
     --blur-bg: hsla(0, 0%, 100%, 0.7);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
