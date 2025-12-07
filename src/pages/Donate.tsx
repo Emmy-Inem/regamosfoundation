@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import FAQSchema from "@/components/schemas/FAQSchema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,6 +58,33 @@ const Donate = () => {
       title: "General Fund",
       description: "Support all our programs and initiatives",
     },
+  ];
+
+  const donateFaqs = [
+    {
+      question: "How can I donate to Regamos Foundation?",
+      answer: "You can donate online through our secure payment portal using card payments, or via bank transfer to our Zenith Bank account (Regamos Foundation, Account Number: 1017935691). You can also contact us directly for other payment methods."
+    },
+    {
+      question: "Is my donation tax-deductible?",
+      answer: "Yes, donations to Regamos Foundation are tax-deductible. We provide official donation receipts for all contributions that can be used for tax purposes."
+    },
+    {
+      question: "What is the minimum donation amount?",
+      answer: "The minimum donation amount is ₦1,000. However, any amount is appreciated and helps us continue our mission of empowering vulnerable communities in Nigeria."
+    },
+    {
+      question: "Where does my donation go?",
+      answer: "100% of your donation goes directly to our programs including education scholarships, widow empowerment initiatives, youth skills training, shelter services, and community development projects. We maintain transparent financial reporting."
+    },
+    {
+      question: "Can I set up recurring donations?",
+      answer: "Yes, you can set up monthly recurring donations to provide sustained support for our programs. Contact us to arrange a recurring donation schedule that works for you."
+    },
+    {
+      question: "How will I know my donation made an impact?",
+      answer: "We provide monthly updates on our programs and their impact. Donors receive regular reports showing how their contributions are making a difference in the lives of widows, orphans, and youth across Nigeria."
+    }
   ];
 
   const handleDonate = async (e: React.FormEvent) => {
@@ -117,6 +145,7 @@ const Donate = () => {
         description="Support Regamos Foundation's mission to empower widows, orphans, and youth. Your donation creates lasting impact in communities across Nigeria."
         url="https://regamosfoundation.lovable.app/donate"
       />
+      <FAQSchema faqs={donateFaqs} />
       <div className="min-h-screen">
         <Navigation />
       <main>

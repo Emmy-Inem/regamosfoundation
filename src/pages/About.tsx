@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import TeamSection from "@/components/TeamSection";
 import SEOHead from "@/components/SEOHead";
+import FAQSchema from "@/components/schemas/FAQSchema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Heart, Target, Award } from "lucide-react";
 
@@ -29,6 +30,29 @@ const About = () => {
     },
   ];
 
+  const aboutFaqs = [
+    {
+      question: "What is Regamos Foundation?",
+      answer: "Regamos Foundation is a private, voluntary, faith-based NGO founded in 2018 and incorporated in 2020. We are dedicated to empowering widows, orphans, abused girls, and youth through education, skill development, psychological support, and community engagement in Nigeria."
+    },
+    {
+      question: "When was Regamos Foundation established?",
+      answer: "Regamos Foundation was founded in 2018 and officially incorporated in 2020. Since then, we have touched the lives of hundreds of widows and thousands of young people across multiple communities in Nigeria."
+    },
+    {
+      question: "What are Regamos Foundation's core values?",
+      answer: "Our core values are Compassion (approaching every individual with empathy and care), Integrity (transparency and honesty in all operations), Empowerment (enabling people to take control of their lives), and Excellence (striving for the highest standards in all programs)."
+    },
+    {
+      question: "Who does Regamos Foundation help?",
+      answer: "We primarily help widows, orphans, abused girls, and youth. Our programs provide education, vocational training, psychological support, shelter services, and community development initiatives to these vulnerable groups."
+    },
+    {
+      question: "Is Regamos Foundation a registered organization?",
+      answer: "Yes, Regamos Foundation is an officially incorporated and registered NGO in Nigeria. We operate with full transparency and provide regular financial reports to stakeholders."
+    }
+  ];
+
   return (
     <>
       <SEOHead 
@@ -36,6 +60,7 @@ const About = () => {
         description="Learn about Regamos Foundation's mission to empower widows, orphans, abused girls, and youth through education and community development in Nigeria."
         url="https://regamosfoundation.lovable.app/about"
       />
+      <FAQSchema faqs={aboutFaqs} />
       <div className="min-h-screen">
         <Navigation />
       <main>

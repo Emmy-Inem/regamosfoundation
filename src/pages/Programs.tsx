@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import UpcomingProgramsSection from "@/components/UpcomingProgramsSection";
 import SEOHead from "@/components/SEOHead";
+import FAQSchema from "@/components/schemas/FAQSchema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -107,6 +108,33 @@ const Programs = () => {
     }
   ];
 
+  const programsFaqs = [
+    {
+      question: "What programs does Regamos Foundation offer?",
+      answer: "We offer six main programs: Education & Advocacy (scholarships, tutoring, mentorship), Widow Empowerment (vocational training, microloans), Community Development (infrastructure, health initiatives), Youth Skills Training (digital skills, entrepreneurship), Psychological Support (trauma counseling, mental health), and Shelter & Protection (safe houses, legal support)."
+    },
+    {
+      question: "How can I participate in Regamos Foundation programs?",
+      answer: "You can participate by becoming a beneficiary (if eligible), volunteering your time and skills, partnering with us as an organization, or donating to support our programs. Contact us through our website or call 0802 330 0639 to learn more."
+    },
+    {
+      question: "Who is eligible for Regamos Foundation's education programs?",
+      answer: "Our education programs primarily serve orphans, children from vulnerable families, and youth who lack access to educational resources. Eligibility is determined through our assessment process. Contact us to apply or refer someone in need."
+    },
+    {
+      question: "How does the Widow Empowerment program work?",
+      answer: "Our Widow Empowerment program provides comprehensive support including vocational skills training (tailoring, catering, crafts), microfinance and business development support, psychological counseling, and community networking opportunities to help widows achieve economic independence."
+    },
+    {
+      question: "Does Regamos Foundation provide shelter services?",
+      answer: "Yes, we provide emergency shelter and safe houses for abused girls and vulnerable women. Our shelter services include legal support, rehabilitation programs, and 24/7 crisis intervention. Contact our hotline at 0907 666 4049 for emergency assistance."
+    },
+    {
+      question: "Are there upcoming events or programs I can attend?",
+      answer: "Yes, we regularly organize training sessions, community outreach events, and awareness campaigns. Check our Upcoming Programs section on this page for current events, or subscribe to our newsletter to stay updated on new programs and events."
+    }
+  ];
+
   return (
     <>
       <SEOHead 
@@ -114,6 +142,7 @@ const Programs = () => {
         description="Explore Regamos Foundation's comprehensive programs including education, widow empowerment, youth training, mental health support, and shelter services."
         url="https://regamosfoundation.lovable.app/programs"
       />
+      <FAQSchema faqs={programsFaqs} />
       <div className="min-h-screen">
         <Navigation />
       <main>
