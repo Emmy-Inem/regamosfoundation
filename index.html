@@ -73,37 +73,63 @@
     <meta name="twitter:site" content="@Foundation_raf" />
     <meta name="twitter:creator" content="@Foundation_raf" />
     
-    <!-- Structured Data - Organization -->
+    <!-- Structured Data - Organization (NGO/NonProfit) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "NGO",
+      "@type": ["NGO", "NonProfit"],
+      "@id": "https://regamosfoundation.lovable.app/#organization",
       "name": "Regamos Foundation",
       "alternateName": "Regamos Foundation Nigeria",
       "url": "https://regamosfoundation.lovable.app",
-      "logo": "https://regamosfoundation.lovable.app/og-image.png",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://regamosfoundation.lovable.app/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "image": "https://regamosfoundation.lovable.app/og-image.png",
       "description": "Regamos Foundation empowers widows, orphans, abused girls, and youth through education, empowerment, and community development in Nigeria.",
       "foundingDate": "2020",
+      "nonprofit": {
+        "@type": "NonprofitType",
+        "nonprofitStatus": "NonProfit501c3"
+      },
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "NG",
-        "addressRegion": "Nigeria"
+        "streetAddress": "Lagos, Nigeria",
+        "addressLocality": "Lagos",
+        "addressRegion": "Lagos State",
+        "postalCode": "100001",
+        "addressCountry": {
+          "@type": "Country",
+          "name": "Nigeria",
+          "identifier": "NG"
+        }
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 6.5244,
+        "longitude": 3.3792
       },
       "contactPoint": [
         {
           "@type": "ContactPoint",
           "telephone": "+234-802-330-0639",
           "contactType": "Customer Service",
+          "areaServed": "NG",
           "availableLanguage": ["English"]
         },
         {
           "@type": "ContactPoint",
           "telephone": "+234-907-666-4049",
           "contactType": "Customer Service",
+          "areaServed": "NG",
           "availableLanguage": ["English"]
         }
       ],
       "email": "regamosfoundation@gmail.com",
+      "telephone": "+234-802-330-0639",
       "sameAs": [
         "https://www.facebook.com/share/1ABfZYGXHo/",
         "https://x.com/Foundation_raf",
@@ -120,8 +146,19 @@
         "Youth Development",
         "Education Programs",
         "Community Development",
-        "Skills Training"
-      ]
+        "Skills Training",
+        "Women Empowerment",
+        "Child Welfare"
+      ],
+      "slogan": "Educate • Empower • Advocate",
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "17:00"
+      },
+      "paymentAccepted": ["Bank Transfer", "Card Payment"],
+      "currenciesAccepted": "NGN"
     }
     </script>
     
