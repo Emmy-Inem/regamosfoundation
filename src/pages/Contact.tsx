@@ -108,13 +108,13 @@ const Contact = () => {
         <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
+        <section className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 bg-gradient-to-b from-muted/30 to-background">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
-              <h1 className="text-5xl md:text-6xl font-bold">
+            <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6 animate-fade-in">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
                 Get in <span className="text-primary">Touch</span>
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed px-2">
                 We'd love to hear from you. Reach out to learn more, volunteer, or partner with us.
               </p>
             </div>
@@ -122,16 +122,16 @@ const Contact = () => {
         </section>
 
         {/* Contact Section */}
-        <section className="py-24 bg-background">
+        <section className="py-16 sm:py-20 md:py-24 bg-background">
           <div className="container mx-auto px-4">
-            <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 max-w-6xl mx-auto">
               {/* Contact Form */}
               <div className="animate-fade-in-up">
                 <Card className="border-0 shadow-soft">
-                  <CardContent className="p-8">
-                    <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div className="grid md:grid-cols-2 gap-4">
+                  <CardContent className="p-5 sm:p-6 md:p-8">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Send Us a Message</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                      <div className="grid sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <label htmlFor="firstName" className="text-sm font-medium">
                             First Name

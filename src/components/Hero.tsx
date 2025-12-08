@@ -57,18 +57,18 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-32 relative z-10">
-        <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in-up">
+      <div className="container mx-auto px-4 py-24 sm:py-28 md:py-32 relative z-10">
+        <div className="max-w-4xl mx-auto text-center space-y-5 sm:space-y-6 md:space-y-8 animate-fade-in-up">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full blur-glass border border-primary/20 animate-scale-in">
-            <Sparkles className="h-5 w-5 text-accent" />
-            <span className="text-sm font-medium">
+          <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full blur-glass border border-primary/20 animate-scale-in">
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
+            <span className="text-xs sm:text-sm font-medium">
               {content?.hero_badge || "Transforming Lives Since 2018"}
             </span>
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight px-2">
             {content?.hero_heading || (
               <>
                 Transforming Lives Through
@@ -80,7 +80,7 @@ const Hero = () => {
           </h1>
 
           {/* Description */}
-          <div className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed prose prose-lg max-w-none">
+          <div className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed prose prose-sm sm:prose-lg max-w-none px-2">
             {content?.hero_description ? (
               <span dangerouslySetInnerHTML={{ __html: content.hero_description }} />
             ) : (
@@ -89,14 +89,14 @@ const Hero = () => {
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-            <Button variant="hero" size="lg" asChild className="group">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4 sm:pt-6 px-4">
+            <Button variant="hero" size="lg" asChild className="group w-full sm:w-auto">
               <Link to="/donate">
                 <Heart className="h-5 w-5 group-hover:animate-float" />
                 Donate Now
               </Link>
             </Button>
-            <Button variant="outline" size="lg" asChild className="blur-glass border-primary/30 hover:border-primary/50">
+            <Button variant="outline" size="lg" asChild className="blur-glass border-primary/30 hover:border-primary/50 w-full sm:w-auto">
               <Link to="/membership">
                 <Users className="h-5 w-5" />
                 Become a Member
@@ -105,15 +105,15 @@ const Hero = () => {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-16 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 pt-10 sm:pt-12 md:pt-16 max-w-3xl mx-auto px-2">
             {displayStats.map((stat, index) => (
               <div
                 key={index}
-                className="blur-glass rounded-lg p-6 shadow-soft hover:shadow-glow transition-smooth animate-scale-in"
+                className="blur-glass rounded-lg p-4 sm:p-6 shadow-soft hover:shadow-glow transition-smooth animate-scale-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="text-4xl font-bold text-accent mb-2">{stat.number}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-accent mb-1 sm:mb-2">{stat.number}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
