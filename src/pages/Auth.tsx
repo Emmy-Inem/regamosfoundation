@@ -128,15 +128,15 @@ const Auth = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
-      <main className="flex-1 flex items-center justify-center py-20 px-4">
+      <main className="flex-1 flex items-center justify-center py-24 sm:py-20 px-4">
         <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Welcome to Regamos Foundation</CardTitle>
-            <CardDescription>
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-xl sm:text-2xl">Welcome to Regamos Foundation</CardTitle>
+            <CardDescription className="text-sm">
               {isLogin ? 'Sign in to your account' : 'Create a new account'}
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pb-6">
             <Tabs value={isLogin ? 'login' : 'signup'} onValueChange={(v) => setIsLogin(v === 'login')}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>

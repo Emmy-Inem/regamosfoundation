@@ -132,17 +132,17 @@ const Membership = () => {
         <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
+        <section className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 bg-gradient-to-b from-muted/30 to-background">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full blur-glass border border-primary/20 mb-4">
-                <UserPlus className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium">Join Our Community</span>
+            <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6 animate-fade-in">
+              <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full blur-glass border border-primary/20 mb-2 sm:mb-4">
+                <UserPlus className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <span className="text-xs sm:text-sm font-medium">Join Our Community</span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
                 Become a <span className="text-primary">Member</span>
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed px-2">
                 Join a supportive community dedicated to empowerment, growth, and positive change
               </p>
             </div>
@@ -150,16 +150,16 @@ const Membership = () => {
         </section>
 
         {/* Membership Categories */}
-        <section className="py-24 bg-background">
+        <section className="py-16 sm:py-20 md:py-24 bg-background">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">Choose Your Membership</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div className="text-center mb-10 sm:mb-12 md:mb-16 animate-fade-in">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">Choose Your Membership</h2>
+              <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
                 Select the membership category that best fits your needs
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto mb-10 sm:mb-12 md:mb-16">
               {categories.map((category, index) => (
                 <Card
                   key={category.type}
@@ -171,25 +171,25 @@ const Membership = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                   onClick={() => setSelectedCategory(category.type)}
                 >
-                  <CardContent className="p-8">
-                    <div className="text-center mb-6">
-                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                        <category.icon className="h-8 w-8 text-primary" />
+                  <CardContent className="p-5 sm:p-6 md:p-8">
+                    <div className="text-center mb-4 sm:mb-6">
+                      <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-primary/10 mb-3 sm:mb-4">
+                        <category.icon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-primary" />
                       </div>
-                      <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
-                      <p className="text-3xl font-bold text-accent">{category.fee}</p>
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">{category.title}</h3>
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-accent">{category.fee}</p>
                     </div>
-                    <ul className="space-y-3">
+                    <ul className="space-y-2 sm:space-y-3">
                       {category.benefits.map((benefit, idx) => (
-                        <li key={idx} className="flex items-start gap-3">
-                          <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                          <span className="text-sm">{benefit}</span>
+                        <li key={idx} className="flex items-start gap-2 sm:gap-3">
+                          <Check className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0 mt-0.5" />
+                          <span className="text-xs sm:text-sm">{benefit}</span>
                         </li>
                       ))}
                     </ul>
                     <Button
                       variant={selectedCategory === category.type ? "cta" : "outline"}
-                      className="w-full mt-6"
+                      className="w-full mt-4 sm:mt-6"
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedCategory(category.type);
@@ -205,10 +205,10 @@ const Membership = () => {
             {/* Application Form */}
             {selectedCategory && (
               <Card className="border-0 shadow-soft max-w-3xl mx-auto animate-fade-in">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold mb-6">Complete Your Application</h2>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
+                <CardContent className="p-5 sm:p-6 md:p-8">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Complete Your Application</h2>
+                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                    <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label htmlFor="firstName" className="text-sm font-medium">
                           First Name *
@@ -235,7 +235,7 @@ const Membership = () => {
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-medium">
                           Email Address *

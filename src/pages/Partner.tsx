@@ -90,13 +90,13 @@ const Partner = () => {
         <Navigation />
         <main>
           {/* Hero Section */}
-          <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
+          <section className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 bg-gradient-to-b from-muted/30 to-background">
             <div className="container mx-auto px-4">
-              <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
-                <h1 className="text-5xl md:text-6xl font-bold">
+              <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6 animate-fade-in">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
                   Partner <span className="text-primary">With Us</span>
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed px-2">
                   Collaborate with us to create sustainable impact and empower communities together.
                 </p>
               </div>
@@ -104,19 +104,19 @@ const Partner = () => {
           </section>
 
           {/* Partnership Types Section */}
-          <section className="py-16 bg-background">
+          <section className="py-12 sm:py-14 md:py-16 bg-background">
             <div className="container mx-auto px-4">
               <div className="max-w-6xl mx-auto">
-                <h2 className="text-3xl font-bold text-center mb-12">Partnership Opportunities</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-8 sm:mb-10 md:mb-12">Partnership Opportunities</h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
                   {partnershipTypes.map((type, index) => (
                     <Card key={index} className="border-0 shadow-soft hover:shadow-glow transition-smooth">
-                      <CardContent className="p-6 text-center space-y-4">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto">
-                          <type.icon className="h-8 w-8 text-primary" />
+                      <CardContent className="p-4 sm:p-5 md:p-6 text-center space-y-3 sm:space-y-4">
+                        <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-primary/10 mx-auto">
+                          <type.icon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-primary" />
                         </div>
-                        <h3 className="font-semibold text-lg">{type.title}</h3>
-                        <p className="text-muted-foreground text-sm">{type.description}</p>
+                        <h3 className="font-semibold text-base sm:text-lg">{type.title}</h3>
+                        <p className="text-muted-foreground text-xs sm:text-sm">{type.description}</p>
                       </CardContent>
                     </Card>
                   ))}
@@ -126,13 +126,13 @@ const Partner = () => {
           </section>
 
           {/* Partnership Form Section */}
-          <section className="py-24 bg-muted/30">
+          <section className="py-16 sm:py-20 md:py-24 bg-muted/30">
             <div className="container mx-auto px-4">
               <div className="max-w-2xl mx-auto">
                 <Card className="border-0 shadow-soft">
-                  <CardContent className="p-8">
-                    <h2 className="text-3xl font-bold mb-6 text-center">Start a Partnership</h2>
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                  <CardContent className="p-5 sm:p-6 md:p-8">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-center">Start a Partnership</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                       <div className="space-y-2">
                         <label htmlFor="organizationName" className="text-sm font-medium">
                           Organization Name *
