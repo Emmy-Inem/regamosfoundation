@@ -24,19 +24,19 @@ const Mission = () => {
       icon: Target,
       title: "Our Mission",
       description: content?.mission_text ||
-        "To empower widows, orphans, abused girls, and youth through education, advocacy, and community development, fostering dignity and self-sufficiency.",
+        "To improve the livelihood of widows, young people, abused girls and the less privileged through Advocacy, Education, Economic Empowerment, Psychological Support, Entrepreneurship Training and Community Development Initiatives.",
     },
     {
       icon: Eye,
       title: "Our Vision",
       description: content?.vision_text ||
-        "A world where every vulnerable person has access to opportunities, support, and the resources needed to thrive and reach their full potential.",
+        "Transforming lives through empowerment.",
     },
     {
       icon: Heart,
       title: "Our Values",
       description: content?.values_text ||
-        "Compassion, integrity, empowerment, faith, and community - these core principles guide every action we take and every life we touch.",
+        "Love and Compassion, Obedience to God's call, Long Term Commitment, Respect for every Individual, Partnership, Teamwork, Integrity and Accountability.",
     },
   ];
 
