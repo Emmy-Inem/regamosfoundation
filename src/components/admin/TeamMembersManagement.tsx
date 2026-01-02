@@ -167,45 +167,48 @@ const TeamMembersManagement = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Team Members Management</h2>
-        <Button onClick={() => setShowForm(!showForm)}>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
+        <h2 className="text-xl sm:text-2xl font-bold">Team Members Management</h2>
+        <Button onClick={() => setShowForm(!showForm)} size="sm" className="w-full sm:w-auto">
           <Plus className="h-4 w-4 mr-2" />
           {showForm ? "Cancel" : "Add Team Member"}
         </Button>
       </div>
 
       {showForm && (
-        <Card className="p-6">
+        <Card className="p-4 sm:p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="full_name">Full Name</Label>
+              <Label htmlFor="full_name" className="text-sm">Full Name</Label>
               <Input
                 id="full_name"
                 value={formData.full_name}
                 onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                 required
+                className="mt-1"
               />
             </div>
 
             <div>
-              <Label htmlFor="role">Role/Position</Label>
+              <Label htmlFor="role" className="text-sm">Role/Position</Label>
               <Input
                 id="role"
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 required
+                className="mt-1"
               />
             </div>
 
             <div>
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio" className="text-sm">Bio</Label>
               <Textarea
                 id="bio"
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 rows={4}
+                className="mt-1"
               />
             </div>
 
@@ -216,7 +219,7 @@ const TeamMembersManagement = () => {
             />
 
             <div className="space-y-2">
-              <Label>Social Links (optional)</Label>
+              <Label className="text-sm">Social Links (optional)</Label>
               <Input
                 placeholder="Facebook URL"
                 value={formData.social_links.facebook}
@@ -252,13 +255,14 @@ const TeamMembersManagement = () => {
             </div>
 
             <div>
-              <Label htmlFor="display_order">Display Order</Label>
+              <Label htmlFor="display_order" className="text-sm">Display Order</Label>
               <Input
                 id="display_order"
                 type="number"
                 value={formData.display_order}
                 onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
                 required
+                className="mt-1"
               />
             </div>
 
@@ -268,10 +272,10 @@ const TeamMembersManagement = () => {
                 checked={formData.is_active}
                 onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
               />
-              <Label htmlFor="is_active">Active</Label>
+              <Label htmlFor="is_active" className="text-sm">Active</Label>
             </div>
 
-            <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+            <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending} className="w-full sm:w-auto">
               {(createMutation.isPending || updateMutation.isPending) && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
@@ -281,28 +285,28 @@ const TeamMembersManagement = () => {
         </Card>
       )}
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {teamMembers?.map((member) => (
-          <Card key={member.id} className="p-4">
-            <div className="space-y-3">
+          <Card key={member.id} className="p-3 sm:p-4">
+            <div className="space-y-2 sm:space-y-3">
               {member.image_url && (
-                <img src={member.image_url} alt={member.full_name} className="w-full h-48 object-cover rounded" />
+                <img src={member.image_url} alt={member.full_name} className="w-full h-36 sm:h-48 object-cover rounded" />
               )}
               <div>
-                <h3 className="font-semibold text-lg">{member.full_name}</h3>
-                <p className="text-sm text-muted-foreground">{member.role}</p>
-                {member.bio && <p className="text-sm mt-2 line-clamp-3">{member.bio}</p>}
+                <h3 className="font-semibold text-base sm:text-lg">{member.full_name}</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">{member.role}</p>
+                {member.bio && <p className="text-xs sm:text-sm mt-2 line-clamp-3">{member.bio}</p>}
               </div>
               <div className="flex items-center justify-between">
-                <span className={`text-xs px-2 py-1 rounded ${member.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                <span className={`text-xs px-2 py-1 rounded ${member.is_active ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
                   {member.is_active ? 'Active' : 'Inactive'}
                 </span>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" onClick={() => handleEdit(member)}>
-                    <Pencil className="h-4 w-4" />
+                    <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                   <Button variant="destructive" size="sm" onClick={() => setDeleteId(member.id)}>
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
               </div>
