@@ -4,7 +4,8 @@ import TeamSection from "@/components/TeamSection";
 import SEOHead from "@/components/SEOHead";
 import FAQSchema from "@/components/schemas/FAQSchema";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Heart, Target, Award, Shield, Handshake, CheckCircle, Star } from "lucide-react";
+import { Users, Heart, Target, Award, Shield, Handshake, CheckCircle, Star, GraduationCap, BookOpen, Crown } from "lucide-react";
+import academyLogo from "@/assets/regamos-academy-logo.png";
 
 const About = () => {
   const coreValues = [
@@ -205,6 +206,112 @@ const About = () => {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Regamos Royal Academy Section */}
+        <section className="py-16 sm:py-20 md:py-24 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-10 sm:mb-12 md:mb-16 animate-fade-in">
+                <div className="flex justify-center mb-6">
+                  <img src={academyLogo} alt="Regamos Royal Academy Logo" className="h-32 sm:h-40 md:h-48 w-auto" />
+                </div>
+                <div className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs sm:text-sm font-medium mb-4">
+                  Social Enterprise
+                </div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">Regamos Royal Academy</h2>
+                <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto px-2">
+                  A Social Enterprise of Regamos Foundation - Creche, Early Years and Primary learning community providing high quality, well-rounded education where every child matters.
+                </p>
+              </div>
+
+              <Card className="border-0 shadow-soft animate-fade-in-up mb-8">
+                <CardContent className="p-6 sm:p-8 md:p-10">
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary mb-3">About the Academy</h3>
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                        Regamos Royal Academy provides high quality, well-rounded education where every child matters and is groomed to make a difference globally. We run a blend of the British-Nigerian curriculum fully integrated with technology, delivered through Activity Based Learning with a focus on raising globally-minded impact champions.
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                        Our Teachers are caring and strongly committed to providing an environment where all children have the opportunity to learn to a high level and be equipped with life skills. Staff continually seek to improve their teaching skills and enhance the social and academic learning of each child in their classroom.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <Card className="border-0 shadow-soft animate-fade-in-up">
+                  <CardContent className="p-6 sm:p-8">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10">
+                        <Target className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold">School Vision</h3>
+                    </div>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      An inclusive learning environment where every child is given the opportunity to thrive, excel and impact.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-soft animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                  <CardContent className="p-6 sm:p-8">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent/10">
+                        <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold">School Mission</h3>
+                    </div>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      To provide a nurturing environment that produces Godly citizens, academic achievers and global influencers equipped with critical thinking skills, problem solving skills, life skills, creativity, global perspective, respect for core values of honesty, loyalty, perseverance, and compassion.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card className="border-0 shadow-soft animate-fade-in-up bg-gradient-to-br from-primary/5 to-accent/5">
+                <CardContent className="p-6 sm:p-8 md:p-10 text-center">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2">Motto</h3>
+                  <p className="text-lg sm:text-xl md:text-2xl text-primary font-semibold italic">"Nurturing Impact Makers"</p>
+                  <p className="text-sm sm:text-base text-muted-foreground mt-4 max-w-2xl mx-auto">
+                    We develop our students to "do the right things, in the right way, with the right people, for the right reasons".
+                  </p>
+                </CardContent>
+              </Card>
+
+              <div className="mt-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-center mb-6">Core Values - As Impact Makers We:</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {[
+                    { icon: Heart, value: "Love God" },
+                    { icon: Crown, value: "Leadership" },
+                    { icon: Shield, value: "Live Responsibly" },
+                    { icon: Users, value: "Work Collaboratively" },
+                    { icon: BookOpen, value: "Are Resourceful" },
+                    { icon: Handshake, value: "Practice Empathy" },
+                    { icon: Star, value: "Are True to Personal Values" },
+                  ].map((item, index) => (
+                    <Card key={index} className="border-0 shadow-soft hover:shadow-glow transition-smooth animate-fade-in-up" style={{ animationDelay: `${index * 0.05}s` }}>
+                      <CardContent className="p-4 text-center">
+                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 mb-2">
+                          <item.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <p className="text-xs sm:text-sm font-medium">{item.value}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>

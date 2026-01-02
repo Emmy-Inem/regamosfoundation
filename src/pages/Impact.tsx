@@ -9,10 +9,10 @@ import communityImg from "@/assets/community.jpg";
 
 const Impact = () => {
   const stats = [
-    { icon: Users, number: "500+", label: "Widows Empowered", color: "primary" },
-    { icon: GraduationCap, number: "1000+", label: "Youth Trained", color: "accent" },
-    { icon: Heart, number: "50+", label: "Communities Reached", color: "primary" },
-    { icon: Award, number: "200+", label: "Scholarships Awarded", color: "accent" },
+    { icon: Users, number: "2,000+", label: "Youth Empowered", color: "primary" },
+    { icon: Heart, number: "800+", label: "Women & Widows Impacted", color: "accent" },
+    { icon: GraduationCap, number: "3,000+", label: "Children Reached", color: "primary" },
+    { icon: Award, number: "300+", label: "Medical Outreach Recipients", color: "accent" },
   ];
 
   const stories = [
@@ -43,12 +43,30 @@ const Impact = () => {
   ];
 
   const achievements = [
-    "Established 10 vocational training centers",
-    "Distributed over 2,000 school supplies kits",
-    "Provided medical outreach to 5,000+ individuals",
-    "Created 150+ sustainable small businesses",
-    "Trained 500+ women in various vocational skills",
-    "Placed 300+ youth in employment or internships",
+    {
+      title: "Youth Empowerment & Leadership Development",
+      description: "Empowered over 2,000 youth through the annual Youth Empowerment Program (YEP), equipping them with essential skills for personal and professional growth."
+    },
+    {
+      title: "Women's Economic Empowerment & Support",
+      description: "Impacted the lives of over 800 women and widows through economic empowerment initiatives, capacity-building programs, mentorship, and counseling services. Provided 100 hybrid palm tree seedlings to women in rural communities."
+    },
+    {
+      title: "Child Protection & Education Advocacy",
+      description: "Reached over 3,000 young school children through the 'Speak Out, Speak Up' Project, raising awareness on child sexual abuse prevention. Donated sanitary pads to girls in underserved schools."
+    },
+    {
+      title: "Support for Orphans & Vulnerable Communities",
+      description: "Partnered with five orphanages to provide life skills training, food donations, computers, and the refurbishment of a digital library, enhancing learning opportunities for disadvantaged children."
+    },
+    {
+      title: "Health Outreach for Rural Communities",
+      description: "Organized free medical outreaches in rural communities, providing essential healthcare services to over 300 women, improving their well-being and access to medical care."
+    },
+    {
+      title: "Establishment of Regamos Royal Academy",
+      description: "Founded Regamos Royal Academy, a social enterprise dedicated to offering quality education to children from struggling families, underserved communities, and out-of-school children."
+    },
   ];
 
   return (
@@ -153,16 +171,21 @@ const Impact = () => {
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
+              <div className="grid md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
                 {achievements.map((achievement, index) => (
                   <Card
                     key={index}
                     className="border-0 shadow-soft hover:shadow-glow transition-smooth animate-fade-in-up"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
-                    <CardContent className="p-4 sm:p-5 md:p-6 flex items-start gap-3 sm:gap-4">
-                      <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0 mt-0.5" />
-                      <p className="text-sm sm:text-base md:text-lg">{achievement}</p>
+                    <CardContent className="p-4 sm:p-5 md:p-6">
+                      <div className="flex items-start gap-3 sm:gap-4">
+                        <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0 mt-1" />
+                        <div>
+                          <h3 className="font-semibold text-sm sm:text-base md:text-lg mb-2">{achievement.title}</h3>
+                          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{achievement.description}</p>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
