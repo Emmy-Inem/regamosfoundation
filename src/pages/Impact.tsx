@@ -7,6 +7,10 @@ import digitalLibraryImg from "@/assets/impact-digital-library.jpg";
 import medicalOutreachImg from "@/assets/impact-medical-outreach.jpg";
 import financialLiteracyImg from "@/assets/impact-financial-literacy.jpg";
 import palmSeedlingsImg from "@/assets/impact-palm-seedlings.jpg";
+import menstrualHygieneImg from "@/assets/impact-menstrual-hygiene.jpg";
+import communityOutreachImg from "@/assets/impact-community-outreach.jpg";
+import childProtectionImg from "@/assets/impact-child-protection.jpg";
+import lifeSkillsImg from "@/assets/impact-life-skills.jpg";
 
 const Impact = () => {
   const stats = [
@@ -48,6 +52,38 @@ const Impact = () => {
       story:
         "Sematex LM Services led by the Managing Director, Mr. Aniefiok Ekanem, donated water packs and 100 palm seedlings to farmers during our Health and Wealth community initiative in Mbioto 1. This initiative supports Regamos Foundation's 300 women empowerment initiative by providing sustainable livelihood opportunities.",
       impact: "100 seedlings distributed",
+    },
+    {
+      name: "Pad A Girl Project",
+      title: "World Menstrual Hygiene Day",
+      image: menstrualHygieneImg,
+      story:
+        "Regamos Foundation partnered with Visionary Women to celebrate World Menstrual Hygiene Day. We distributed 150 pads to girls at Gbangapi Secondary School, Minna, Niger State. We educated them on the importance of menstrual hygiene, how to track their menstrual cycle, and the importance of being a female child. At Regamos Foundation, our priority is to make sure that the female child sees a bright future for herself.",
+      impact: "150 girls reached",
+    },
+    {
+      name: "Community Empowerment",
+      title: "Transforming Lives Together",
+      image: communityOutreachImg,
+      story:
+        "At Regamos Foundation we are passionate about transforming lives. With the support of His Excellencies, the Deputy Governor, and the Chairman of our Advisory Board, along with the entire Regamos Foundation team, we continue to reach more communities and change lives for the better.",
+      impact: "Multiple communities",
+    },
+    {
+      name: "Speak Out Against Sexual Abuse",
+      title: "Child Protection Network Campaign",
+      image: childProtectionImg,
+      story:
+        "Regamos Foundation in celebration of the Child Protection Network (CPN) Lagos State week had a 'Speak out against sexual abuse' sensitisation campaign for Secondary School students in Ibeju Lekki, Lagos Nigeria. Joining our foundation in this sensitisation campaign was the Ibeju Lekki CPN Coordinator. The students were equipped with knowledge on how to stay safe and report incidences of sexual abuse.",
+      impact: "100+ students educated",
+    },
+    {
+      name: "Life Skills Training",
+      title: "Destiny Trust Orphanage",
+      image: lifeSkillsImg,
+      story:
+        "Life Skills Training for Orphanages at Destiny Trust Orphanage on the topic of Self Awareness. We taught 5 reasons why Self Awareness is important: Self Reflection, Strength and Weaknesses, Manage your emotions, Consider others, and Take criticism. Empowering children with essential life skills for their future.",
+      impact: "20+ children trained",
     },
   ];
 
