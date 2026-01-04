@@ -11,6 +11,11 @@ import menstrualHygieneImg from "@/assets/impact-menstrual-hygiene.jpg";
 import communityOutreachImg from "@/assets/impact-community-outreach.jpg";
 import childProtectionImg from "@/assets/impact-child-protection.jpg";
 import lifeSkillsImg from "@/assets/impact-life-skills.jpg";
+import hpDonationImg from "@/assets/impact-hp-donation.jpg";
+import computerTrainingImg from "@/assets/impact-computer-training.jpg";
+import childrensDayImg from "@/assets/impact-childrens-day.jpg";
+import rocoOrphanageImg from "@/assets/impact-roco-orphanage.jpg";
+import peculiarSaintImg from "@/assets/impact-peculiar-saint.jpg";
 
 const Impact = () => {
   const stats = [
@@ -84,6 +89,46 @@ const Impact = () => {
       story:
         "Life Skills Training for Orphanages at Destiny Trust Orphanage on the topic of Self Awareness. We taught 5 reasons why Self Awareness is important: Self Reflection, Strength and Weaknesses, Manage your emotions, Consider others, and Take criticism. Empowering children with essential life skills for their future.",
       impact: "20+ children trained",
+    },
+    {
+      name: "HP Foundation Partnership",
+      title: "Technology for Education",
+      image: hpDonationImg,
+      story:
+        "Thank you Global Shapers Community, HP Foundation and Codesparks for making this a reality. Through this incredible partnership, we were able to provide computers and technology resources to support education and digital literacy for orphanages and underserved communities, transforming lives through technology.",
+      impact: "Multiple computers donated",
+    },
+    {
+      name: "Computer Training Program",
+      title: "Arrow of God Orphanage",
+      image: computerTrainingImg,
+      story:
+        "Regamos Foundation training the teachers of Arrow of God Orphanage on the basic components of the computer system. The training covered areas such as input devices and output devices processing, software, hardware and storage devices. This is the first of the three weeks training to be conducted by the foundation in Arrows of God Orphanage.",
+      impact: "Teachers empowered",
+    },
+    {
+      name: "Children's Day Celebration",
+      title: "UDV Orphanage",
+      image: childrensDayImg,
+      story:
+        "Regamos Foundation in partnership with Tee Dee Foodies and Parker's Global Foundation celebrated Children's Day with children in UDV Orphanage. The children had plenty to eat and drink. They sang, played and were celebrated. From all of us at Regamos Foundation we wish every child out there a 'Happy Children's Day'.",
+      impact: "30+ children celebrated",
+    },
+    {
+      name: "Life Skills at Roco Orphanage",
+      title: "Self Awareness Module",
+      image: rocoOrphanageImg,
+      story:
+        "Regamos Foundation life skills training program at Roco orphanage. Today's module was Self Awareness. It was an impactful session where children learned about understanding themselves and their potential. The training helps orphans develop essential skills for navigating life's challenges.",
+      impact: "25+ children trained",
+    },
+    {
+      name: "Peculiar Saint Orphanage",
+      title: "Communication & Self Awareness",
+      image: peculiarSaintImg,
+      story:
+        "We were at Peculiar Saint Orphanage to empower the children on life skills training. We taught them Communication skills and Self Awareness. It was facilitated by our Founder/Executive Director, Dr. Regina Inem and our intern, Praise from a Private University. Building foundations for brighter futures.",
+      impact: "15+ children empowered",
     },
   ];
 
