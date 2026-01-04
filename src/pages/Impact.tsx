@@ -3,9 +3,10 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, GraduationCap, Heart, TrendingUp, Award, CheckCircle } from "lucide-react";
-import educationImg from "@/assets/education.jpg";
-import empowermentImg from "@/assets/empowerment.jpg";
-import communityImg from "@/assets/community.jpg";
+import digitalLibraryImg from "@/assets/impact-digital-library.jpg";
+import medicalOutreachImg from "@/assets/impact-medical-outreach.jpg";
+import financialLiteracyImg from "@/assets/impact-financial-literacy.jpg";
+import palmSeedlingsImg from "@/assets/impact-palm-seedlings.jpg";
 
 const Impact = () => {
   const stats = [
@@ -17,28 +18,36 @@ const Impact = () => {
 
   const stories = [
     {
-      name: "Amaka's Story",
-      title: "From Widow to Entrepreneur",
-      image: empowermentImg,
+      name: "Digital Library at Arrow of God Orphanage",
+      title: "Transforming Lives Through Technology",
+      image: digitalLibraryImg,
       story:
-        "After losing her husband, Amaka was left to care for her three children alone. Through our widow empowerment program, she learned tailoring skills and received a microloan to start her own business. Today, she runs a successful tailoring shop and employs two other widows.",
-      impact: "Now supporting 5 families",
+        "In partnership with HP Foundation and Global Shapers, Regamos Foundation commissioned a Digital Library at the Arrow of God Orphanage. This project included digital library refurbishment, training of all children aged 12-18 years, and teacher/staff training on computer skills. The project commenced February 2021 and was successfully completed in August 2021.",
+      impact: "100+ children trained",
     },
     {
-      name: "David's Journey",
-      title: "Youth Skills Training Success",
-      image: educationImg,
+      name: "Health & Wealth Initiative",
+      title: "Free Medical Outreach in Mbioto 1",
+      image: medicalOutreachImg,
       story:
-        "David joined our youth training program as a school dropout with no prospects. Through digital skills training and mentorship, he discovered his passion for graphic design. He now works as a freelance designer and mentors other young people in the program.",
-      impact: "Earning sustainable income",
+        "As part of our Health and Wealth initiative for 300 women empowerment program in Mbioto 1, Etinan LGA, Akwa Ibom State, we organized a free medical service and drug administration at the Mbioto 1 Health Centre. The village Head and council chiefs were happy to receive the drugs donated by Regamos Foundation for the women and people of the community.",
+      impact: "300+ women served",
     },
     {
-      name: "Community Transformation",
-      title: "Empowering Entire Villages",
-      image: communityImg,
+      name: "Financial Literacy Empowerment",
+      title: "Access Bank Partnership",
+      image: financialLiteracyImg,
       story:
-        "In a rural community outside Lagos, we implemented a comprehensive development program including education, health awareness, and economic empowerment. The community now has a functional school, health clinic, and women's cooperative generating income.",
-      impact: "250+ families transformed",
+        "Access Bank, led by their Abuja team and Uyo office with their Regional Manager, partnered with us to empower 300 women on Financial Literacy skills during our Health and Wealth initiative. The Bank gave out free gifts, opened accounts for the women, empowered selected youth on POS business, and promised to create a POS point in the village.",
+      impact: "300 women empowered",
+    },
+    {
+      name: "Sustainable Livelihoods",
+      title: "Palm Seedlings Distribution",
+      image: palmSeedlingsImg,
+      story:
+        "Sematex LM Services led by the Managing Director, Mr. Aniefiok Ekanem, donated water packs and 100 palm seedlings to farmers during our Health and Wealth community initiative in Mbioto 1. This initiative supports Regamos Foundation's 300 women empowerment initiative by providing sustainable livelihood opportunities.",
+      impact: "100 seedlings distributed",
     },
   ];
 
