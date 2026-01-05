@@ -31,6 +31,8 @@ import UpcomingProgramsManagement from '@/components/admin/UpcomingProgramsManag
 import TeamMembersManagement from '@/components/admin/TeamMembersManagement';
 import TestimonialsManagement from '@/components/admin/TestimonialsManagement';
 import { EmailCampaignManagement } from '@/components/admin/EmailCampaignManagement';
+import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
+import { ExportData } from '@/components/admin/ExportData';
 
 const Admin = () => {
   const { user, loading, isAdmin } = useAuth();
@@ -244,9 +246,10 @@ const Admin = () => {
       <main className="flex-1 container mx-auto px-4 py-20">
         <h1 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8">Admin Dashboard</h1>
         
-        <Tabs defaultValue="donations" className="space-y-4">
+        <Tabs defaultValue="analytics" className="space-y-4">
           <div className="overflow-x-auto pb-2">
             <TabsList className="inline-flex w-auto min-w-full justify-start">
+              <TabsTrigger value="analytics" className="text-xs md:text-sm">Analytics</TabsTrigger>
               <TabsTrigger value="donations" className="text-xs md:text-sm">Donations</TabsTrigger>
               <TabsTrigger value="members" className="text-xs md:text-sm">Members</TabsTrigger>
               <TabsTrigger value="contacts" className="text-xs md:text-sm">Contact</TabsTrigger>
@@ -261,8 +264,13 @@ const Admin = () => {
               <TabsTrigger value="testimonials" className="text-xs md:text-sm">Testimonials</TabsTrigger>
               <TabsTrigger value="content" className="text-xs md:text-sm">Content</TabsTrigger>
               <TabsTrigger value="email" className="text-xs md:text-sm">Email</TabsTrigger>
+              <TabsTrigger value="export" className="text-xs md:text-sm">Export</TabsTrigger>
             </TabsList>
           </div>
+
+          <TabsContent value="analytics">
+            <AnalyticsDashboard />
+          </TabsContent>
 
           <TabsContent value="donations">
             <Card>
@@ -873,6 +881,10 @@ const Admin = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="export">
+            <ExportData />
           </TabsContent>
         </Tabs>
       </main>

@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import SocialShareButtons from "@/components/SocialShareButtons";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, GraduationCap, Heart, TrendingUp, Award, CheckCircle } from "lucide-react";
 import digitalLibraryImg from "@/assets/impact-digital-library.jpg";
@@ -241,7 +242,13 @@ const Impact = () => {
                     <CardContent className={`p-5 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-center ${index % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""}`}>
                       <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2">{story.name}</h3>
                       <p className="text-primary font-semibold mb-3 sm:mb-4 text-sm sm:text-base">{story.title}</p>
-                      <p className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg">{story.story}</p>
+                      <p className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg mb-4">{story.story}</p>
+                      <SocialShareButtons 
+                        url={`https://regamosfoundation.lovable.app/impact#${story.name.toLowerCase().replace(/\s+/g, '-')}`}
+                        title={`${story.name} - ${story.title}`}
+                        description={story.story.substring(0, 120)}
+                        compact
+                      />
                     </CardContent>
                   </div>
                 </Card>
