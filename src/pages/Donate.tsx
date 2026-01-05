@@ -347,40 +347,8 @@ const Donate = () => {
                           </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 pt-4">
-                          <div className="space-y-4">
-                            <h4 className="font-semibold">Bank Transfer - Option 1</h4>
-                            <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
-                              <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Bank Name:</span>
-                                <span className="font-medium">Fidelity Bank</span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Account Name:</span>
-                                <span className="font-medium">Regamos Consulting</span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Account Number:</span>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium">5610043086</span>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-6 w-6 p-0"
-                                    onClick={() => {
-                                      navigator.clipboard.writeText("5610043086");
-                                      toast.success("Account number copied!");
-                                    }}
-                                  >
-                                    <Copy className="h-3 w-3" />
-                                  </Button>
-                                </div>
-                              </div>
-                              <div className="text-xs text-muted-foreground mt-2">
-                                Reference: Donate to widows and less privilege/Your Name
-                              </div>
-                            </div>
-
-                            <h4 className="font-semibold">Bank Transfer - Option 2</h4>
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Bank Transfer</h4>
                             <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
                               <div className="flex justify-between items-center">
                                 <span className="text-muted-foreground">Bank Name:</span>
