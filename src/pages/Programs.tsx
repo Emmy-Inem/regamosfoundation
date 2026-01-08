@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import UpcomingProgramsSection from "@/components/UpcomingProgramsSection";
+import EventCalendar from "@/components/EventCalendar";
 import SEOHead from "@/components/SEOHead";
 import FAQSchema from "@/components/schemas/FAQSchema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -350,6 +351,9 @@ const Programs = () => {
             </div>
           </div>
         </section>
+
+        {/* Event Calendar Section */}
+        <EventCalendar />
 
         {/* Upcoming Programs Section */}
         <UpcomingProgramsSection />
