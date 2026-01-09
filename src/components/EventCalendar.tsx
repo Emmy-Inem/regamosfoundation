@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Calendar as CalendarIcon, MapPin, ChevronLeft, ChevronRight, UserPlus, Check } from "lucide-react";
+import { Loader2, Calendar as CalendarIcon, MapPin, ChevronLeft, ChevronRight, UserPlus, Check, ChevronDown } from "lucide-react";
 import { format, parseISO, isWithinInterval, startOfDay, endOfDay, addMonths, subMonths, isBefore, isAfter } from "date-fns";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -106,17 +106,39 @@ const EventCalendar = () => {
     });
   };
 
-  // Get programs for next 2 months only (for the list view)
-  const getUpcomingTwoMonthsPrograms = () => {
+  const [eventsMonthsToShow, setEventsMonthsToShow] = useState(2);
+
+  // Get programs for the list view based on months to show
+  const getUpcomingPrograms = () => {
     if (!programs) return [];
     
     const now = startOfDay(new Date());
-    const twoMonthsFromNow = endOfDay(addMonths(now, 2));
+    const endDate = endOfDay(addMonths(now, eventsMonthsToShow));
     
     return programs.filter((program) => {
       const startDate = parseISO(program.start_date);
-      return !isBefore(startDate, now) && !isAfter(startDate, twoMonthsFromNow);
+      return !isBefore(startDate, now) && !isAfter(startDate, endDate);
     });
+  };
+
+  // Check if there are more programs to show
+  const hasMoreEventsToShow = () => {
+    if (!programs) return false;
+    
+    const now = startOfDay(new Date());
+    const currentEndDate = endOfDay(addMonths(now, eventsMonthsToShow));
+    const endOfYear = endOfDay(new Date(now.getFullYear(), 11, 31));
+    
+    if (currentEndDate >= endOfYear) return false;
+    
+    return programs.some((program) => {
+      const startDate = parseISO(program.start_date);
+      return isAfter(startDate, currentEndDate) && !isAfter(startDate, endOfYear);
+    });
+  };
+
+  const handleShowMoreEvents = () => {
+    setEventsMonthsToShow((prev) => prev + 2);
   };
 
   // Get events for a specific date
@@ -159,7 +181,7 @@ const EventCalendar = () => {
   };
 
   const selectedEvents = selectedDate ? getEventsForDate(selectedDate) : [];
-  const upcomingTwoMonths = getUpcomingTwoMonthsPrograms();
+  const upcomingPrograms = getUpcomingPrograms();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -310,14 +332,14 @@ const EventCalendar = () => {
           </Card>
         </div>
 
-        {/* Upcoming Events List - Next 2 Months Only */}
-        {upcomingTwoMonths.length > 0 && (
+        {/* Upcoming Events List */}
+        {upcomingPrograms.length > 0 && (
           <div className="mt-8 sm:mt-12 max-w-4xl mx-auto">
             <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">
-              Upcoming Events <span className="text-muted-foreground text-base sm:text-lg font-normal">(Next 2 Months)</span>
+              Upcoming Events
             </h3>
             <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
-              {upcomingTwoMonths.map((program) => (
+              {upcomingPrograms.map((program) => (
                 <Card
                   key={program.id}
                   className="hover:shadow-lg transition-shadow cursor-pointer"
@@ -348,6 +370,20 @@ const EventCalendar = () => {
                 </Card>
               ))}
             </div>
+            
+            {hasMoreEventsToShow() && (
+              <div className="flex justify-center mt-6">
+                <Button 
+                  variant="outline" 
+                  onClick={handleShowMoreEvents}
+                  className="gap-2"
+                >
+                  See More Events
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+            
             <p className="text-center text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-6">
               Click on any event to view full details and register
             </p>
