@@ -143,6 +143,41 @@ export type Database = {
         }
         Relationships: []
       }
+      event_registrations: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          program_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          program_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          program_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "upcoming_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       impact_stats: {
         Row: {
           color: string
