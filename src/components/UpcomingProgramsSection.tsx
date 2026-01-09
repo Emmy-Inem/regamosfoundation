@@ -1,26 +1,67 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Calendar, MapPin, ExternalLink } from "lucide-react";
+import { Loader2, Calendar, MapPin, ExternalLink, ChevronDown } from "lucide-react";
 import EventSchema from "@/components/schemas/EventSchema";
+import { addMonths, startOfDay, endOfDay, parseISO, isBefore, isAfter } from "date-fns";
 
 const UpcomingProgramsSection = () => {
-  const { data: programs, isLoading } = useQuery({
-    queryKey: ["upcoming-programs-public"],
+  const [monthsToShow, setMonthsToShow] = useState(1);
+
+  const { data: allPrograms, isLoading } = useQuery({
+    queryKey: ["upcoming-programs-public-all"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("upcoming_programs")
         .select("*")
         .in("status", ["upcoming", "ongoing"])
-        .order("start_date", { ascending: true })
-        .limit(6);
+        .order("start_date", { ascending: true });
       
       if (error) throw error;
       return data;
     },
   });
+
+  // Filter programs to show only within the selected month range
+  const getFilteredPrograms = () => {
+    if (!allPrograms) return [];
+    
+    const now = startOfDay(new Date());
+    const endDate = endOfDay(addMonths(now, monthsToShow));
+    const endOfYear = endOfDay(new Date(now.getFullYear(), 11, 31));
+    
+    return allPrograms.filter((program) => {
+      const startDate = parseISO(program.start_date);
+      return !isBefore(startDate, now) && !isAfter(startDate, endDate);
+    });
+  };
+
+  // Check if there are more programs to show
+  const hasMorePrograms = () => {
+    if (!allPrograms) return false;
+    
+    const now = startOfDay(new Date());
+    const currentEndDate = endOfDay(addMonths(now, monthsToShow));
+    const endOfYear = endOfDay(new Date(now.getFullYear(), 11, 31));
+    
+    // Check if we've reached end of year
+    if (currentEndDate >= endOfYear) return false;
+    
+    // Check if there are programs beyond current view but within the year
+    return allPrograms.some((program) => {
+      const startDate = parseISO(program.start_date);
+      return isAfter(startDate, currentEndDate) && !isAfter(startDate, endOfYear);
+    });
+  };
+
+  const handleShowMore = () => {
+    setMonthsToShow((prev) => prev + 2);
+  };
+
+  const programs = getFilteredPrograms();
 
   if (isLoading) {
     return (
@@ -145,6 +186,20 @@ const UpcomingProgramsSection = () => {
             </Card>
           ))}
         </div>
+
+        {hasMorePrograms() && (
+          <div className="flex justify-center mt-8">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={handleShowMore}
+              className="gap-2"
+            >
+              See More Events
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
