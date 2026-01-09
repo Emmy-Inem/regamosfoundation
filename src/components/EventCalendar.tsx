@@ -1,12 +1,23 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, Calendar as CalendarIcon, MapPin, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Loader2, Calendar as CalendarIcon, MapPin, ChevronLeft, ChevronRight, UserPlus, Check } from "lucide-react";
 import { format, parseISO, isWithinInterval, startOfDay, endOfDay, addMonths, subMonths, isBefore, isAfter } from "date-fns";
+import { toast } from "sonner";
+import { z } from "zod";
 
 interface UpcomingProgram {
   id: string;
@@ -20,9 +31,20 @@ interface UpcomingProgram {
   registration_url: string | null;
 }
 
+const registrationSchema = z.object({
+  full_name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
+  email: z.string().trim().email("Please enter a valid email").max(255, "Email is too long"),
+  phone: z.string().trim().max(20, "Phone number is too long").optional(),
+});
+
 const EventCalendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [selectedEvent, setSelectedEvent] = useState<UpcomingProgram | null>(null);
+  const [showRegistration, setShowRegistration] = useState(false);
+  const [formData, setFormData] = useState({ full_name: "", email: "", phone: "" });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const queryClient = useQueryClient();
 
   const { data: programs, isLoading } = useQuery({
     queryKey: ["calendar-programs"],
@@ -37,6 +59,52 @@ const EventCalendar = () => {
       return data as UpcomingProgram[];
     },
   });
+
+  const registerMutation = useMutation({
+    mutationFn: async (data: { program_id: string; full_name: string; email: string; phone?: string }) => {
+      const { error } = await supabase
+        .from("event_registrations")
+        .insert([data]);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Registration successful! We'll send you event details soon.");
+      setShowRegistration(false);
+      setFormData({ full_name: "", email: "", phone: "" });
+      setFormErrors({});
+      queryClient.invalidateQueries({ queryKey: ["event-registrations"] });
+    },
+    onError: () => {
+      toast.error("Registration failed. Please try again.");
+    },
+  });
+
+  const handleRegistrationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormErrors({});
+
+    const result = registrationSchema.safeParse(formData);
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          errors[err.path[0] as string] = err.message;
+        }
+      });
+      setFormErrors(errors);
+      return;
+    }
+
+    if (!selectedEvent) return;
+
+    registerMutation.mutate({
+      program_id: selectedEvent.id,
+      full_name: result.data.full_name,
+      email: result.data.email,
+      phone: result.data.phone || undefined,
+    });
+  };
 
   // Get programs for next 2 months only (for the list view)
   const getUpcomingTwoMonthsPrograms = () => {
@@ -116,6 +184,11 @@ const EventCalendar = () => {
 
   const handleNextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
+  };
+
+  const openEventDetails = (event: UpcomingProgram) => {
+    setSelectedEvent(event);
+    setShowRegistration(false);
   };
 
   if (isLoading) {
@@ -200,7 +273,11 @@ const EventCalendar = () => {
               ) : (
                 <div className="space-y-3 sm:space-y-4">
                   {selectedEvents.map((event) => (
-                    <Card key={event.id} className="overflow-hidden border">
+                    <Card 
+                      key={event.id} 
+                      className="overflow-hidden border cursor-pointer hover:shadow-md transition-shadow"
+                      onClick={() => openEventDetails(event)}
+                    >
                       {event.image_url && (
                         <div className="h-24 sm:h-32 overflow-hidden">
                           <img
@@ -210,7 +287,7 @@ const EventCalendar = () => {
                           />
                         </div>
                       )}
-                      <CardContent className="p-3 sm:p-4 space-y-2 sm:space-y-3">
+                      <CardContent className="p-3 sm:p-4 space-y-2">
                         <div className="flex items-start justify-between gap-2">
                           <h3 className="font-semibold text-sm sm:text-lg leading-tight">{event.title}</h3>
                           <Badge className={`${getStatusColor(event.status)} text-xs`}>
@@ -218,36 +295,12 @@ const EventCalendar = () => {
                           </Badge>
                         </div>
                         
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
-                          {stripHtml(event.description)}
-                        </p>
-                        
-                        <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                          <CalendarIcon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                          <span>
-                            {format(parseISO(event.start_date), "MMM d, yyyy")}
-                            {event.end_date && ` - ${format(parseISO(event.end_date), "MMM d, yyyy")}`}
-                          </span>
-                        </div>
-                        
                         <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                           <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                          <span className="truncate">{event.location}</span>
+                          <span>{event.location}</span>
                         </div>
                         
-                        {event.registration_url && (
-                          <Button asChild size="sm" className="w-full mt-2 text-xs sm:text-sm">
-                            <a
-                              href={event.registration_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2"
-                            >
-                              Register Now
-                              <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
-                            </a>
-                          </Button>
-                        )}
+                        <p className="text-xs text-primary font-medium">Click to view full details & register</p>
                       </CardContent>
                     </Card>
                   ))}
@@ -268,10 +321,7 @@ const EventCalendar = () => {
                 <Card
                   key={program.id}
                   className="hover:shadow-lg transition-shadow cursor-pointer"
-                  onClick={() => {
-                    setSelectedDate(parseISO(program.start_date));
-                    setCurrentMonth(parseISO(program.start_date));
-                  }}
+                  onClick={() => openEventDetails(program)}
                 >
                   <CardContent className="p-3 sm:p-4 flex gap-3 sm:gap-4">
                     <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-lg bg-primary/10 flex flex-col items-center justify-center">
@@ -284,7 +334,7 @@ const EventCalendar = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <h4 className="font-semibold text-sm sm:text-base truncate">{program.title}</h4>
+                        <h4 className="font-semibold text-sm sm:text-base line-clamp-1">{program.title}</h4>
                         <Badge className={`${getStatusColor(program.status)} text-[10px] sm:text-xs flex-shrink-0`}>
                           {program.status}
                         </Badge>
@@ -299,11 +349,140 @@ const EventCalendar = () => {
               ))}
             </div>
             <p className="text-center text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-6">
-              Click on any date in the calendar above to view all events for that day
+              Click on any event to view full details and register
             </p>
           </div>
         )}
       </div>
+
+      {/* Event Details Dialog */}
+      <Dialog open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          {selectedEvent && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-xl">{selectedEvent.title}</DialogTitle>
+                <DialogDescription className="flex items-center gap-2 pt-2">
+                  <Badge className={getStatusColor(selectedEvent.status)}>
+                    {selectedEvent.status}
+                  </Badge>
+                </DialogDescription>
+              </DialogHeader>
+
+              {!showRegistration ? (
+                <div className="space-y-4">
+                  {selectedEvent.image_url && (
+                    <div className="rounded-lg overflow-hidden">
+                      <img
+                        src={selectedEvent.image_url}
+                        alt={selectedEvent.title}
+                        className="w-full h-48 object-cover"
+                      />
+                    </div>
+                  )}
+
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm">
+                      <CalendarIcon className="h-4 w-4 text-primary flex-shrink-0" />
+                      <span className="font-medium">Date:</span>
+                      <span>
+                        {format(parseISO(selectedEvent.start_date), "EEEE, MMMM d, yyyy")}
+                        {selectedEvent.end_date && ` - ${format(parseISO(selectedEvent.end_date), "MMMM d, yyyy")}`}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-sm">
+                      <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+                      <span className="font-medium">Location:</span>
+                      <span>{selectedEvent.location}</span>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-4">
+                    <h4 className="font-semibold mb-2">About This Event</h4>
+                    <div 
+                      className="text-sm text-muted-foreground prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: selectedEvent.description }}
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <Button onClick={() => setShowRegistration(true)} className="flex-1">
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Register for Event
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleRegistrationSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="full_name">Full Name *</Label>
+                    <Input
+                      id="full_name"
+                      value={formData.full_name}
+                      onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                      placeholder="Enter your full name"
+                      className={formErrors.full_name ? "border-destructive" : ""}
+                    />
+                    {formErrors.full_name && (
+                      <p className="text-xs text-destructive">{formErrors.full_name}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="Enter your email"
+                      className={formErrors.email ? "border-destructive" : ""}
+                    />
+                    {formErrors.email && (
+                      <p className="text-xs text-destructive">{formErrors.email}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number (Optional)</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="Enter your phone number"
+                      className={formErrors.phone ? "border-destructive" : ""}
+                    />
+                    {formErrors.phone && (
+                      <p className="text-xs text-destructive">{formErrors.phone}</p>
+                    )}
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setShowRegistration(false)}
+                      className="flex-1"
+                    >
+                      Back
+                    </Button>
+                    <Button type="submit" className="flex-1" disabled={registerMutation.isPending}>
+                      {registerMutation.isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <Check className="h-4 w-4 mr-2" />
+                      )}
+                      Submit
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
