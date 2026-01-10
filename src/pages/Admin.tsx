@@ -33,6 +33,7 @@ import TestimonialsManagement from '@/components/admin/TestimonialsManagement';
 import { EmailCampaignManagement } from '@/components/admin/EmailCampaignManagement';
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { ExportData } from '@/components/admin/ExportData';
+import { EventRegistrationsManagement } from '@/components/admin/EventRegistrationsManagement';
 
 const Admin = () => {
   const { user, loading, isAdmin } = useAuth();
@@ -260,6 +261,7 @@ const Admin = () => {
               <TabsTrigger value="stats" className="text-xs md:text-sm">Stats</TabsTrigger>
               <TabsTrigger value="achievements" className="text-xs md:text-sm">Achievements</TabsTrigger>
               <TabsTrigger value="upcoming" className="text-xs md:text-sm">Upcoming</TabsTrigger>
+              <TabsTrigger value="registrations" className="text-xs md:text-sm">Registrations</TabsTrigger>
               <TabsTrigger value="team" className="text-xs md:text-sm">Team</TabsTrigger>
               <TabsTrigger value="testimonials" className="text-xs md:text-sm">Testimonials</TabsTrigger>
               <TabsTrigger value="content" className="text-xs md:text-sm">Content</TabsTrigger>
@@ -881,6 +883,10 @@ const Admin = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="registrations">
+            <EventRegistrationsManagement />
           </TabsContent>
 
           <TabsContent value="export">
