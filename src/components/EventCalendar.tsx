@@ -393,11 +393,11 @@ const EventCalendar = () => {
 
       {/* Event Details Dialog */}
       <Dialog open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto">
           {selectedEvent && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-xl">{selectedEvent.title}</DialogTitle>
+                <DialogTitle className="text-lg sm:text-xl pr-6">{selectedEvent.title}</DialogTitle>
                 <DialogDescription className="flex items-center gap-2 pt-2">
                   <Badge className={getStatusColor(selectedEvent.status)}>
                     {selectedEvent.status}
@@ -406,109 +406,113 @@ const EventCalendar = () => {
               </DialogHeader>
 
               {!showRegistration ? (
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {selectedEvent.image_url && (
                     <div className="rounded-lg overflow-hidden">
                       <img
                         src={selectedEvent.image_url}
                         alt={selectedEvent.title}
-                        className="w-full h-48 object-cover"
+                        className="w-full h-36 sm:h-48 object-cover"
                       />
                     </div>
                   )}
 
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm">
-                      <CalendarIcon className="h-4 w-4 text-primary flex-shrink-0" />
-                      <span className="font-medium">Date:</span>
-                      <span>
-                        {format(parseISO(selectedEvent.start_date), "EEEE, MMMM d, yyyy")}
-                        {selectedEvent.end_date && ` - ${format(parseISO(selectedEvent.end_date), "MMMM d, yyyy")}`}
-                      </span>
+                  <div className="space-y-2 sm:space-y-3">
+                    <div className="flex items-start gap-2 text-xs sm:text-sm">
+                      <CalendarIcon className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-medium">Date: </span>
+                        <span className="break-words">
+                          {format(parseISO(selectedEvent.start_date), "EEE, MMM d, yyyy")}
+                          {selectedEvent.end_date && ` - ${format(parseISO(selectedEvent.end_date), "MMM d, yyyy")}`}
+                        </span>
+                      </div>
                     </div>
                     
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
-                      <span className="font-medium">Location:</span>
-                      <span>{selectedEvent.location}</span>
+                    <div className="flex items-start gap-2 text-xs sm:text-sm">
+                      <MapPin className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-medium">Location: </span>
+                        <span className="break-words">{selectedEvent.location}</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="border-t pt-4">
-                    <h4 className="font-semibold mb-2">About This Event</h4>
+                  <div className="border-t pt-3 sm:pt-4">
+                    <h4 className="font-semibold mb-2 text-sm sm:text-base">About This Event</h4>
                     <div 
-                      className="text-sm text-muted-foreground prose prose-sm max-w-none"
+                      className="text-xs sm:text-sm text-muted-foreground prose prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ __html: selectedEvent.description }}
                     />
                   </div>
 
-                  <div className="flex gap-3 pt-4">
-                    <Button onClick={() => setShowRegistration(true)} className="flex-1">
-                      <UserPlus className="h-4 w-4 mr-2" />
-                      Register for Event
+                  <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4">
+                    <Button onClick={() => setShowRegistration(true)} className="flex-1 text-sm">
+                      <UserPlus className="h-4 w-4 mr-1.5 sm:mr-2" />
+                      Register
                     </Button>
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleRegistrationSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="full_name">Full Name *</Label>
+                <form onSubmit={handleRegistrationSubmit} className="space-y-3 sm:space-y-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="full_name" className="text-sm">Full Name *</Label>
                     <Input
                       id="full_name"
                       value={formData.full_name}
                       onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                       placeholder="Enter your full name"
-                      className={formErrors.full_name ? "border-destructive" : ""}
+                      className={`text-sm ${formErrors.full_name ? "border-destructive" : ""}`}
                     />
                     {formErrors.full_name && (
                       <p className="text-xs text-destructive">{formErrors.full_name}</p>
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address *</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="email" className="text-sm">Email Address *</Label>
                     <Input
                       id="email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="Enter your email"
-                      className={formErrors.email ? "border-destructive" : ""}
+                      className={`text-sm ${formErrors.email ? "border-destructive" : ""}`}
                     />
                     {formErrors.email && (
                       <p className="text-xs text-destructive">{formErrors.email}</p>
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number (Optional)</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="phone" className="text-sm">Phone Number (Optional)</Label>
                     <Input
                       id="phone"
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="Enter your phone number"
-                      className={formErrors.phone ? "border-destructive" : ""}
+                      className={`text-sm ${formErrors.phone ? "border-destructive" : ""}`}
                     />
                     {formErrors.phone && (
                       <p className="text-xs text-destructive">{formErrors.phone}</p>
                     )}
                   </div>
 
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex gap-2 sm:gap-3 pt-2">
                     <Button 
                       type="button" 
                       variant="outline" 
                       onClick={() => setShowRegistration(false)}
-                      className="flex-1"
+                      className="flex-1 text-sm"
                     >
                       Back
                     </Button>
-                    <Button type="submit" className="flex-1" disabled={registerMutation.isPending}>
+                    <Button type="submit" className="flex-1 text-sm" disabled={registerMutation.isPending}>
                       {registerMutation.isPending ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
                       ) : (
-                        <Check className="h-4 w-4 mr-2" />
+                        <Check className="h-4 w-4 mr-1.5" />
                       )}
                       Submit
                     </Button>

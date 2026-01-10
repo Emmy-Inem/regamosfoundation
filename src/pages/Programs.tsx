@@ -1,6 +1,5 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import UpcomingProgramsSection from "@/components/UpcomingProgramsSection";
 import EventCalendar from "@/components/EventCalendar";
 import SEOHead from "@/components/SEOHead";
 import FAQSchema from "@/components/schemas/FAQSchema";
@@ -354,9 +353,6 @@ const Programs = () => {
 
         {/* Event Calendar Section */}
         <EventCalendar />
-
-        {/* Upcoming Programs & Events Section */}
-        <UpcomingProgramsSection />
 
         {/* CTA Section */}
         <section className="py-16 sm:py-20 md:py-24 bg-muted/30">
