@@ -9,7 +9,7 @@ import EventSchema from "@/components/schemas/EventSchema";
 import { addMonths, startOfDay, endOfDay, parseISO, isBefore, isAfter } from "date-fns";
 
 const UpcomingProgramsSection = () => {
-  const [monthsToShow, setMonthsToShow] = useState(1);
+  const [monthsToShow, setMonthsToShow] = useState(2);
 
   const { data: allPrograms, isLoading } = useQuery({
     queryKey: ["upcoming-programs-public-all"],
