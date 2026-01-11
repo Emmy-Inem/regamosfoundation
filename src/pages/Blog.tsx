@@ -185,38 +185,38 @@ const Blog = () => {
         <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
+        <section className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 bg-gradient-to-b from-muted/30 to-background">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
-              <h1 className="text-5xl md:text-6xl font-bold">
+            <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6 animate-fade-in">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
                 Our <span className="text-primary">Blog</span>
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed px-2">
                 Stories, updates, and insights from our journey of empowerment
               </p>
               
               {/* Search Bar */}
-              <div className="max-w-md mx-auto pt-4">
+              <div className="max-w-md mx-auto pt-4 px-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder="Search articles..."
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
-                    className="pl-10 pr-10"
+                    className="pl-9 sm:pl-10 pr-10 text-sm sm:text-base"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => handleSearchChange('')}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     >
-                      <X className="h-5 w-5" />
+                      <X className="h-4 w-4 sm:h-5 sm:w-5" />
                     </button>
                   )}
                 </div>
                 {searchQuery && (
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                     Found {resultCount} article{resultCount !== 1 ? 's' : ''} matching "{searchQuery}"
                   </p>
                 )}
@@ -252,7 +252,7 @@ const Blog = () => {
         </section>
 
         {/* Blog Grid */}
-        <section className="py-24 bg-background">
+        <section className="py-12 sm:py-16 md:py-24 bg-background">
           <div className="container mx-auto px-4">
             {loading ? (
               <div className="text-center py-12">
@@ -264,14 +264,14 @@ const Blog = () => {
               </div>
             ) : (
               <>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
                   {filteredPosts.slice(0, visiblePosts).map((post, index) => (
                     <Card
                       key={post.id || index}
                       className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth animate-fade-in-up cursor-pointer"
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                      <div className="relative h-56 overflow-hidden">
+                      <div className="relative h-40 sm:h-48 md:h-56 overflow-hidden">
                         {post.image_url || post.image ? (
                           <img
                             src={post.image_url || post.image}
@@ -280,20 +280,20 @@ const Blog = () => {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
-                            <p className="text-muted-foreground">No image</p>
+                            <p className="text-muted-foreground text-sm">No image</p>
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                        <div className="absolute top-4 left-4">
-                          <span className="inline-block px-3 py-1 bg-accent text-white text-xs font-semibold rounded-full">
+                        <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
+                          <span className="inline-block px-2 py-0.5 sm:px-3 sm:py-1 bg-accent text-white text-[10px] sm:text-xs font-semibold rounded-full">
                             {post.category}
                           </span>
                         </div>
                       </div>
-                      <CardContent className="p-6 space-y-4">
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
+                      <CardContent className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                        <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1 sm:gap-2">
+                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                             <span>
                               {post.published_at || post.date 
                                 ? new Date(post.published_at || post.date).toLocaleDateString('en-US', {
@@ -304,24 +304,23 @@ const Blog = () => {
                                 : 'No date'}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <User className="h-4 w-4" />
-                            <span>{post.author || 'Regamos Foundation'}</span>
+                          <div className="flex items-center gap-1 sm:gap-2">
+                            <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                            <span className="truncate max-w-[100px] sm:max-w-none">{post.author || 'Regamos Foundation'}</span>
                           </div>
                         </div>
-                        <h3 className="text-xl font-semibold leading-tight group-hover:text-primary transition-smooth">
+                        <h3 className="text-base sm:text-lg md:text-xl font-semibold leading-tight group-hover:text-primary transition-smooth line-clamp-2">
                           {post.title}
                         </h3>
-                        <p className="text-muted-foreground leading-relaxed line-clamp-3">
+                        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 sm:line-clamp-3">
                           {stripHtml(post.excerpt)}
                         </p>
                         <Button 
                           variant="link" 
-                          className="p-0 h-auto group"
+                          className="p-0 h-auto group text-sm"
                           onClick={() => post.id && navigate(`/blog/${post.id}`)}
                         >
                           Read More
-                          <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-smooth" />
                         </Button>
                       </CardContent>
                     </Card>
@@ -345,13 +344,39 @@ const Blog = () => {
           </div>
         </section>
 
+        {/* Founder's Blog Section */}
+        <section className="py-12 sm:py-16 md:py-20 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <Card className="border-0 shadow-soft bg-gradient-to-br from-accent/10 to-primary/10 max-w-3xl mx-auto overflow-hidden">
+              <CardContent className="p-6 sm:p-8 md:p-12 text-center space-y-4 sm:space-y-6">
+                <div className="inline-block px-3 py-1 rounded-full bg-accent/20 text-accent text-xs sm:text-sm font-medium">
+                  From Our Founder
+                </div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">Read More From Dr. Regina Inem</h2>
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
+                  Explore inspiring thoughts, insights, and stories from our founder's personal blog
+                </p>
+                <Button 
+                  variant="cta" 
+                  size="lg"
+                  className="w-full sm:w-auto"
+                  onClick={() => window.open('https://regina-inem.com.ng/', '_blank')}
+                >
+                  <ArrowRight className="h-4 w-4 mr-2" />
+                  Visit Founder's Blog
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Newsletter CTA */}
-        <section className="py-24 bg-muted/30">
+        <section className="py-12 sm:py-16 md:py-20 bg-background">
           <div className="container mx-auto px-4">
             <Card className="border-0 shadow-soft bg-gradient-to-br from-primary/10 to-accent/10 max-w-3xl mx-auto">
-              <CardContent className="p-12 text-center space-y-6">
-                <h2 className="text-4xl font-bold">Stay Updated</h2>
-                <p className="text-xl text-muted-foreground">
+              <CardContent className="p-6 sm:p-8 md:p-12 text-center space-y-4 sm:space-y-6">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">Stay Updated</h2>
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
                   Subscribe to our newsletter for the latest stories and updates from Regamos Foundation
                 </p>
                 <form 
@@ -367,7 +392,7 @@ const Blog = () => {
                     onChange={(e) => setNewsletterEmail(e.target.value)}
                     required
                   />
-                  <Button type="submit" variant="cta" size="lg">
+                  <Button type="submit" variant="cta" size="lg" className="w-full sm:w-auto">
                     Subscribe
                   </Button>
                 </form>
