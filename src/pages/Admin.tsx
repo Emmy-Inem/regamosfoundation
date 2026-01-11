@@ -244,29 +244,29 @@ const Admin = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
-      <main className="flex-1 container mx-auto px-4 py-20">
-        <h1 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8">Admin Dashboard</h1>
+      <main className="flex-1 container mx-auto px-3 sm:px-4 py-16 sm:py-20">
+        <h1 className="text-xl sm:text-2xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8">Admin Dashboard</h1>
         
-        <Tabs defaultValue="analytics" className="space-y-4">
-          <div className="overflow-x-auto pb-2">
-            <TabsList className="inline-flex w-auto min-w-full justify-start">
-              <TabsTrigger value="analytics" className="text-xs md:text-sm">Analytics</TabsTrigger>
-              <TabsTrigger value="donations" className="text-xs md:text-sm">Donations</TabsTrigger>
-              <TabsTrigger value="members" className="text-xs md:text-sm">Members</TabsTrigger>
-              <TabsTrigger value="contacts" className="text-xs md:text-sm">Contact</TabsTrigger>
-              <TabsTrigger value="newsletters" className="text-xs md:text-sm">Newsletter</TabsTrigger>
-              <TabsTrigger value="blog" className="text-xs md:text-sm">Blog</TabsTrigger>
-              <TabsTrigger value="programs" className="text-xs md:text-sm">Programs</TabsTrigger>
-              <TabsTrigger value="stories" className="text-xs md:text-sm">Stories</TabsTrigger>
-              <TabsTrigger value="stats" className="text-xs md:text-sm">Stats</TabsTrigger>
-              <TabsTrigger value="achievements" className="text-xs md:text-sm">Achievements</TabsTrigger>
-              <TabsTrigger value="upcoming" className="text-xs md:text-sm">Upcoming</TabsTrigger>
-              <TabsTrigger value="registrations" className="text-xs md:text-sm">Registrations</TabsTrigger>
-              <TabsTrigger value="team" className="text-xs md:text-sm">Team</TabsTrigger>
-              <TabsTrigger value="testimonials" className="text-xs md:text-sm">Testimonials</TabsTrigger>
-              <TabsTrigger value="content" className="text-xs md:text-sm">Content</TabsTrigger>
-              <TabsTrigger value="email" className="text-xs md:text-sm">Email</TabsTrigger>
-              <TabsTrigger value="export" className="text-xs md:text-sm">Export</TabsTrigger>
+        <Tabs defaultValue="analytics" className="space-y-3 sm:space-y-4">
+          <div className="overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex w-max min-w-full h-auto flex-wrap sm:flex-nowrap gap-1 p-1 bg-muted/50">
+              <TabsTrigger value="analytics" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Analytics</TabsTrigger>
+              <TabsTrigger value="donations" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Donations</TabsTrigger>
+              <TabsTrigger value="members" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Members</TabsTrigger>
+              <TabsTrigger value="contacts" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Contact</TabsTrigger>
+              <TabsTrigger value="newsletters" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Newsletter</TabsTrigger>
+              <TabsTrigger value="blog" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Blog</TabsTrigger>
+              <TabsTrigger value="programs" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Programs</TabsTrigger>
+              <TabsTrigger value="stories" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Stories</TabsTrigger>
+              <TabsTrigger value="stats" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Stats</TabsTrigger>
+              <TabsTrigger value="achievements" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Achievements</TabsTrigger>
+              <TabsTrigger value="upcoming" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Upcoming</TabsTrigger>
+              <TabsTrigger value="registrations" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Registrations</TabsTrigger>
+              <TabsTrigger value="team" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Team</TabsTrigger>
+              <TabsTrigger value="testimonials" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Testimonials</TabsTrigger>
+              <TabsTrigger value="content" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Content</TabsTrigger>
+              <TabsTrigger value="email" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Email</TabsTrigger>
+              <TabsTrigger value="export" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Export</TabsTrigger>
             </TabsList>
           </div>
 

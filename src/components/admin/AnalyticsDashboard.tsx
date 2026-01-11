@@ -112,72 +112,72 @@ export const AnalyticsDashboard = () => {
   }));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+            <CardTitle className="text-xs sm:text-sm font-medium">Total Donations</CardTitle>
+            <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₦{totalDonations.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              {donations?.length || 0} total transactions
+          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+            <div className="text-lg sm:text-2xl font-bold">₦{totalDonations.toLocaleString()}</div>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
+              {donations?.length || 0} transactions
             </p>
           </CardContent>
         </Card>
         
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed Donations</CardTitle>
-            <Heart className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+            <CardTitle className="text-xs sm:text-sm font-medium">Completed</CardTitle>
+            <Heart className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₦{totalCompletedAmount.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              {completedDonations.length} successful payments
+          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+            <div className="text-lg sm:text-2xl font-bold">₦{totalCompletedAmount.toLocaleString()}</div>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
+              {completedDonations.length} payments
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Members</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+            <CardTitle className="text-xs sm:text-sm font-medium">Members</CardTitle>
+            <Users className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalMembers}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{totalMembers}</div>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
               {approvedMembers} approved
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Newsletter Subscribers</CardTitle>
-            <Mail className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6">
+            <CardTitle className="text-xs sm:text-sm font-medium">Subscribers</CardTitle>
+            <Mail className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalSubscribers}</div>
-            <p className="text-xs text-muted-foreground">
-              Active email list
+          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{totalSubscribers}</div>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
+              Active list
             </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Charts */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
         {/* Donations Over Time */}
-        <Card className="col-span-2">
-          <CardHeader>
-            <CardTitle>Donations Over Last 30 Days</CardTitle>
-            <CardDescription>Daily donation amounts</CardDescription>
+        <Card className="col-span-1 md:col-span-2">
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-sm sm:text-base">Donations Over Last 30 Days</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Daily donation amounts</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-[300px]">
+          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+            <div className="h-[200px] sm:h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={donationsByDay}>
                   <defs>
@@ -187,13 +187,14 @@ export const AnalyticsDashboard = () => {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis dataKey="date" className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
-                  <YAxis className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} tickFormatter={(v) => `₦${v / 1000}k`} />
+                  <XAxis dataKey="date" className="text-[10px] sm:text-xs" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} interval="preserveStartEnd" />
+                  <YAxis className="text-[10px] sm:text-xs" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} tickFormatter={(v) => `₦${v / 1000}k`} width={45} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "hsl(var(--background))",
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                     labelStyle={{ color: "hsl(var(--foreground))" }}
                     formatter={(value: number) => [`₦${value.toLocaleString()}`, "Amount"]}
@@ -213,22 +214,23 @@ export const AnalyticsDashboard = () => {
 
         {/* Member Growth */}
         <Card>
-          <CardHeader>
-            <CardTitle>Member Growth</CardTitle>
-            <CardDescription>New members by month</CardDescription>
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-sm sm:text-base">Member Growth</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">New members by month</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-[250px]">
+          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+            <div className="h-[180px] sm:h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={memberGrowthData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis dataKey="month" className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
-                  <YAxis className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
+                  <XAxis dataKey="month" className="text-[10px] sm:text-xs" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} />
+                  <YAxis className="text-[10px] sm:text-xs" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} width={30} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "hsl(var(--background))",
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                   />
                   <Bar dataKey="count" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
@@ -240,20 +242,20 @@ export const AnalyticsDashboard = () => {
 
         {/* Donation Status */}
         <Card>
-          <CardHeader>
-            <CardTitle>Donation Status</CardTitle>
-            <CardDescription>Payment status breakdown</CardDescription>
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-sm sm:text-base">Donation Status</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Payment status breakdown</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-[250px]">
+          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+            <div className="h-[180px] sm:h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={statusBreakdown}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
+                    innerRadius={40}
+                    outerRadius={60}
                     paddingAngle={5}
                     dataKey="value"
                   >
@@ -266,14 +268,15 @@ export const AnalyticsDashboard = () => {
                       backgroundColor: "hsl(var(--background))",
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                   />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="flex justify-center gap-4 mt-2">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-2">
                 {statusBreakdown.map((entry) => (
-                  <div key={entry.name} className="flex items-center gap-2 text-sm">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }} />
+                  <div key={entry.name} className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: entry.color }} />
                     <span>{entry.name}: {entry.value}</span>
                   </div>
                 ))}

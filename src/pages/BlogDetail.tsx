@@ -108,21 +108,21 @@ const BlogDetail = () => {
         author={post.author || 'Regamos Foundation'}
       />
       <Navigation />
-      <main className="flex-1 py-20">
+      <main className="flex-1 py-16 sm:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <Button
             variant="ghost"
-            className="mb-6"
+            className="mb-4 sm:mb-6 text-sm"
             onClick={() => navigate('/blog')}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Blog
           </Button>
 
-          <article className="space-y-8">
+          <article className="space-y-6 sm:space-y-8">
             {/* Featured Image */}
             {post.image_url && (
-              <div className="relative h-96 rounded-lg overflow-hidden">
+              <div className="relative h-48 sm:h-64 md:h-96 rounded-lg overflow-hidden">
                 <img
                   src={post.image_url}
                   alt={post.title}
@@ -133,14 +133,14 @@ const BlogDetail = () => {
             )}
 
             {/* Header */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 flex-wrap">
-                <span className="inline-block px-3 py-1 bg-accent text-white text-sm font-semibold rounded-full">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <span className="inline-block px-2 py-0.5 sm:px-3 sm:py-1 bg-accent text-white text-xs sm:text-sm font-semibold rounded-full">
                   {post.category}
                 </span>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
+                <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground flex-wrap">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span>
                       {new Date(post.published_at).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -149,77 +149,78 @@ const BlogDetail = () => {
                       })}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <User className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span>{post.author || 'Regamos Foundation'}</span>
                   </div>
                 </div>
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
                 {post.title}
               </h1>
 
               <div 
-                className="text-xl text-muted-foreground leading-relaxed prose prose-lg max-w-none"
+                className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed prose prose-sm sm:prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.excerpt }}
               />
 
               {/* Social Sharing Buttons */}
-              <div className="flex flex-wrap gap-2 pt-4">
-                <span className="text-sm text-muted-foreground self-center mr-2">Share:</span>
+              <div className="flex flex-wrap gap-2 pt-3 sm:pt-4">
+                <span className="text-xs sm:text-sm text-muted-foreground self-center mr-1 sm:mr-2">Share:</span>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white border-0"
+                  className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white border-0 text-xs sm:text-sm px-2 sm:px-3"
                   onClick={() => window.open(shareLinks.facebook, '_blank', 'width=600,height=400')}
                 >
-                  <Facebook className="h-4 w-4 mr-2" />
-                  Facebook
+                  <Facebook className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Facebook</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white border-0"
+                  className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white border-0 text-xs sm:text-sm px-2 sm:px-3"
                   onClick={() => window.open(shareLinks.twitter, '_blank', 'width=600,height=400')}
                 >
-                  <Twitter className="h-4 w-4 mr-2" />
-                  Twitter
+                  <Twitter className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Twitter</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-[#25D366] hover:bg-[#25D366]/90 text-white border-0"
+                  className="bg-[#25D366] hover:bg-[#25D366]/90 text-white border-0 text-xs sm:text-sm px-2 sm:px-3"
                   onClick={() => window.open(shareLinks.whatsapp, '_blank')}
                 >
-                  <MessageCircle className="h-4 w-4 mr-2" />
-                  WhatsApp
+                  <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">WhatsApp</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white border-0"
+                  className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white border-0 text-xs sm:text-sm px-2 sm:px-3"
                   onClick={() => window.open(shareLinks.linkedin, '_blank', 'width=600,height=400')}
                 >
-                  <Linkedin className="h-4 w-4 mr-2" />
-                  LinkedIn
+                  <Linkedin className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">LinkedIn</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
+                  className="text-xs sm:text-sm px-2 sm:px-3"
                   onClick={handleCopyLink}
                 >
-                  <Link2 className="h-4 w-4 mr-2" />
-                  Copy Link
+                  <Link2 className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Copy Link</span>
                 </Button>
               </div>
             </div>
 
             {/* Content */}
             <Card className="border-0 shadow-soft">
-              <CardContent className="p-8 md:p-12">
+              <CardContent className="p-4 sm:p-6 md:p-8 lg:p-12">
                 <div 
-                  className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
+                  className="prose prose-sm sm:prose-base md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
               </CardContent>
