@@ -34,9 +34,10 @@ import { EmailCampaignManagement } from '@/components/admin/EmailCampaignManagem
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { ExportData } from '@/components/admin/ExportData';
 import { EventRegistrationsManagement } from '@/components/admin/EventRegistrationsManagement';
+import UserRolesManagement from '@/components/admin/UserRolesManagement';
 
 const Admin = () => {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -267,6 +268,7 @@ const Admin = () => {
               <TabsTrigger value="content" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Content</TabsTrigger>
               <TabsTrigger value="email" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Email</TabsTrigger>
               <TabsTrigger value="export" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Export</TabsTrigger>
+              <TabsTrigger value="users" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Users</TabsTrigger>
             </TabsList>
           </div>
 
@@ -891,6 +893,10 @@ const Admin = () => {
 
           <TabsContent value="export">
             <ExportData />
+          </TabsContent>
+
+          <TabsContent value="users">
+            <UserRolesManagement isSuperAdmin={isSuperAdmin} />
           </TabsContent>
         </Tabs>
       </main>

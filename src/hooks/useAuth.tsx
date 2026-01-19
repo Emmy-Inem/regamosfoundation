@@ -54,9 +54,10 @@ export function useAuth() {
       .eq('user_id', userId);
     
     if (data && !error && data.length > 0) {
-      // Check if user has admin role
+      // Check if user has super_admin or admin role
+      const superAdminRole = data.find(r => r.role === 'super_admin');
       const adminRole = data.find(r => r.role === 'admin');
-      setUserRole(adminRole ? 'admin' : data[0].role);
+      setUserRole(superAdminRole ? 'super_admin' : adminRole ? 'admin' : data[0].role);
     } else {
       setUserRole(null);
     }
@@ -99,6 +100,7 @@ export function useAuth() {
     signUp,
     signIn,
     signOut,
-    isAdmin: userRole === 'admin',
+    isAdmin: userRole === 'admin' || userRole === 'super_admin',
+    isSuperAdmin: userRole === 'super_admin',
   };
 }
