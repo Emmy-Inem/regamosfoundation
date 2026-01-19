@@ -35,6 +35,7 @@ import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { ExportData } from '@/components/admin/ExportData';
 import { EventRegistrationsManagement } from '@/components/admin/EventRegistrationsManagement';
 import UserRolesManagement from '@/components/admin/UserRolesManagement';
+import ActivityLogViewer from '@/components/admin/ActivityLogViewer';
 
 const Admin = () => {
   const { user, loading, isAdmin, isSuperAdmin } = useAuth();
@@ -269,6 +270,7 @@ const Admin = () => {
               <TabsTrigger value="email" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Email</TabsTrigger>
               <TabsTrigger value="export" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Export</TabsTrigger>
               <TabsTrigger value="users" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Users</TabsTrigger>
+              <TabsTrigger value="activity" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Activity</TabsTrigger>
             </TabsList>
           </div>
 
@@ -897,6 +899,10 @@ const Admin = () => {
 
           <TabsContent value="users">
             <UserRolesManagement isSuperAdmin={isSuperAdmin} />
+          </TabsContent>
+
+          <TabsContent value="activity">
+            <ActivityLogViewer />
           </TabsContent>
         </Tabs>
       </main>
