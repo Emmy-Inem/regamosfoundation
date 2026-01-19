@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { useActivityLog } from '@/hooks/useActivityLog';
 import { Shield, ShieldCheck, User, Trash2, UserPlus } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
@@ -24,6 +25,7 @@ interface UserRolesManagementProps {
 
 const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
   const { toast } = useToast();
+  const { logActivity } = useActivityLog();
   const queryClient = useQueryClient();
   const [selectedUserId, setSelectedUserId] = useState<string>('');
   const [selectedRole, setSelectedRole] = useState<AppRole>('admin');
@@ -62,15 +64,24 @@ const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
 
   // Add role mutation
   const addRoleMutation = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
+    mutationFn: async ({ userId, role, userName }: { userId: string; role: AppRole; userName: string }) => {
       const { error } = await supabase
         .from('user_roles')
         .insert({ user_id: userId, role });
       
       if (error) throw error;
+      return { userId, role, userName };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-activity-logs'] });
+      logActivity({
+        actionType: 'role_added',
+        entityType: 'user_role',
+        entityId: data.userId,
+        entityName: `${data.userName} - ${data.role}`,
+        details: { role: data.role }
+      });
       toast({
         title: 'Role Added',
         description: 'User role has been added successfully.',
@@ -88,7 +99,7 @@ const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
 
   // Remove role mutation
   const removeRoleMutation = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
+    mutationFn: async ({ userId, role, userName }: { userId: string; role: AppRole; userName: string }) => {
       const { error } = await supabase
         .from('user_roles')
         .delete()
@@ -96,9 +107,18 @@ const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
         .eq('role', role);
       
       if (error) throw error;
+      return { userId, role, userName };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-activity-logs'] });
+      logActivity({
+        actionType: 'role_removed',
+        entityType: 'user_role',
+        entityId: data.userId,
+        entityName: `${data.userName} - ${data.role}`,
+        details: { role: data.role }
+      });
       toast({
         title: 'Role Removed',
         description: 'User role has been removed successfully.',
@@ -192,7 +212,12 @@ const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
               <Button
                 onClick={() => {
                   if (selectedUserId) {
-                    addRoleMutation.mutate({ userId: selectedUserId, role: selectedRole });
+                    const selectedUser = nonAdminUsers.find(u => u.user_id === selectedUserId);
+                    addRoleMutation.mutate({ 
+                      userId: selectedUserId, 
+                      role: selectedRole,
+                      userName: selectedUser?.full_name || selectedUser?.email || 'Unknown'
+                    });
                   }
                 }}
                 disabled={!selectedUserId || addRoleMutation.isPending}
@@ -260,7 +285,11 @@ const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
                               <AlertDialogFooter className="flex-col sm:flex-row gap-2">
                                 <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                  onClick={() => removeRoleMutation.mutate({ userId: user.user_id, role })}
+                                  onClick={() => removeRoleMutation.mutate({ 
+                                    userId: user.user_id, 
+                                    role,
+                                    userName: user.full_name || user.email
+                                  })}
                                   className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                 >
                                   Remove
