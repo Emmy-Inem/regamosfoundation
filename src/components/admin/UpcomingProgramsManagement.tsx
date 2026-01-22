@@ -17,7 +17,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Textarea } from "@/components/ui/textarea";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { ImageUpload } from "@/components/ui/image-upload";
 import {
@@ -27,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 const UpcomingProgramsManagement = () => {
   const [showForm, setShowForm] = useState(false);
@@ -44,6 +44,7 @@ const UpcomingProgramsManagement = () => {
   });
 
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: programs, isLoading } = useQuery({
     queryKey: ["upcoming-programs"],
@@ -60,13 +61,22 @@ const UpcomingProgramsManagement = () => {
 
   const createMutation = useMutation({
     mutationFn: async (newProgram: typeof formData) => {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("upcoming_programs")
-        .insert([newProgram]);
+        .insert([newProgram])
+        .select()
+        .single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["upcoming-programs"] });
+      logActivity({
+        entityType: "upcoming_program",
+        actionType: "created",
+        entityId: data?.id,
+        entityName: formData.title,
+      });
       toast.success("Program created successfully");
       resetForm();
     },
@@ -83,9 +93,16 @@ const UpcomingProgramsManagement = () => {
         .update(data)
         .eq("id", id);
       if (error) throw error;
+      return { id, data };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, data }) => {
       queryClient.invalidateQueries({ queryKey: ["upcoming-programs"] });
+      logActivity({
+        entityType: "upcoming_program",
+        actionType: "updated",
+        entityId: id,
+        entityName: data.title,
+      });
       toast.success("Program updated successfully");
       resetForm();
     },
@@ -97,14 +114,22 @@ const UpcomingProgramsManagement = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
+      const program = programs?.find(p => p.id === id);
       const { error } = await supabase
         .from("upcoming_programs")
         .delete()
         .eq("id", id);
       if (error) throw error;
+      return { id, name: program?.title };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, name }) => {
       queryClient.invalidateQueries({ queryKey: ["upcoming-programs"] });
+      logActivity({
+        entityType: "upcoming_program",
+        actionType: "deleted",
+        entityId: id,
+        entityName: name,
+      });
       toast.success("Program deleted successfully");
       setDeleteId(null);
     },

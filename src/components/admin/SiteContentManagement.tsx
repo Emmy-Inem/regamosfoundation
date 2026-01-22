@@ -8,9 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 export function SiteContentManagement() {
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: content, isLoading } = useQuery({
     queryKey: ["site-content"],
@@ -41,9 +43,15 @@ export function SiteContentManagement() {
           .insert([{ content_key: key, content_value: value, content_type: "text", section }]);
         if (error) throw error;
       }
+      return { key };
     },
-    onSuccess: () => {
+    onSuccess: ({ key }) => {
       queryClient.invalidateQueries({ queryKey: ["site-content"] });
+      logActivity({
+        entityType: "site_content",
+        actionType: "updated",
+        entityName: key,
+      });
       toast.success("Content updated successfully");
     },
     onError: () => toast.error("Failed to update content"),

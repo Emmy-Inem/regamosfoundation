@@ -13,12 +13,14 @@ import Footer from '@/components/Footer';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { ImageUpload } from '@/components/ui/image-upload';
+import { useActivityLog } from '@/hooks/useActivityLog';
 
 const BlogEditor = () => {
   const { id } = useParams();
   const { user, loading: authLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { logActivity } = useActivityLog();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -85,20 +87,36 @@ const BlogEditor = () => {
 
         if (error) throw error;
 
+        await logActivity({
+          entityType: 'blog_post',
+          actionType: 'updated',
+          entityId: id,
+          entityName: formData.title,
+          details: { category: formData.category, author: formData.author },
+        });
+
         toast({
           title: 'Success!',
           description: 'Blog post updated successfully.',
         });
       } else {
         // Create new post
-        const { error } = await supabase.from('blog_posts').insert([
+        const { data, error } = await supabase.from('blog_posts').insert([
           {
             ...formData,
             published_at: new Date().toISOString(),
           },
-        ]);
+        ]).select().single();
 
         if (error) throw error;
+
+        await logActivity({
+          entityType: 'blog_post',
+          actionType: 'created',
+          entityId: data?.id,
+          entityName: formData.title,
+          details: { category: formData.category, author: formData.author },
+        });
 
         toast({
           title: 'Success!',

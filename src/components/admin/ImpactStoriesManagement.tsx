@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Loader2, Trash2, Edit, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 export function ImpactStoriesManagement() {
   const [showForm, setShowForm] = useState(false);
@@ -36,6 +37,7 @@ export function ImpactStoriesManagement() {
   });
 
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: stories, isLoading } = useQuery({
     queryKey: ["impact-stories"],
@@ -51,11 +53,18 @@ export function ImpactStoriesManagement() {
 
   const createMutation = useMutation({
     mutationFn: async (newStory: typeof formData) => {
-      const { error } = await supabase.from("impact_stories").insert([newStory]);
+      const { data, error } = await supabase.from("impact_stories").insert([newStory]).select().single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["impact-stories"] });
+      logActivity({
+        entityType: "impact_story",
+        actionType: "created",
+        entityId: data?.id,
+        entityName: formData.name,
+      });
       toast.success("Story created successfully");
       resetForm();
     },
@@ -66,9 +75,16 @@ export function ImpactStoriesManagement() {
     mutationFn: async ({ id, data }: { id: string; data: typeof formData }) => {
       const { error } = await supabase.from("impact_stories").update(data).eq("id", id);
       if (error) throw error;
+      return { id, data };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, data }) => {
       queryClient.invalidateQueries({ queryKey: ["impact-stories"] });
+      logActivity({
+        entityType: "impact_story",
+        actionType: "updated",
+        entityId: id,
+        entityName: data.name,
+      });
       toast.success("Story updated successfully");
       resetForm();
     },
@@ -77,11 +93,19 @@ export function ImpactStoriesManagement() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
+      const story = stories?.find(s => s.id === id);
       const { error } = await supabase.from("impact_stories").delete().eq("id", id);
       if (error) throw error;
+      return { id, name: story?.name };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, name }) => {
       queryClient.invalidateQueries({ queryKey: ["impact-stories"] });
+      logActivity({
+        entityType: "impact_story",
+        actionType: "deleted",
+        entityId: id,
+        entityName: name,
+      });
       toast.success("Story deleted successfully");
       setDeleteId(null);
     },
