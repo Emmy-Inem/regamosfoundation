@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 const TestimonialsManagement = () => {
   const [showForm, setShowForm] = useState(false);
@@ -35,6 +36,7 @@ const TestimonialsManagement = () => {
   });
 
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: testimonials, isLoading } = useQuery({
     queryKey: ["testimonials"],
@@ -51,13 +53,22 @@ const TestimonialsManagement = () => {
 
   const createMutation = useMutation({
     mutationFn: async (newTestimonial: typeof formData) => {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("testimonials")
-        .insert([newTestimonial]);
+        .insert([newTestimonial])
+        .select()
+        .single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["testimonials"] });
+      logActivity({
+        entityType: "testimonial",
+        actionType: "created",
+        entityId: data?.id,
+        entityName: formData.author_name,
+      });
       toast.success("Testimonial created successfully");
       resetForm();
     },
@@ -74,9 +85,16 @@ const TestimonialsManagement = () => {
         .update(data)
         .eq("id", id);
       if (error) throw error;
+      return { id, data };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, data }) => {
       queryClient.invalidateQueries({ queryKey: ["testimonials"] });
+      logActivity({
+        entityType: "testimonial",
+        actionType: "updated",
+        entityId: id,
+        entityName: data.author_name,
+      });
       toast.success("Testimonial updated successfully");
       resetForm();
     },
@@ -88,14 +106,22 @@ const TestimonialsManagement = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
+      const testimonial = testimonials?.find(t => t.id === id);
       const { error } = await supabase
         .from("testimonials")
         .delete()
         .eq("id", id);
       if (error) throw error;
+      return { id, name: testimonial?.author_name };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, name }) => {
       queryClient.invalidateQueries({ queryKey: ["testimonials"] });
+      logActivity({
+        entityType: "testimonial",
+        actionType: "deleted",
+        entityId: id,
+        entityName: name,
+      });
       toast.success("Testimonial deleted successfully");
       setDeleteId(null);
     },

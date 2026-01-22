@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 const TeamMembersManagement = () => {
   const [showForm, setShowForm] = useState(false);
@@ -41,6 +42,7 @@ const TeamMembersManagement = () => {
   });
 
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: teamMembers, isLoading } = useQuery({
     queryKey: ["team-members"],
@@ -57,13 +59,22 @@ const TeamMembersManagement = () => {
 
   const createMutation = useMutation({
     mutationFn: async (newMember: typeof formData) => {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("team_members")
-        .insert([newMember]);
+        .insert([newMember])
+        .select()
+        .single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["team-members"] });
+      logActivity({
+        entityType: "team_member",
+        actionType: "created",
+        entityId: data?.id,
+        entityName: formData.full_name,
+      });
       toast.success("Team member created successfully");
       resetForm();
     },
@@ -80,9 +91,16 @@ const TeamMembersManagement = () => {
         .update(data)
         .eq("id", id);
       if (error) throw error;
+      return { id, data };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, data }) => {
       queryClient.invalidateQueries({ queryKey: ["team-members"] });
+      logActivity({
+        entityType: "team_member",
+        actionType: "updated",
+        entityId: id,
+        entityName: data.full_name,
+      });
       toast.success("Team member updated successfully");
       resetForm();
     },
@@ -94,14 +112,22 @@ const TeamMembersManagement = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
+      const member = teamMembers?.find(m => m.id === id);
       const { error } = await supabase
         .from("team_members")
         .delete()
         .eq("id", id);
       if (error) throw error;
+      return { id, name: member?.full_name };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, name }) => {
       queryClient.invalidateQueries({ queryKey: ["team-members"] });
+      logActivity({
+        entityType: "team_member",
+        actionType: "deleted",
+        entityId: id,
+        entityName: name,
+      });
       toast.success("Team member deleted successfully");
       setDeleteId(null);
     },

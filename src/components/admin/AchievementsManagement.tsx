@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 const AchievementsManagement = () => {
   const [showForm, setShowForm] = useState(false);
@@ -31,6 +32,7 @@ const AchievementsManagement = () => {
   });
 
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: achievements, isLoading } = useQuery({
     queryKey: ["achievements"],
@@ -47,13 +49,22 @@ const AchievementsManagement = () => {
 
   const createMutation = useMutation({
     mutationFn: async (newAchievement: typeof formData) => {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("achievements")
-        .insert([newAchievement]);
+        .insert([newAchievement])
+        .select()
+        .single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["achievements"] });
+      logActivity({
+        entityType: "achievement",
+        actionType: "created",
+        entityId: data?.id,
+        entityName: formData.achievement_text.substring(0, 50),
+      });
       toast.success("Achievement created successfully");
       resetForm();
     },
@@ -70,9 +81,16 @@ const AchievementsManagement = () => {
         .update(data)
         .eq("id", id);
       if (error) throw error;
+      return { id, data };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, data }) => {
       queryClient.invalidateQueries({ queryKey: ["achievements"] });
+      logActivity({
+        entityType: "achievement",
+        actionType: "updated",
+        entityId: id,
+        entityName: data.achievement_text.substring(0, 50),
+      });
       toast.success("Achievement updated successfully");
       resetForm();
     },
@@ -84,14 +102,22 @@ const AchievementsManagement = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
+      const achievement = achievements?.find(a => a.id === id);
       const { error } = await supabase
         .from("achievements")
         .delete()
         .eq("id", id);
       if (error) throw error;
+      return { id, name: achievement?.achievement_text.substring(0, 50) };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, name }) => {
       queryClient.invalidateQueries({ queryKey: ["achievements"] });
+      logActivity({
+        entityType: "achievement",
+        actionType: "deleted",
+        entityId: id,
+        entityName: name,
+      });
       toast.success("Achievement deleted successfully");
       setDeleteId(null);
     },

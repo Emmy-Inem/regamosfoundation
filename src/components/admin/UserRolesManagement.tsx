@@ -25,7 +25,7 @@ interface UserRolesManagementProps {
 
 const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
   const { toast } = useToast();
-  const { logActivity } = useActivityLog();
+  const { logActivity, notifyUser } = useActivityLog();
   const queryClient = useQueryClient();
   const [selectedUserId, setSelectedUserId] = useState<string>('');
   const [selectedRole, setSelectedRole] = useState<AppRole>('admin');
@@ -72,16 +72,27 @@ const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
       if (error) throw error;
       return { userId, role, userName };
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });
       queryClient.invalidateQueries({ queryKey: ['admin-activity-logs'] });
-      logActivity({
+      
+      await logActivity({
         actionType: 'role_added',
         entityType: 'user_role',
         entityId: data.userId,
         entityName: `${data.userName} - ${data.role}`,
         details: { role: data.role }
       });
+
+      // Notify the user about their new role
+      await notifyUser({
+        userId: data.userId,
+        type: 'role_added',
+        title: 'Role Assigned',
+        message: `You have been assigned the "${data.role}" role. You now have additional permissions.`,
+        metadata: { role: data.role },
+      });
+
       toast({
         title: 'Role Added',
         description: 'User role has been added successfully.',
@@ -109,16 +120,27 @@ const UserRolesManagement = ({ isSuperAdmin }: UserRolesManagementProps) => {
       if (error) throw error;
       return { userId, role, userName };
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });
       queryClient.invalidateQueries({ queryKey: ['admin-activity-logs'] });
-      logActivity({
+      
+      await logActivity({
         actionType: 'role_removed',
         entityType: 'user_role',
         entityId: data.userId,
         entityName: `${data.userName} - ${data.role}`,
         details: { role: data.role }
       });
+
+      // Notify the user about the role removal
+      await notifyUser({
+        userId: data.userId,
+        type: 'role_removed',
+        title: 'Role Removed',
+        message: `Your "${data.role}" role has been removed. Some permissions may no longer be available.`,
+        metadata: { role: data.role },
+      });
+
       toast({
         title: 'Role Removed',
         description: 'User role has been removed successfully.',

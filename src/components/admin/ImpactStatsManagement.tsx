@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Loader2, Trash2, Edit, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 export function ImpactStatsManagement() {
   const [showForm, setShowForm] = useState(false);
@@ -34,6 +35,7 @@ export function ImpactStatsManagement() {
   });
 
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: stats, isLoading } = useQuery({
     queryKey: ["impact-stats"],
@@ -49,11 +51,18 @@ export function ImpactStatsManagement() {
 
   const createMutation = useMutation({
     mutationFn: async (newStat: typeof formData) => {
-      const { error } = await supabase.from("impact_stats").insert([newStat]);
+      const { data, error } = await supabase.from("impact_stats").insert([newStat]).select().single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["impact-stats"] });
+      logActivity({
+        entityType: "impact_stat",
+        actionType: "created",
+        entityId: data?.id,
+        entityName: formData.label,
+      });
       toast.success("Stat created successfully");
       resetForm();
     },
@@ -64,9 +73,16 @@ export function ImpactStatsManagement() {
     mutationFn: async ({ id, data }: { id: string; data: typeof formData }) => {
       const { error } = await supabase.from("impact_stats").update(data).eq("id", id);
       if (error) throw error;
+      return { id, data };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, data }) => {
       queryClient.invalidateQueries({ queryKey: ["impact-stats"] });
+      logActivity({
+        entityType: "impact_stat",
+        actionType: "updated",
+        entityId: id,
+        entityName: data.label,
+      });
       toast.success("Stat updated successfully");
       resetForm();
     },
@@ -75,11 +91,19 @@ export function ImpactStatsManagement() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
+      const stat = stats?.find(s => s.id === id);
       const { error } = await supabase.from("impact_stats").delete().eq("id", id);
       if (error) throw error;
+      return { id, name: stat?.label };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, name }) => {
       queryClient.invalidateQueries({ queryKey: ["impact-stats"] });
+      logActivity({
+        entityType: "impact_stat",
+        actionType: "deleted",
+        entityId: id,
+        entityName: name,
+      });
       toast.success("Stat deleted successfully");
       setDeleteId(null);
     },

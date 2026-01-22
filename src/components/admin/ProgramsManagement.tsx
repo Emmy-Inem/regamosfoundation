@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Loader2, Trash2, Edit, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 export function ProgramsManagement() {
   const [showForm, setShowForm] = useState(false);
@@ -37,6 +38,7 @@ export function ProgramsManagement() {
   });
 
   const queryClient = useQueryClient();
+  const { logActivity } = useActivityLog();
 
   const { data: programs, isLoading } = useQuery({
     queryKey: ["programs"],
@@ -52,11 +54,18 @@ export function ProgramsManagement() {
 
   const createMutation = useMutation({
     mutationFn: async (newProgram: typeof formData) => {
-      const { error } = await supabase.from("programs").insert([newProgram]);
+      const { data, error } = await supabase.from("programs").insert([newProgram]).select().single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["programs"] });
+      logActivity({
+        entityType: "program",
+        actionType: "created",
+        entityId: data?.id,
+        entityName: formData.title,
+      });
       toast.success("Program created successfully");
       resetForm();
     },
@@ -67,9 +76,16 @@ export function ProgramsManagement() {
     mutationFn: async ({ id, data }: { id: string; data: typeof formData }) => {
       const { error } = await supabase.from("programs").update(data).eq("id", id);
       if (error) throw error;
+      return { id, data };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, data }) => {
       queryClient.invalidateQueries({ queryKey: ["programs"] });
+      logActivity({
+        entityType: "program",
+        actionType: "updated",
+        entityId: id,
+        entityName: data.title,
+      });
       toast.success("Program updated successfully");
       resetForm();
     },
@@ -78,11 +94,19 @@ export function ProgramsManagement() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
+      const program = programs?.find(p => p.id === id);
       const { error } = await supabase.from("programs").delete().eq("id", id);
       if (error) throw error;
+      return { id, name: program?.title };
     },
-    onSuccess: () => {
+    onSuccess: ({ id, name }) => {
       queryClient.invalidateQueries({ queryKey: ["programs"] });
+      logActivity({
+        entityType: "program",
+        actionType: "deleted",
+        entityId: id,
+        entityName: name,
+      });
       toast.success("Program deleted successfully");
       setDeleteId(null);
     },
