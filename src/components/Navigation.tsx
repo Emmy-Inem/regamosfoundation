@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { NotificationsDropdown } from "@/components/admin/NotificationsDropdown";
 import logo from "@/assets/logo.png";
 
 const Navigation = () => {
@@ -87,6 +88,7 @@ const Navigation = () => {
           <Button variant="cta" size="sm" asChild>
             <Link to="/donate">Donate Now</Link>
           </Button>
+          {user && <NotificationsDropdown />}
           {user ? (
             <Button
               variant="outline"
@@ -140,6 +142,12 @@ const Navigation = () => {
               <Button variant="cta" asChild onClick={() => setIsMobileMenuOpen(false)}>
                 <Link to="/donate">Donate Now</Link>
               </Button>
+              {user && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Notifications</span>
+                  <NotificationsDropdown />
+                </div>
+              )}
               {user ? (
                 <Button
                   variant="outline"
