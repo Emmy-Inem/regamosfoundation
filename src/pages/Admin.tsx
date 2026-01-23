@@ -259,18 +259,10 @@ const Admin = () => {
               <TabsTrigger value="newsletters" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Newsletter</TabsTrigger>
               <TabsTrigger value="blog" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Blog</TabsTrigger>
               <TabsTrigger value="programs" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Programs</TabsTrigger>
-              <TabsTrigger value="stories" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Stories</TabsTrigger>
-              <TabsTrigger value="stats" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Stats</TabsTrigger>
-              <TabsTrigger value="achievements" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Achievements</TabsTrigger>
-              <TabsTrigger value="upcoming" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Upcoming</TabsTrigger>
-              <TabsTrigger value="registrations" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Registrations</TabsTrigger>
-              <TabsTrigger value="team" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Team</TabsTrigger>
-              <TabsTrigger value="testimonials" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Testimonials</TabsTrigger>
+              <TabsTrigger value="impact" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Impact</TabsTrigger>
+              <TabsTrigger value="people" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">People</TabsTrigger>
               <TabsTrigger value="content" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Content</TabsTrigger>
-              <TabsTrigger value="email" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Email</TabsTrigger>
-              <TabsTrigger value="export" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Export</TabsTrigger>
-              <TabsTrigger value="users" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Users</TabsTrigger>
-              <TabsTrigger value="activity" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Activity</TabsTrigger>
+              <TabsTrigger value="system" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">System</TabsTrigger>
             </TabsList>
           </div>
 
@@ -817,92 +809,99 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="programs">
-            <ProgramsManagement />
+            <Card>
+              <CardContent className="p-4 sm:p-6">
+                <Tabs defaultValue="all-programs" className="space-y-4">
+                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
+                    <TabsTrigger value="all-programs" className="text-xs sm:text-sm">All Programs</TabsTrigger>
+                    <TabsTrigger value="upcoming-programs" className="text-xs sm:text-sm">Upcoming</TabsTrigger>
+                    <TabsTrigger value="registrations" className="text-xs sm:text-sm">Registrations</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="all-programs">
+                    <ProgramsManagement />
+                  </TabsContent>
+                  <TabsContent value="upcoming-programs">
+                    <UpcomingProgramsManagement />
+                  </TabsContent>
+                  <TabsContent value="registrations">
+                    <EventRegistrationsManagement />
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="stories">
-            <ImpactStoriesManagement />
+          <TabsContent value="impact">
+            <Card>
+              <CardContent className="p-4 sm:p-6">
+                <Tabs defaultValue="stories" className="space-y-4">
+                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
+                    <TabsTrigger value="stories" className="text-xs sm:text-sm">Stories</TabsTrigger>
+                    <TabsTrigger value="stats" className="text-xs sm:text-sm">Stats</TabsTrigger>
+                    <TabsTrigger value="achievements" className="text-xs sm:text-sm">Achievements</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="stories">
+                    <ImpactStoriesManagement />
+                  </TabsContent>
+                  <TabsContent value="stats">
+                    <ImpactStatsManagement />
+                  </TabsContent>
+                  <TabsContent value="achievements">
+                    <AchievementsManagement />
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="stats">
-            <ImpactStatsManagement />
+          <TabsContent value="people">
+            <Card>
+              <CardContent className="p-4 sm:p-6">
+                <Tabs defaultValue="team" className="space-y-4">
+                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
+                    <TabsTrigger value="team" className="text-xs sm:text-sm">Team</TabsTrigger>
+                    <TabsTrigger value="testimonials" className="text-xs sm:text-sm">Testimonials</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="team">
+                    <TeamMembersManagement />
+                  </TabsContent>
+                  <TabsContent value="testimonials">
+                    <TestimonialsManagement />
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="content">
             <SiteContentManagement />
           </TabsContent>
 
-          <TabsContent value="achievements">
-            <AchievementsManagement />
-          </TabsContent>
-
-          <TabsContent value="upcoming">
-            <UpcomingProgramsManagement />
-          </TabsContent>
-
-          <TabsContent value="team">
-            <TeamMembersManagement />
-          </TabsContent>
-
-          <TabsContent value="testimonials">
-            <TestimonialsManagement />
-          </TabsContent>
-
-          <TabsContent value="email">
-            <EmailCampaignManagement />
-          </TabsContent>
-
-          <TabsContent value="analytics">
+          <TabsContent value="system">
             <Card>
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-4">Analytics Dashboard</h2>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <Card>
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold mb-2">Total Donations</h3>
-                      <p className="text-3xl font-bold text-primary">
-                        ₦{donations?.reduce((sum, d) => sum + Number(d.amount), 0).toLocaleString()}
-                      </p>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        From {donations?.length} donations
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold mb-2">Total Members</h3>
-                      <p className="text-3xl font-bold text-accent">{members?.length}</p>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        {members?.filter(m => m.status === 'approved').length} approved
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold mb-2">Newsletter Subscribers</h3>
-                      <p className="text-3xl font-bold text-primary">{newsletters?.length}</p>
-                      <p className="text-sm text-muted-foreground mt-2">Active subscribers</p>
-                    </CardContent>
-                  </Card>
-                </div>
+              <CardContent className="p-4 sm:p-6">
+                <Tabs defaultValue="users" className="space-y-4">
+                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
+                    <TabsTrigger value="users" className="text-xs sm:text-sm">Users</TabsTrigger>
+                    <TabsTrigger value="email" className="text-xs sm:text-sm">Email</TabsTrigger>
+                    <TabsTrigger value="export" className="text-xs sm:text-sm">Export</TabsTrigger>
+                    <TabsTrigger value="activity" className="text-xs sm:text-sm">Activity</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="users">
+                    <UserRolesManagement isSuperAdmin={isSuperAdmin} />
+                  </TabsContent>
+                  <TabsContent value="email">
+                    <EmailCampaignManagement />
+                  </TabsContent>
+                  <TabsContent value="export">
+                    <ExportData />
+                  </TabsContent>
+                  <TabsContent value="activity">
+                    <ActivityLogViewer />
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="registrations">
-            <EventRegistrationsManagement />
-          </TabsContent>
-
-          <TabsContent value="export">
-            <ExportData />
-          </TabsContent>
-
-          <TabsContent value="users">
-            <UserRolesManagement isSuperAdmin={isSuperAdmin} />
-          </TabsContent>
-
-          <TabsContent value="activity">
-            <ActivityLogViewer />
           </TabsContent>
         </Tabs>
       </main>
