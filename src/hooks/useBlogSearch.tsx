@@ -11,6 +11,7 @@ interface BlogPost {
   image?: string;
   published_at?: string;
   date?: string;
+  view_count?: number;
 }
 
 export const useBlogSearch = (posts: BlogPost[]) => {

@@ -86,6 +86,7 @@ export type Database = {
           published_at: string | null
           title: string
           updated_at: string
+          view_count: number | null
         }
         Insert: {
           author?: string | null
@@ -98,6 +99,7 @@ export type Database = {
           published_at?: string | null
           title: string
           updated_at?: string
+          view_count?: number | null
         }
         Update: {
           author?: string | null
@@ -110,6 +112,7 @@ export type Database = {
           published_at?: string | null
           title?: string
           updated_at?: string
+          view_count?: number | null
         }
         Relationships: []
       }
@@ -619,6 +622,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_view_count: { Args: { post_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "member" | "user" | "super_admin"
