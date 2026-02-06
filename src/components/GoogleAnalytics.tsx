@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// Replace with your actual Google Analytics Measurement ID
-const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX';
+// Google Analytics Measurement ID from environment variable
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || '';
 
 declare global {
   interface Window {
@@ -12,8 +12,15 @@ declare global {
 }
 
 export const initGA = () => {
-  if (typeof window === 'undefined' || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') {
-    console.log('Google Analytics: Using placeholder ID. Replace G-XXXXXXXXXX with your actual Measurement ID.');
+  if (typeof window === 'undefined' || !GA_MEASUREMENT_ID) {
+    if (import.meta.env.DEV) {
+      console.log('Google Analytics: No measurement ID configured. Add VITE_GA_MEASUREMENT_ID to enable tracking.');
+    }
+    return;
+  }
+
+  // Avoid duplicate initialization
+  if (document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"]`)) {
     return;
   }
 
@@ -31,11 +38,12 @@ export const initGA = () => {
   window.gtag('js', new Date());
   window.gtag('config', GA_MEASUREMENT_ID, {
     page_path: window.location.pathname,
+    send_page_view: true,
   });
 };
 
 export const trackPageView = (path: string) => {
-  if (typeof window === 'undefined' || !window.gtag || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') {
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) {
     return;
   }
   window.gtag('config', GA_MEASUREMENT_ID, {
@@ -44,7 +52,7 @@ export const trackPageView = (path: string) => {
 };
 
 export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
-  if (typeof window === 'undefined' || !window.gtag || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') {
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) {
     return;
   }
   window.gtag('event', action, {
@@ -52,6 +60,27 @@ export const trackEvent = (action: string, category: string, label?: string, val
     event_label: label,
     value: value,
   });
+};
+
+// Track custom events for the foundation
+export const trackDonation = (amount: number, frequency: string) => {
+  trackEvent('donation', 'engagement', frequency, amount);
+};
+
+export const trackNewsletterSignup = () => {
+  trackEvent('newsletter_signup', 'engagement');
+};
+
+export const trackBlogView = (postId: string, title: string) => {
+  trackEvent('blog_view', 'content', title);
+};
+
+export const trackVolunteerSignup = () => {
+  trackEvent('volunteer_signup', 'engagement');
+};
+
+export const trackContactSubmission = () => {
+  trackEvent('contact_form', 'engagement');
 };
 
 const GoogleAnalytics = () => {
