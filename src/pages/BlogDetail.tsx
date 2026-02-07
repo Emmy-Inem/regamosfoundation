@@ -164,11 +164,13 @@ const BlogDetail = () => {
                   <div className="flex items-center gap-1 sm:gap-2">
                     <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span>
-                      {new Date(post.published_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
+                      {post.published_at 
+                        ? new Date(post.published_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })
+                        : 'Date not available'}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 sm:gap-2">
@@ -283,13 +285,15 @@ const BlogDetail = () => {
                       </div>
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             <span>
-                              {new Date(relatedPost.published_at).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric'
-                              })}
+                              {relatedPost.published_at 
+                                ? new Date(relatedPost.published_at).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric'
+                                  })
+                                : 'N/A'}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
