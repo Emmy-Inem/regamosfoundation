@@ -120,7 +120,7 @@ const Blog = () => {
     ? searchResults 
     : searchResults.filter(post => post.category === selectedCategory);
 
-  const featuredPosts = blogPosts
+  const featuredPosts = [...blogPosts]
     .sort((a, b) => (b.view_count || 0) - (a.view_count || 0))
     .slice(0, 3);
 
