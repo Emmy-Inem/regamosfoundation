@@ -61,18 +61,24 @@ export function useAuth() {
     initializeAuth();
 
     // Set up auth state listener
+    // NOTE: Do NOT use await inside onAuthStateChange - it causes a deadlock!
+    // See: https://supabase.com/docs/guides/troubleshooting/why-is-my-supabase-api-call-not-returning-PGzXw0
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
         if (!mounted) return;
         
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Fetch user role when session changes
+        // Fetch user role when session changes - use setTimeout to avoid deadlock
         if (session?.user) {
           setRoleLoading(true);
-          await fetchUserRole(session.user.id);
-          setRoleLoading(false);
+          // Defer the async call to avoid blocking the Supabase client
+          setTimeout(() => {
+            fetchUserRole(session.user.id).finally(() => {
+              if (mounted) setRoleLoading(false);
+            });
+          }, 0);
         } else {
           setUserRole(null);
           setRoleLoading(false);
