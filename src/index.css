@@ -197,7 +197,7 @@ All colors MUST be HSL.
 
 /* Blog content link styles */
 .prose a {
-  color: hsl(var(--primary));
+  color: hsl(210, 100%, 45%);
   text-decoration: underline;
   cursor: pointer;
   pointer-events: auto;
@@ -206,12 +206,11 @@ All colors MUST be HSL.
 }
 
 .prose a:hover {
-  color: hsl(var(--primary) / 0.8);
-  opacity: 0.9;
+  color: hsl(210, 100%, 35%);
 }
 
 .prose a:visited {
-  color: hsl(var(--primary) / 0.7);
+  color: hsl(270, 50%, 45%);
 }
 
 /* Quill editor font size classes in rendered content */
