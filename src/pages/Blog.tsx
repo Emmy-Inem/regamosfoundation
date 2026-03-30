@@ -226,7 +226,7 @@ const Blog = () => {
                       className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth cursor-pointer"
                       onClick={() => navigate(`/blog/${post.id}`)}
                     >
-                      <div className="relative h-32 sm:h-40 overflow-hidden">
+                      <div className="relative h-48 sm:h-52 overflow-hidden">
                         {post.image_url ? (
                           <img
                             src={post.image_url}
@@ -236,23 +236,22 @@ const Blog = () => {
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20" />
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
-                        <div className="absolute bottom-3 left-3 right-3">
-                          <span className="inline-block px-2 py-0.5 bg-accent text-white text-[10px] sm:text-xs font-semibold rounded-full mb-1">
-                            {post.category}
-                          </span>
-                          <h3 className="text-sm sm:text-base font-semibold text-white line-clamp-2">{post.title}</h3>
-                        </div>
                       </div>
-                      <CardContent className="p-3 sm:p-4">
+                      <CardContent className="p-4">
+                        <span className="inline-block px-2 py-0.5 bg-accent text-white text-[10px] sm:text-xs font-semibold rounded-full mb-2">
+                          {post.category}
+                        </span>
+                        <h3 className="text-sm sm:text-base font-semibold text-foreground line-clamp-2 mb-3">{post.title}</h3>
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             <span>
-                              {new Date(post.published_at).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric'
-                              })}
+                              {post.published_at
+                                ? new Date(post.published_at).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric'
+                                  })
+                                : 'N/A'}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
