@@ -102,10 +102,16 @@ const BlogDetail = () => {
   // Strip HTML for meta description
   const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
 
-  // Post-process HTML to make links open in new tabs
+  // Post-process HTML to make links open in new tabs and remove duplicate cover image
   const processContent = (html: string) => {
     if (!html) return '';
-    return html.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
+    let processed = html.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
+    // Remove the first image if it matches the cover image to avoid duplication
+    if (post?.image_url) {
+      const escapedUrl = post.image_url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      processed = processed.replace(new RegExp(`<img[^>]*src=["']${escapedUrl}["'][^>]*>`, 'i'), '');
+    }
+    return processed;
   };
 
   if (loading) {
