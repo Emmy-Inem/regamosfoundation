@@ -213,3 +213,83 @@ All colors MUST be HSL.
 .prose a:visited {
   color: hsl(var(--primary) / 0.7);
 }
+
+/* Quill editor font size classes in rendered content */
+.prose .ql-size-small {
+  font-size: 0.75em;
+}
+
+.prose .ql-size-large {
+  font-size: 1.5em;
+}
+
+.prose .ql-size-huge {
+  font-size: 2.5em;
+}
+
+/* Ensure Quill header sizes render correctly in prose */
+.prose h1 {
+  font-size: 2em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
+
+.prose h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.prose h4 {
+  font-size: 1.1em;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.prose h5 {
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.prose h6 {
+  font-size: 0.875em;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Quill inline styles - preserve font-size set via style attribute */
+.prose [style*="font-size"] {
+  font-size: inherit;
+}
+
+/* Quill blockquote */
+.prose blockquote {
+  border-left: 4px solid hsl(var(--primary));
+  padding-left: 1em;
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Quill code block */
+.prose pre.ql-syntax {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  border-radius: 0.5rem;
+  padding: 1em;
+  overflow-x: auto;
+}
