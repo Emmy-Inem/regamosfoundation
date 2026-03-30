@@ -102,6 +102,12 @@ const BlogDetail = () => {
   // Strip HTML for meta description
   const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
 
+  // Post-process HTML to make links open in new tabs
+  const processContent = (html: string) => {
+    if (!html) return '';
+    return html.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -249,7 +255,7 @@ const BlogDetail = () => {
               <CardContent className="p-4 sm:p-6 md:p-8 lg:p-12">
                 <div 
                   className="prose prose-sm sm:prose-base md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: processContent(post.content) }}
                 />
               </CardContent>
             </Card>
