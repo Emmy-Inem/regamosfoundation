@@ -194,3 +194,22 @@ All colors MUST be HSL.
 .dark .rich-text-editor .ql-picker-label {
   color: hsl(var(--foreground));
 }
+
+/* Blog content link styles */
+.prose a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  cursor: pointer;
+  pointer-events: auto;
+  font-weight: 500;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.prose a:hover {
+  color: hsl(var(--primary) / 0.8);
+  opacity: 0.9;
+}
+
+.prose a:visited {
+  color: hsl(var(--primary) / 0.7);
+}

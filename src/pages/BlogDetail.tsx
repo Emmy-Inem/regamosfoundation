@@ -102,6 +102,12 @@ const BlogDetail = () => {
   // Strip HTML for meta description
   const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
 
+  // Post-process HTML to make links open in new tabs
+  const processContent = (html: string) => {
+    if (!html) return '';
+    return html.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
