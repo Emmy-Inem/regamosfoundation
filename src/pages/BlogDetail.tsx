@@ -106,11 +106,22 @@ const BlogDetail = () => {
   const processContent = (html: string) => {
     if (!html) return '';
     let processed = html.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
-    // Remove the first image if it matches the cover image to avoid duplication
+    // Remove ALL images that match the cover image URL (handles duplicates)
     if (post?.image_url) {
       const escapedUrl = post.image_url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      processed = processed.replace(new RegExp(`<img[^>]*src=["']${escapedUrl}["'][^>]*>`, 'i'), '');
+      processed = processed.replace(new RegExp(`<img[^>]*src=["']${escapedUrl}["'][^>]*\\/?>`, 'gi'), '');
+      // Also remove the first <img> tag entirely if it appears before any text content
+      // This handles cases where the cover was re-uploaded with a slightly different URL
+      const firstImgMatch = processed.match(/^(\s*<p>\s*)?<img[^>]*\/?>/i);
+      if (firstImgMatch) {
+        const idx = processed.indexOf(firstImgMatch[0]);
+        if (idx < 20) {
+          processed = processed.replace(firstImgMatch[0], '');
+        }
+      }
     }
+    // Clean up empty paragraphs left after image removal
+    processed = processed.replace(/<p>\s*<\/p>/g, '');
     return processed;
   };
 
