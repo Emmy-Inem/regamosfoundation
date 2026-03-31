@@ -5,10 +5,46 @@ import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, User, ArrowLeft, Share2, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+
+const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
+
+/** Remove the cover image from post body to avoid duplication */
+const processContent = (html: string, coverUrl?: string | null): string => {
+  if (!html) return '';
+
+  let processed = html;
+
+  // Make all links open in new tab
+  processed = processed.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
+
+  // Remove images matching the cover URL
+  if (coverUrl) {
+    // Normalize URL for comparison — strip protocol and query params
+    const normalize = (url: string) => url.replace(/^https?:\/\//, '').split('?')[0];
+    const normalizedCover = normalize(coverUrl);
+
+    // Remove all <img> tags whose src matches the cover image
+    processed = processed.replace(/<img[^>]*src=["']([^"']*)["'][^>]*\/?>/gi, (match, src) => {
+      return normalize(src) === normalizedCover ? '' : match;
+    });
+  }
+
+  // Remove the very first <img> if it appears before any real text content
+  // (handles cases where cover was re-uploaded with different URL)
+  const stripped = processed.replace(/^(\s*(<p>\s*)*)/i, '');
+  if (stripped.startsWith('<img')) {
+    processed = processed.replace(/<img[^>]*\/?>/, '');
+  }
+
+  // Clean up empty paragraphs
+  processed = processed.replace(/<p>\s*(<br\s*\/?>)?\s*<\/p>/g, '');
+
+  return processed;
+};
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -51,7 +87,6 @@ const BlogDetail = () => {
 
       setPost(data);
       
-      // Fetch related posts in the same category
       const { data: related } = await supabase
         .from('blog_posts')
         .select('id, title, image_url, category, published_at, view_count')
@@ -73,7 +108,7 @@ const BlogDetail = () => {
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
   const encodedUrl = encodeURIComponent(currentUrl);
   const encodedTitle = encodeURIComponent(post?.title || '');
-  const encodedExcerpt = encodeURIComponent(post?.excerpt?.replace(/<[^>]*>/g, '') || '');
+  const encodedExcerpt = encodeURIComponent(stripHtml(post?.excerpt || ''));
 
   const shareLinks = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
@@ -85,44 +120,6 @@ const BlogDetail = () => {
   const handleCopyLink = () => {
     navigator.clipboard.writeText(currentUrl);
     toast.success('Link copied to clipboard!');
-  };
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: post?.title,
-        text: post?.excerpt?.replace(/<[^>]*>/g, ''),
-        url: currentUrl,
-      });
-    } else {
-      handleCopyLink();
-    }
-  };
-
-  // Strip HTML for meta description
-  const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
-
-  // Post-process HTML to make links open in new tabs and remove duplicate cover image
-  const processContent = (html: string) => {
-    if (!html) return '';
-    let processed = html.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
-    // Remove ALL images that match the cover image URL (handles duplicates)
-    if (post?.image_url) {
-      const escapedUrl = post.image_url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      processed = processed.replace(new RegExp(`<img[^>]*src=["']${escapedUrl}["'][^>]*\\/?>`, 'gi'), '');
-      // Also remove the first <img> tag entirely if it appears before any text content
-      // This handles cases where the cover was re-uploaded with a slightly different URL
-      const firstImgMatch = processed.match(/^(\s*<p>\s*)?<img[^>]*\/?>/i);
-      if (firstImgMatch) {
-        const idx = processed.indexOf(firstImgMatch[0]);
-        if (idx < 20) {
-          processed = processed.replace(firstImgMatch[0], '');
-        }
-      }
-    }
-    // Clean up empty paragraphs left after image removal
-    processed = processed.replace(/<p>\s*<\/p>/g, '');
-    return processed;
   };
 
   if (loading) {
@@ -137,9 +134,7 @@ const BlogDetail = () => {
     );
   }
 
-  if (!post) {
-    return null;
-  }
+  if (!post) return null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -165,7 +160,7 @@ const BlogDetail = () => {
           </Button>
 
           <article className="space-y-6 sm:space-y-8">
-            {/* Featured Image */}
+            {/* Featured Image — single instance */}
             {post.image_url && (
               <div className="relative h-48 sm:h-64 md:h-96 rounded-lg overflow-hidden">
                 <img
@@ -173,7 +168,6 @@ const BlogDetail = () => {
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
               </div>
             )}
 
@@ -211,10 +205,10 @@ const BlogDetail = () => {
                 {post.title}
               </h1>
 
-              <div 
-                className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed prose prose-sm sm:prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.excerpt }}
-              />
+              {/* Excerpt as plain text summary */}
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
+                {stripHtml(post.excerpt)}
+              </p>
 
               {/* Social Sharing Buttons */}
               <div className="flex flex-wrap gap-2 pt-3 sm:pt-4">
@@ -271,8 +265,8 @@ const BlogDetail = () => {
             <Card className="border-0 shadow-soft">
               <CardContent className="p-4 sm:p-6 md:p-8 lg:p-12">
                 <div 
-                  className="prose prose-sm sm:prose-base md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
-                  dangerouslySetInnerHTML={{ __html: processContent(post.content) }}
+                  className="blog-content prose prose-sm sm:prose-base md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
+                  dangerouslySetInnerHTML={{ __html: processContent(post.content, post.image_url) }}
                 />
               </CardContent>
             </Card>
@@ -285,10 +279,10 @@ const BlogDetail = () => {
                   {relatedPosts.map((relatedPost) => (
                     <Card 
                       key={relatedPost.id}
-                      className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth cursor-pointer"
+                      className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth cursor-pointer flex flex-col"
                       onClick={() => navigate(`/blog/${relatedPost.id}`)}
                     >
-                      <div className="relative h-32 overflow-hidden">
+                      <div className="relative h-32 overflow-hidden shrink-0">
                         {relatedPost.image_url ? (
                           <img
                             src={relatedPost.image_url}
@@ -298,17 +292,14 @@ const BlogDetail = () => {
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20" />
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
-                        <div className="absolute bottom-2 left-2 right-2">
-                          <span className="inline-block px-2 py-0.5 bg-accent text-white text-[10px] font-semibold rounded-full mb-1">
-                            {relatedPost.category}
-                          </span>
-                          <h3 className="text-sm font-semibold text-white line-clamp-2">{relatedPost.title}</h3>
-                        </div>
                       </div>
-                      <CardContent className="p-3">
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <div className="flex items-center gap-1">
+                      <CardContent className="p-3 flex flex-col flex-1 gap-2">
+                        <span className="inline-block px-2 py-0.5 bg-accent text-white text-[10px] font-semibold rounded-full w-fit">
+                          {relatedPost.category}
+                        </span>
+                        <h3 className="text-sm font-semibold text-foreground line-clamp-2">{relatedPost.title}</h3>
+                        <div className="mt-auto flex items-center justify-between text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             <span>
                               {relatedPost.published_at 
