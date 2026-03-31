@@ -99,7 +99,7 @@ export function BlogManagement() {
                       <h3 className="font-semibold text-base sm:text-lg">{post.title}</h3>
                       <Badge variant="outline">{post.category}</Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{post.excerpt}</p>
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{post.excerpt?.replace(/<[^>]*>/g, '') || ''}</p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
                       <span>By {post.author}</span>
                       <span>•</span>

@@ -14,6 +14,72 @@ import educationImg from "@/assets/education.jpg";
 import empowermentImg from "@/assets/empowerment.jpg";
 import communityImg from "@/assets/community.jpg";
 
+const stripHtml = (html: string) => {
+  if (!html) return '';
+  const tmp = document.createElement("DIV");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+};
+
+const BlogCard = ({ post, onClick, featured = false }: { post: any; onClick: () => void; featured?: boolean }) => (
+  <Card
+    className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth cursor-pointer flex flex-col"
+    onClick={onClick}
+  >
+    <div className={`relative ${featured ? 'h-40 sm:h-48' : 'h-40 sm:h-48 md:h-52'} overflow-hidden shrink-0`}>
+      {(post.image_url || post.image) ? (
+        <img
+          src={post.image_url || post.image}
+          alt={post.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-smooth"
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
+          <span className="text-muted-foreground text-sm">No image</span>
+        </div>
+      )}
+    </div>
+    <CardContent className="p-4 sm:p-5 flex flex-col flex-1 gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="inline-block px-2 py-0.5 bg-accent text-white text-[10px] sm:text-xs font-semibold rounded-full">
+          {post.category}
+        </span>
+        <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
+          <Calendar className="h-3 w-3" />
+          <span>
+            {(post.published_at || post.date)
+              ? new Date(post.published_at || post.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })
+              : 'N/A'}
+          </span>
+        </div>
+        <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
+          <Eye className="h-3 w-3" />
+          <span>{post.view_count || 0} reads</span>
+        </div>
+      </div>
+      <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-smooth">
+        {post.title}
+      </h3>
+      {!featured && (
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
+          {stripHtml(post.excerpt)}
+        </p>
+      )}
+      <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center gap-1">
+          <User className="h-3 w-3" />
+          <span className="truncate max-w-[120px]">{post.author || 'Regamos Foundation'}</span>
+        </div>
+        <span className="text-primary font-medium text-xs">Read More →</span>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 const Blog = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,13 +91,7 @@ const Blog = () => {
   const [showFilter, setShowFilter] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const categories = ["All", "Empowerment", "Education", "Community", "Youth Development", "Mental Health"];
-
-  const stripHtml = (html: string) => {
-    const tmp = document.createElement("DIV");
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
-  };
+  const categories = ["All", "Empowerment", "Education", "Community", "Youth Development", "Mental Health", "Programs"];
 
   const defaultPosts = [
     {
@@ -120,7 +180,8 @@ const Blog = () => {
     ? searchResults 
     : searchResults.filter(post => post.category === selectedCategory);
 
-  const featuredPosts = [...blogPosts]
+  // Featured posts: top 3 by view count from the same display source
+  const featuredPosts = [...displayPosts]
     .sort((a, b) => (b.view_count || 0) - (a.view_count || 0))
     .slice(0, 3);
 
@@ -212,7 +273,7 @@ const Blog = () => {
           </section>
 
           {/* Featured Posts Section */}
-          {!loading && blogPosts.length > 0 && (
+          {!loading && displayPosts.length > 0 && (
             <section className="py-8 sm:py-12 bg-muted/20">
               <div className="container mx-auto px-4">
                 <div className="text-center mb-6 sm:mb-8">
@@ -220,47 +281,13 @@ const Blog = () => {
                   <p className="text-muted-foreground">Most popular stories from our foundation</p>
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
-                  {featuredPosts.map((post) => (
-                    <Card 
-                      key={post.id}
-                      className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth cursor-pointer"
-                      onClick={() => navigate(`/blog/${post.id}`)}
-                    >
-                      <div className="relative h-48 sm:h-52 overflow-hidden">
-                        {post.image_url ? (
-                          <img
-                            src={post.image_url}
-                            alt={post.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-smooth"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20" />
-                        )}
-                      </div>
-                      <CardContent className="p-4">
-                        <span className="inline-block px-2 py-0.5 bg-accent text-white text-[10px] sm:text-xs font-semibold rounded-full mb-2">
-                          {post.category}
-                        </span>
-                        <h3 className="text-sm sm:text-base font-semibold text-foreground line-clamp-2 mb-3">{post.title}</h3>
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            <span>
-                              {post.published_at
-                                ? new Date(post.published_at).toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric'
-                                  })
-                                : 'N/A'}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Eye className="h-3 w-3" />
-                            <span>{post.view_count || 0} reads</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                  {featuredPosts.map((post, idx) => (
+                    <BlogCard
+                      key={post.id || idx}
+                      post={post}
+                      featured
+                      onClick={() => post.id ? navigate(`/blog/${post.id}`) : undefined}
+                    />
                   ))}
                 </div>
               </div>
@@ -302,76 +329,24 @@ const Blog = () => {
                 </div>
               ) : filteredPosts.length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-muted-foreground">No blog posts found in this category.</p>
+                  <p className="text-lg text-muted-foreground mb-2">No blog posts found.</p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedCategory !== "All" 
+                      ? `Try selecting a different category or clear the "${selectedCategory}" filter.`
+                      : searchQuery 
+                        ? `No results for "${searchQuery}". Try a different search term.`
+                        : 'Check back soon for new content!'}
+                  </p>
                 </div>
               ) : (
                 <>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
                     {filteredPosts.slice(0, visiblePosts).map((post, index) => (
-                      <Card
+                      <BlogCard
                         key={post.id || index}
-                        className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth animate-fade-in-up cursor-pointer"
-                        style={{ animationDelay: `${index * 0.1}s` }}
-                      >
-                        <div className="relative h-40 sm:h-48 md:h-56 overflow-hidden">
-                          {post.image_url || post.image ? (
-                            <img
-                              src={post.image_url || post.image}
-                              alt={post.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
-                              <p className="text-muted-foreground text-sm">No image</p>
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                          <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
-                            <span className="inline-block px-2 py-0.5 sm:px-3 sm:py-1 bg-accent text-white text-[10px] sm:text-xs font-semibold rounded-full">
-                              {post.category}
-                            </span>
-                          </div>
-                        </div>
-                        <CardContent className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-                          <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
-                            <div className="flex items-center gap-1 sm:gap-2">
-                              <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-                              <span>
-                                {post.published_at || post.date 
-                                  ? new Date(post.published_at || post.date).toLocaleDateString('en-US', {
-                                      year: 'numeric',
-                                      month: 'short',
-                                      day: 'numeric'
-                                    })
-                                  : 'No date'}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1 sm:gap-2">
-                              <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
-                              <span>{post.view_count || 0} reads</span>
-                            </div>
-                          </div>
-                          <h3 className="text-base sm:text-lg md:text-xl font-semibold leading-tight group-hover:text-primary transition-smooth line-clamp-2">
-                            {post.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 sm:line-clamp-3">
-                            {stripHtml(post.excerpt)}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1 sm:gap-2 text-xs text-muted-foreground">
-                              <User className="h-3 w-3 sm:h-4 sm:w-4" />
-                              <span className="truncate max-w-[100px] sm:max-w-none">{post.author || 'Regamos Foundation'}</span>
-                            </div>
-                            <Button 
-                              variant="link" 
-                              className="p-0 h-auto group text-sm"
-                              onClick={() => post.id && navigate(`/blog/${post.id}`)}
-                            >
-                              Read More
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
+                        post={post}
+                        onClick={() => post.id ? navigate(`/blog/${post.id}`) : undefined}
+                      />
                     ))}
                   </div>
 
