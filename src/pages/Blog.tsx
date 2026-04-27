@@ -271,28 +271,6 @@ const Blog = () => {
             </div>
           </section>
 
-          {/* Featured Posts Section */}
-          {!loading && displayPosts.length > 0 && (
-            <section className="py-8 sm:py-12 bg-muted/20">
-              <div className="container mx-auto px-4">
-                <div className="text-center mb-6 sm:mb-8">
-                  <h2 className="text-2xl sm:text-3xl font-bold mb-2">Featured Articles</h2>
-                  <p className="text-muted-foreground">Most popular stories from our foundation</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                  {featuredPosts.map((post, idx) => (
-                    <BlogCard
-                      key={post.id || idx}
-                      post={post}
-                      featured
-                      onClick={() => post.id ? navigate(`/blog/${post.id}`) : undefined}
-                    />
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-
           {/* Category Filter */}
           <section 
             className={`py-6 md:py-8 bg-background sticky top-20 z-40 blur-glass border-b border-border transition-transform duration-300 ${
