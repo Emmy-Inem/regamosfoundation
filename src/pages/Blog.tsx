@@ -23,14 +23,15 @@ const stripHtml = (html: string) => {
 
 const BlogCard = ({ post, onClick, featured = false }: { post: any; onClick: () => void; featured?: boolean }) => (
   <Card
-    className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth cursor-pointer flex flex-col"
+    className="group overflow-hidden border-0 shadow-soft hover:shadow-glow transition-smooth cursor-pointer flex flex-col h-full"
     onClick={onClick}
   >
-    <div className={`relative ${featured ? 'h-40 sm:h-48' : 'h-40 sm:h-48 md:h-52'} overflow-hidden shrink-0`}>
+    <div className="relative w-full aspect-[16/10] overflow-hidden shrink-0 bg-muted">
       {(post.image_url || post.image) ? (
         <img
           src={post.image_url || post.image}
           alt={post.title}
+          loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-smooth"
         />
       ) : (
@@ -39,12 +40,12 @@ const BlogCard = ({ post, onClick, featured = false }: { post: any; onClick: () 
         </div>
       )}
     </div>
-    <CardContent className="p-4 sm:p-5 flex flex-col flex-1 gap-2">
+    <CardContent className="p-5 flex flex-col flex-1 gap-3">
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="inline-block px-2 py-0.5 bg-accent text-white text-[10px] sm:text-xs font-semibold rounded-full">
+        <span className="inline-block px-2.5 py-0.5 bg-accent text-white text-[11px] font-semibold rounded-full">
           {post.category}
         </span>
-        <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
+        <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
           <Calendar className="h-3 w-3" />
           <span>
             {(post.published_at || post.date)
@@ -56,25 +57,23 @@ const BlogCard = ({ post, onClick, featured = false }: { post: any; onClick: () 
               : 'N/A'}
           </span>
         </div>
-        <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
+        <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
           <Eye className="h-3 w-3" />
           <span>{post.view_count || 0} reads</span>
         </div>
       </div>
-      <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-smooth">
+      <h3 className="text-base sm:text-lg font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-smooth">
         {post.title}
       </h3>
-      {!featured && (
-        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
-          {stripHtml(post.excerpt)}
-        </p>
-      )}
-      <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground">
-        <div className="flex items-center gap-1">
+      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+        {stripHtml(post.excerpt)}
+      </p>
+      <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground border-t border-border/50">
+        <div className="flex items-center gap-1 pt-2">
           <User className="h-3 w-3" />
-          <span className="truncate max-w-[120px]">{post.author || 'Regamos Foundation'}</span>
+          <span className="truncate max-w-[140px]">{post.author || 'Regamos Foundation'}</span>
         </div>
-        <span className="text-primary font-medium text-xs">Read More →</span>
+        <span className="text-primary font-semibold text-xs pt-2">Read More →</span>
       </div>
     </CardContent>
   </Card>
