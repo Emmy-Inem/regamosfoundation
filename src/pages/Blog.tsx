@@ -179,11 +179,6 @@ const Blog = () => {
     ? searchResults 
     : searchResults.filter(post => post.category === selectedCategory);
 
-  // Featured posts: top 3 by view count from the same display source
-  const featuredPosts = [...displayPosts]
-    .sort((a, b) => (b.view_count || 0) - (a.view_count || 0))
-    .slice(0, 3);
-
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
