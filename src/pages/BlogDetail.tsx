@@ -194,6 +194,17 @@ const BlogDetail = () => {
                 {post.title}
               </h1>
 
+              {/* Featured Image — full, uncropped, after title */}
+              {post.image_url && (
+                <div className="rounded-lg overflow-hidden bg-muted">
+                  <img
+                    src={post.image_url}
+                    alt={post.title}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+              )}
+
               {/* Excerpt as plain text summary */}
               <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
                 {stripHtml(post.excerpt)}
