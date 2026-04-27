@@ -160,17 +160,6 @@ const BlogDetail = () => {
           </Button>
 
           <article className="space-y-6 sm:space-y-8">
-            {/* Featured Image — single instance */}
-            {post.image_url && (
-              <div className="relative h-48 sm:h-64 md:h-96 rounded-lg overflow-hidden">
-                <img
-                  src={post.image_url}
-                  alt={post.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-
             {/* Header */}
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
