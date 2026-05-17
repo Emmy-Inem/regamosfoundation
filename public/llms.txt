@@ -1,0 +1,23 @@
+# Regamos Foundation
+
+> Faith-based Nigerian NGO empowering widows, orphans, abused girls, and youth through education, skills training, and community development.
+
+Regamos Foundation runs microcredit, skills acquisition, mentorship, scholarship, and community development programs across Nigeria. The site lets visitors learn about our work, read impact stories, donate, volunteer, become members, or partner with us.
+
+## Pages
+
+- [Home](/): Mission overview, featured programs, upcoming events.
+- [About](/about): History, leadership, core values, and goals.
+- [Programs](/programs): Microcredit, skills training, mentorship, scholarships, and community initiatives.
+- [Impact](/impact): Stories of transformation and program outcomes.
+- [Blog](/blog): News, stories, and updates from our work.
+- [Donate](/donate): Support our programs via bank transfer or card.
+- [Membership](/membership): Join Regamos Foundation as a member.
+- [Volunteer](/volunteer): Apply to volunteer with us.
+- [Partner](/partner): Partner with the foundation as an organization.
+- [Contact](/contact): Reach our team.
+
+## Optional
+
+- [Privacy Policy](/privacy-policy)
+- [Terms of Service](/terms-of-service)

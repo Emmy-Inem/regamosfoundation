@@ -69,7 +69,7 @@ const About = () => {
     <>
       <SEOHead 
         title="About Us"
-        description="Learn about Regamos Foundation's mission to empower widows, orphans, abused girls, and youth through education and community development in Nigeria. Founded by Dr. Regina Inem."
+        description="Learn about Regamos Foundation's mission to empower widows, orphans, and youth across Nigeria through education and community development."
         url="https://regamosfoundation.lovable.app/about"
       />
       <FAQSchema faqs={aboutFaqs} />
