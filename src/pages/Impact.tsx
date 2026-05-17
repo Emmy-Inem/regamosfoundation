@@ -164,7 +164,7 @@ const Impact = () => {
     <>
       <SEOHead 
         title="Impact Stories"
-        description="Discover real stories of transformation through Regamos Foundation. See how we've empowered widows, educated youth, and strengthened communities."
+        description="Real stories of transformation: widows empowered, youth educated, and communities strengthened across Nigeria by Regamos Foundation."
         url="https://regamosfoundation.lovable.app/impact"
       />
       <div className="min-h-screen">

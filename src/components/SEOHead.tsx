@@ -14,8 +14,8 @@ interface SEOHeadProps {
 }
 
 const SEOHead = ({
-  title = "Regamos Foundation - Transforming Lives Through Empowerment",
-  description = "Regamos Foundation empowers widows, orphans, abused girls, and youth through education, empowerment, and community development in Nigeria. Join us in making a difference.",
+  title = "Regamos Foundation — Empowering Lives in Nigeria",
+  description = "Empowering widows, orphans, and youth in Nigeria through education, skills training, and community development. Donate or volunteer today.",
   keywords = "regamos foundation, widows empowerment, orphan care, youth development, community development, education, Nigeria NGO, charity, non-profit, donate, volunteer, empowerment programs",
   image = "https://regamosfoundation.lovable.app/og-image.png",
   url = "https://regamosfoundation.lovable.app",

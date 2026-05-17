@@ -13,14 +13,14 @@ Allow: /
 User-agent: *
 Allow: /
 
-# Sitemaps - Dynamic sitemap includes all blog posts
-Sitemap: https://hlffhiutjqguedgnnblj.supabase.co/functions/v1/sitemap
+# Sitemaps
 Sitemap: https://regamosfoundation.lovable.app/sitemap.xml
 
 # Disallow admin and auth pages
 Disallow: /admin
 Disallow: /auth
 Disallow: /payment
+Disallow: /blog-editor
 
 # Crawl delay for non-major bots
 Crawl-delay: 1
