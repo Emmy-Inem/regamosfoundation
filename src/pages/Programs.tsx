@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import EventCalendar from "@/components/EventCalendar";
+import PastEventsSection from "@/components/PastEventsSection";
 import SEOHead from "@/components/SEOHead";
 import FAQSchema from "@/components/schemas/FAQSchema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -353,6 +354,9 @@ const Programs = () => {
 
         {/* Event Calendar Section */}
         <EventCalendar />
+
+        {/* Past Events */}
+        <PastEventsSection />
 
         {/* CTA Section */}
         <section className="py-16 sm:py-20 md:py-24 bg-muted/30">
