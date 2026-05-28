@@ -10,6 +10,7 @@ import { Users, Check, Heart, BookOpen, Briefcase, UserPlus } from "lucide-react
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import membershipHero from "@/assets/pages/membership-hero.jpg";
 
 const membershipSchema = z.object({
   firstName: z.string().trim().min(2, "First name must be at least 2 characters").max(50),
@@ -132,8 +133,12 @@ const Membership = () => {
         <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 bg-gradient-to-b from-muted/30 to-background">
-          <div className="container mx-auto px-4">
+        <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <img src={membershipHero} alt="Community in Nigeria" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
+          </div>
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6 animate-fade-in">
               <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full blur-glass border border-primary/20 mb-2 sm:mb-4">
                 <UserPlus className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />

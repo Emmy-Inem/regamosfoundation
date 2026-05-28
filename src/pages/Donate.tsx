@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { Heart, Check, Users, GraduationCap, Home, Sparkles, Copy, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import donateHero from "@/assets/pages/donate-hero.jpg";
 
 const Donate = () => {
   const navigate = useNavigate();
@@ -150,8 +151,12 @@ const Donate = () => {
         <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-gradient-to-b from-muted/30 to-background">
-          <div className="container mx-auto px-4">
+        <section className="relative pt-32 pb-16 overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <img src={donateHero} alt="Volunteers distributing aid in Africa" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
+          </div>
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
               <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full blur-glass border border-accent/20 mb-4">
                 <Sparkles className="h-5 w-5 text-accent" />
