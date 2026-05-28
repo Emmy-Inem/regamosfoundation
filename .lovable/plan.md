@@ -1,63 +1,85 @@
+## Goal
 
-Goal: stabilize the blog experience end-to-end by fixing the public blog list, featured cards, post detail rendering, and the editor-to-display formatting pipeline.
+1. Swap the clearly AI-generated images on the site for free, royalty-free stock photos (Unsplash/Pexels), keeping the real event photos you've uploaded.
+2. Share a high-level list of missing features worth adding next (no implementation in this pass).
 
-1. Rework the blog list page layout
-- Refactor `src/pages/Blog.tsx` so featured cards and regular cards use one clean card pattern with:
-  - fixed image area
-  - non-overlapping text section
-  - consistent title/excerpt/date spacing
-  - full-card click behavior without nested click conflicts
-- Remove decorative overlays on list cards that are making text/images feel broken.
-- Add a safer fallback when there are no fetched posts, so the page still looks intentional instead of half-empty.
+## Image audit — what gets replaced
 
-2. Fix featured articles logic
-- Make featured articles derive from the same display source as the main grid, not only raw fetched posts.
-- Improve sorting/fallback logic so featured posts always render cleanly even when `view_count` is low or missing.
-- Prevent featured cards from showing broken metadata or awkward empty image areas.
+Confirmed AI-generated decorative assets in `src/assets/` (these were created with the image model during the initial build):
 
-3. Fix duplicate cover image rendering in blog detail
-- Tighten the `processContent` logic in `src/pages/BlogDetail.tsx` so it only removes the actual duplicated leading content image, instead of using broad regex that can behave oddly.
-- Normalize image URL comparison before removal.
-- Clean up leftover empty wrappers after the duplicate image is stripped.
+- `hero-bg.jpg` — homepage hero background
+- `community.jpg` — Mission/Programs section
+- `education.jpg` — Programs section
+- `empowerment.jpg` — Programs/About section
+- `impact-digital-library.jpg`
+- `impact-medical-outreach.jpg`
+- `impact-financial-literacy.jpg`
+- `impact-palm-seedlings.jpg`
+- `impact-menstrual-hygiene.jpg`
+- `impact-community-outreach.jpg`
+- `impact-child-protection.jpg`
+- `impact-life-skills.jpg`
+- `impact-hp-donation.jpg`
+- `impact-computer-training.jpg`
+- `impact-childrens-day.jpg`
+- `impact-roco-orphanage.jpg`
+- `impact-peculiar-saint.jpg`
 
-4. Improve blog detail content rendering
-- Separate excerpt styling from full article styling so global `.prose` rules do not accidentally affect both in unwanted ways.
-- Scope rich-text display styles more carefully in `src/index.css` to support:
-  - blue underlined links
-  - headers/subheaders/body hierarchy
-  - Quill font sizes
-  - images, lists, blockquotes, and spacing
-- Remove CSS that currently cancels inline font sizes (`.prose [style*="font-size"] { font-size: inherit; }`), because that defeats editor formatting.
+Kept as-is:
+- `logo.png`, `regamos-academy-logo.png`
+- All event flyers uploaded to the `content-uploads` bucket (YEP 2026, Family Day 2026, etc.)
+- Any real photos stored in DB (`impact_stories.image_url`, `team_members.avatar_url`, `blog_posts.cover_image`)
 
-5. Align editor output with public rendering
-- Update `src/components/ui/rich-text-editor.tsx` and/or display styles so what is selected in the editor matches what users see after publishing:
-  - heading levels
-  - font sizes
-  - paragraph spacing
-  - links
-- Ensure blog excerpts remain simple/controlled while full content can carry richer formatting.
+## How the swap works
 
-6. Clean up content and category handling
-- Unify categories used in `Blog.tsx` and `BlogEditor.tsx` so filtering never hides valid posts because of naming mismatch.
-- Sanitize displayed excerpts in admin/public views so raw HTML does not leak into card summaries.
+1. For each asset above, pick a topical, high-quality Unsplash photo (African women's empowerment, youth training, classroom, medical outreach, community gathering, hygiene/health, children at school, computer lab, etc.).
+2. Download into the same `src/assets/` paths (same filenames) so no imports change.
+3. Quick visual QA in the preview at mobile + desktop to confirm composition still reads well behind overlays.
+4. Add a short `CREDITS.md` in `src/assets/` listing each photo's Unsplash author + URL (Unsplash license doesn't require attribution but it's good practice).
 
-Files to update
-- `src/pages/Blog.tsx`
-- `src/pages/BlogDetail.tsx`
-- `src/components/ui/rich-text-editor.tsx`
-- `src/pages/BlogEditor.tsx`
-- `src/index.css`
-- possibly `src/components/admin/BlogManagement.tsx` for cleaner excerpt previews
+I will also re-check `impact_stories` rows in the database; any row whose `image_url` points to an obviously AI-rendered asset will be flagged in chat for you to decide whether to replace.
 
-Technical notes
-- Current issues are mostly frontend rendering/styling problems, not backend/RLS issues.
-- The biggest correctness bug is the current duplicate-image removal strategy in `BlogDetail`, which is too regex-heavy and likely causing the “showing twice in a weird way” behavior.
-- The biggest formatting bug is in `src/index.css`: inline font-size styling is effectively being neutralized, which explains why published content often looks like normal body text.
-- The biggest UX issue on the list page is inconsistent card structure between featured posts, regular posts, and fallback posts.
+## Missing features — high-level list
 
-Expected result
-- Blog page looks consistent on mobile and desktop.
-- Featured articles display cleanly and reliably.
-- Cover image appears once only.
-- Published content preserves headers, subheaders, body text, and link styling correctly.
-- Admin formatting choices are reflected on the live site.
+Donor experience
+- Recurring/monthly giving (Monnify subscription or Paystack Plans)
+- Auto-emailed PDF donation receipts + annual giving statements
+- Donor wall / "Thank you" page with opt-in public names
+- Dedication / in-honor-of / in-memory-of giving option
+- Multi-currency display (NGN, USD, GBP)
+
+Engagement & content
+- Site-wide search (blog + programs + impact stories)
+- Newsletter archive page (already sending — surface past issues)
+- Comment moderation queue UI in admin (currently guest comments are allowed)
+- Related posts + reading-time on blog detail
+- Volunteer hours tracker / volunteer portal login
+
+Programs & events
+- Online event registration with calendar (.ics) download
+- Post-event photo galleries linked from past events
+- Ticketing / paid workshop support
+- Sponsor logos carousel on event pages
+
+Admin & operations
+- Dashboard KPIs (donations this month, new members, blog views) — already partial, expand
+- CSV export with date filters on all tables
+- Audit-log search & filters
+- Two-factor auth for admin accounts
+- Scheduled blog publishing
+
+Trust, compliance & SEO
+- Annual report / financial transparency page (downloadable PDFs)
+- Accreditation / partner-logo strip
+- Cookie consent banner (GDPR/NDPR)
+- Schema.org `NGO` + `DonateAction` structured data on Donate page
+- Open Graph image per blog post (auto-generated)
+
+Accessibility & performance
+- Skip-to-content already exists — add language switcher (EN/Pidgin/French) groundwork
+- Image `srcset` + AVIF variants via a build step
+- Lighthouse CI in publish flow
+
+## Out of scope this round
+- No backend schema changes, no new pages, no auth changes.
+- Feature suggestions are advisory only — pick which ones you want and I'll plan them separately.
