@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import volunteerHero from "@/assets/pages/volunteer-hero.jpg";
 
 const Volunteer = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -90,8 +91,12 @@ const Volunteer = () => {
         <Navigation />
         <main>
           {/* Hero Section */}
-          <section className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 bg-gradient-to-b from-muted/30 to-background">
-            <div className="container mx-auto px-4">
+          <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 overflow-hidden">
+            <div className="absolute inset-0 z-0">
+              <img src={volunteerHero} alt="Community volunteers in Africa" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
+            </div>
+            <div className="container mx-auto px-4 relative z-10">
               <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6 animate-fade-in">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
                   Volunteer <span className="text-primary">With Us</span>

@@ -1,25 +1,30 @@
 # Image Credits
 
-All photographs sourced from [Unsplash](https://unsplash.com) under the [Unsplash License](https://unsplash.com/license) (free to use, attribution appreciated).
+All photographs sourced from [Pexels](https://www.pexels.com) under the [Pexels License](https://www.pexels.com/license/) (free to use, attribution appreciated). Photos were curated to feature Black/African subjects relevant to the foundation's mission.
 
-| File | Unsplash Photo ID |
-|------|-------------------|
-| hero-bg.jpg | photo-1488521787991-ed7bbaae773c |
-| community.jpg | photo-1593113598332-cd288d649433 |
-| education.jpg | photo-1427504494785-3a9ca7044f45 |
-| empowerment.jpg | photo-1573497019940-1c28c88b4f3e |
-| impact-digital-library.jpg | photo-1517486808906-6ca8b3f04846 |
-| impact-medical-outreach.jpg | photo-1576091160550-2173dba999ef |
-| impact-financial-literacy.jpg | photo-1554224155-6726b3ff858f |
-| impact-palm-seedlings.jpg | photo-1416879595882-3373a0480b5b |
-| impact-menstrual-hygiene.jpg | photo-1509062522246-3755977927d7 |
-| impact-community-outreach.jpg | photo-1469571486292-0ba58a3f068b |
-| impact-child-protection.jpg | photo-1488751045188-3c55bbf9a3fa |
-| impact-life-skills.jpg | photo-1503676260728-1c00da094a0b |
-| impact-hp-donation.jpg | photo-1517336714731-489689fd1ca8 |
-| impact-computer-training.jpg | photo-1531482615713-2afd69097998 |
-| impact-childrens-day.jpg | photo-1607453998774-d533f65dac99 |
-| impact-roco-orphanage.jpg | photo-1497375638960-ca368c7231e4 |
-| impact-peculiar-saint.jpg | photo-1542810634-71277d95dcbb |
+| File | Pexels Photo ID | Source |
+|------|-----------------|--------|
+| hero-bg.jpg | 6646855 | https://www.pexels.com/photo/6646855/ |
+| community.jpg | 30980280 | https://www.pexels.com/photo/30980280/ |
+| education.jpg | 31486175 | https://www.pexels.com/photo/31486175/ |
+| empowerment.jpg | 13786953 | https://www.pexels.com/photo/13786953/ |
+| impact-digital-library.jpg | 30688590 | https://www.pexels.com/photo/30688590/ |
+| impact-medical-outreach.jpg | 8248433 | https://www.pexels.com/photo/8248433/ |
+| impact-financial-literacy.jpg | 29387556 | https://www.pexels.com/photo/29387556/ |
+| impact-palm-seedlings.jpg | 30403190 | https://www.pexels.com/photo/30403190/ |
+| impact-menstrual-hygiene.jpg | 34211744 | https://www.pexels.com/photo/34211744/ |
+| impact-community-outreach.jpg | 11170092 | https://www.pexels.com/photo/11170092/ |
+| impact-child-protection.jpg | 7577253 | https://www.pexels.com/photo/7577253/ |
+| impact-life-skills.jpg | 6457538 | https://www.pexels.com/photo/6457538/ |
+| impact-hp-donation.jpg | 5905893 | https://www.pexels.com/photo/5905893/ |
+| impact-computer-training.jpg | 5905852 | https://www.pexels.com/photo/5905852/ |
+| impact-childrens-day.jpg | 30237524 | https://www.pexels.com/photo/30237524/ |
+| impact-roco-orphanage.jpg | 6672099 | https://www.pexels.com/photo/6672099/ |
+| impact-peculiar-saint.jpg | 32490288 | https://www.pexels.com/photo/32490288/ |
+| pages/donate-hero.jpg | 6646918 | https://www.pexels.com/photo/6646918/ |
+| pages/volunteer-hero.jpg | 29602668 | https://www.pexels.com/photo/29602668/ |
+| pages/partner-hero.jpg | 7413997 | https://www.pexels.com/photo/7413997/ |
+| pages/membership-hero.jpg | 30776220 | https://www.pexels.com/photo/30776220/ |
+| pages/contact-hero.jpg | 6646870 | https://www.pexels.com/photo/6646870/ |
 
-Each URL: `https://unsplash.com/photos/{id}`
+All 22 IDs are unique — no duplicate photos across the site.
