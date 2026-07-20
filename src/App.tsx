@@ -26,6 +26,7 @@ import Volunteer from "./pages/Volunteer";
 import Partner from "./pages/Partner";
 import Payment from "./pages/Payment";
 import DynamicSitemap from "./components/DynamicSitemap";
+import OAuthConsent from "./pages/OAuthConsent";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/partner" element={<Partner />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/sitemap" element={<DynamicSitemap />} />
+            <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

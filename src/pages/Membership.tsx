@@ -17,7 +17,7 @@ const membershipSchema = z.object({
   lastName: z.string().trim().min(2, "Last name must be at least 2 characters").max(50),
   email: z.string().trim().email("Invalid email address").max(255),
   phone: z.string().trim().min(10, "Phone number must be at least 10 digits").max(15),
-  category: z.enum(["widow", "youth"], { required_error: "Please select a category" }),
+  category: z.enum(["widow", "youth"], { message: "Please select a category" }),
   address: z.string().trim().min(10, "Address must be at least 10 characters").max(500),
   reason: z.string().trim().min(20, "Please provide more details (at least 20 characters)").max(1000),
 });
@@ -113,7 +113,7 @@ const Membership = () => {
       setSelectedCategory(null);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const firstError = error.errors[0];
+        const firstError = error.issues[0];
         toast.error(firstError.message);
       } else {
         console.error('Error submitting membership:', error);
