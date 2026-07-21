@@ -162,9 +162,11 @@ const Blog = () => {
 
   const fetchBlogPosts = async () => {
     try {
+      // Only fetch fields needed for the card list — excluding `content`
+      // (avg 235 kB per post) cut the payload from ~2.8 MB to ~40 kB.
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('*')
+        .select('id, title, excerpt, image_url, category, author, published_at, view_count, created_at')
         .order('published_at', { ascending: false });
 
       if (error) throw error;
