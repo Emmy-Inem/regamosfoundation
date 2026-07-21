@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import educationImg from "@/assets/home-education.jpg";
 import empowermentImg from "@/assets/home-empowerment.jpg";
 import communityImg from "@/assets/home-community.jpg";
+import youthImg from "@/assets/home-youth.jpg";
 
 const Programs = () => {
   const { data: programs, isLoading } = useQuery({
@@ -54,7 +55,7 @@ const Programs = () => {
       title: "Youth Skills Training",
       description:
         "Equipping young people with practical skills, mentorship, and opportunities for economic independence and growth.",
-      image_url: educationImg,
+      image_url: youthImg,
       color: "accent",
     },
   ];
