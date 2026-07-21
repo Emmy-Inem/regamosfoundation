@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PastEventHighlights from "@/components/PastEventHighlights";
 import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, User, ArrowRight, Search, X, Eye, ExternalLink } from "lucide-react";
@@ -10,9 +11,9 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useBlogSearch } from "@/hooks/useBlogSearch";
-import educationImg from "@/assets/education.jpg";
-import empowermentImg from "@/assets/empowerment.jpg";
-import communityImg from "@/assets/community.jpg";
+import educationImg from "@/assets/blog-education.jpg";
+import empowermentImg from "@/assets/blog-empowerment.jpg";
+import communityImg from "@/assets/blog-community.jpg";
 
 const stripHtml = (html: string) => {
   if (!html) return '';
@@ -345,6 +346,9 @@ const Blog = () => {
               )}
             </div>
           </section>
+
+          {/* Past Event Highlights */}
+          <PastEventHighlights />
 
           {/* Founder's Blog Section */}
           <section className="py-12 sm:py-16 md:py-20 bg-muted/30">

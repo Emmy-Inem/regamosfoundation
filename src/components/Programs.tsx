@@ -5,9 +5,9 @@ import * as LucideIcons from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import educationImg from "@/assets/education.jpg";
-import empowermentImg from "@/assets/empowerment.jpg";
-import communityImg from "@/assets/community.jpg";
+import educationImg from "@/assets/home-education.jpg";
+import empowermentImg from "@/assets/home-empowerment.jpg";
+import communityImg from "@/assets/home-community.jpg";
 
 const Programs = () => {
   const { data: programs, isLoading } = useQuery({

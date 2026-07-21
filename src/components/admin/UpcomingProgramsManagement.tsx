@@ -41,6 +41,8 @@ const UpcomingProgramsManagement = () => {
     status: "upcoming",
     image_url: "",
     registration_url: "",
+    highlight_writeup: "",
+    gallery_urls: [] as string[],
   });
 
   const queryClient = useQueryClient();
@@ -149,6 +151,8 @@ const UpcomingProgramsManagement = () => {
       status: "upcoming",
       image_url: "",
       registration_url: "",
+      highlight_writeup: "",
+      gallery_urls: [],
     });
     setShowForm(false);
     setEditingId(null);
@@ -164,6 +168,8 @@ const UpcomingProgramsManagement = () => {
       status: program.status,
       image_url: program.image_url || "",
       registration_url: program.registration_url || "",
+      highlight_writeup: program.highlight_writeup || "",
+      gallery_urls: program.gallery_urls || [],
     });
     setEditingId(program.id);
     setShowForm(true);
@@ -280,6 +286,33 @@ const UpcomingProgramsManagement = () => {
                 value={formData.registration_url}
                 onChange={(e) => setFormData({ ...formData, registration_url: e.target.value })}
                 placeholder="https://..."
+              />
+            </div>
+
+            <div className="space-y-2 border-t pt-4">
+              <Label>Past Event Highlight (shown on Blog page when status = completed)</Label>
+              <p className="text-xs text-muted-foreground">
+                Gallery image URLs, one per line. The main Program Image is shown first automatically.
+              </p>
+              <textarea
+                className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm font-mono"
+                placeholder="https://...\nhttps://..."
+                value={(formData.gallery_urls || []).join("\n")}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    gallery_urls: e.target.value
+                      .split("\n")
+                      .map((s) => s.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+              <Label className="pt-2 block">Highlight Write-up</Label>
+              <RichTextEditor
+                value={formData.highlight_writeup}
+                onChange={(value) => setFormData({ ...formData, highlight_writeup: value })}
+                placeholder="Write a recap of this event... (falls back to Description if empty)"
               />
             </div>
 

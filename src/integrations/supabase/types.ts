@@ -552,6 +552,8 @@ export type Database = {
           created_at: string
           description: string
           end_date: string | null
+          gallery_urls: string[]
+          highlight_writeup: string | null
           id: string
           image_url: string | null
           location: string
@@ -565,6 +567,8 @@ export type Database = {
           created_at?: string
           description: string
           end_date?: string | null
+          gallery_urls?: string[]
+          highlight_writeup?: string | null
           id?: string
           image_url?: string | null
           location: string
@@ -578,6 +582,8 @@ export type Database = {
           created_at?: string
           description?: string
           end_date?: string | null
+          gallery_urls?: string[]
+          highlight_writeup?: string | null
           id?: string
           image_url?: string | null
           location?: string
