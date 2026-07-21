@@ -10,9 +10,9 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useBlogSearch } from "@/hooks/useBlogSearch";
-import educationImg from "@/assets/education.jpg";
-import empowermentImg from "@/assets/empowerment.jpg";
-import communityImg from "@/assets/community.jpg";
+import educationImg from "@/assets/blog-education.jpg";
+import empowermentImg from "@/assets/blog-empowerment.jpg";
+import communityImg from "@/assets/blog-community.jpg";
 
 const stripHtml = (html: string) => {
   if (!html) return '';
