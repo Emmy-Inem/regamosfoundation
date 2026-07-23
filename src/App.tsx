@@ -27,6 +27,7 @@ import Partner from "./pages/Partner";
 import Payment from "./pages/Payment";
 import DynamicSitemap from "./components/DynamicSitemap";
 import OAuthConsent from "./pages/OAuthConsent";
+import EventHighlight from "./pages/EventHighlight";
 
 const queryClient = new QueryClient();
 
