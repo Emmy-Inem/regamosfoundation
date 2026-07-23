@@ -27,6 +27,7 @@ import Partner from "./pages/Partner";
 import Payment from "./pages/Payment";
 import DynamicSitemap from "./components/DynamicSitemap";
 import OAuthConsent from "./pages/OAuthConsent";
+import EventHighlight from "./pages/EventHighlight";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/impact" element={<Impact />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogDetail />} />
+            <Route path="/events/:id" element={<EventHighlight />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/membership" element={<Membership />} />
             <Route path="/contact" element={<Contact />} />

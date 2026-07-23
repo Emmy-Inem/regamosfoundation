@@ -289,25 +289,64 @@ const UpcomingProgramsManagement = () => {
               />
             </div>
 
-            <div className="space-y-2 border-t pt-4">
-              <Label>Past Event Highlight (shown on Blog page when status = completed)</Label>
+            <div className="space-y-3 border-t pt-4">
+              <Label>Past Event Highlight Gallery (shown when status = completed)</Label>
               <p className="text-xs text-muted-foreground">
-                Gallery image URLs, one per line. The main Program Image is shown first automatically.
+                Upload as many photos as you like. The main Program Image is shown first automatically on the event highlight page.
               </p>
-              <textarea
-                className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm font-mono"
-                placeholder="https://...\nhttps://..."
-                value={(formData.gallery_urls || []).join("\n")}
-                onChange={(e) =>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {(formData.gallery_urls || []).map((url, idx) => (
+                  <div key={idx} className="relative group border rounded-md overflow-hidden bg-muted">
+                    <img src={url} alt={`Gallery ${idx + 1}`} className="w-full aspect-square object-cover" />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-1 right-1 h-7 w-7 p-0 opacity-90"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          gallery_urls: formData.gallery_urls.filter((_, i) => i !== idx),
+                        })
+                      }
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+
+              <ImageUpload
+                label="Add gallery image"
+                value=""
+                onChange={(url) => {
+                  if (!url) return;
                   setFormData({
                     ...formData,
-                    gallery_urls: e.target.value
-                      .split("\n")
-                      .map((s) => s.trim())
-                      .filter(Boolean),
-                  })
-                }
+                    gallery_urls: [...(formData.gallery_urls || []), url],
+                  });
+                }}
               />
+
+              <details className="text-xs">
+                <summary className="cursor-pointer text-muted-foreground">Or paste URLs (one per line)</summary>
+                <textarea
+                  className="mt-2 w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm font-mono"
+                  placeholder="https://...\nhttps://..."
+                  value={(formData.gallery_urls || []).join("\n")}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      gallery_urls: e.target.value
+                        .split("\n")
+                        .map((s) => s.trim())
+                        .filter(Boolean),
+                    })
+                  }
+                />
+              </details>
+
               <Label className="pt-2 block">Highlight Write-up</Label>
               <RichTextEditor
                 value={formData.highlight_writeup}
@@ -315,6 +354,7 @@ const UpcomingProgramsManagement = () => {
                 placeholder="Write a recap of this event... (falls back to Description if empty)"
               />
             </div>
+
 
             <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
               {(createMutation.isPending || updateMutation.isPending) && (
