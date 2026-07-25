@@ -1,13 +1,49 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarTrigger,
+} from '@/components/ui/sidebar';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Loader2,
+  LayoutDashboard,
+  HeartHandshake,
+  Users,
+  Mail,
+  FileText,
+  Calendar,
+  Sparkles,
+  UserCog,
+  Settings,
+  Plus,
+  Minus,
+  BarChart3,
+  Newspaper,
+  Trophy,
+  Image as ImageIcon,
+  Award,
+  MessageSquare,
+  Send,
+  Download,
+  ShieldCheck,
+  ScrollText,
+  ClipboardList,
+  CalendarCheck,
+  BookOpen,
+} from 'lucide-react';
 
-// Admin management components
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { DonationsManagement } from '@/components/admin/DonationsManagement';
 import { MembersManagement } from '@/components/admin/MembersManagement';
@@ -28,18 +64,134 @@ import { EventRegistrationsManagement } from '@/components/admin/EventRegistrati
 import UserRolesManagement from '@/components/admin/UserRolesManagement';
 import ActivityLogViewer from '@/components/admin/ActivityLogViewer';
 
+type ViewKey =
+  | 'analytics'
+  | 'donations'
+  | 'members'
+  | 'contacts'
+  | 'newsletter'
+  | 'blog'
+  | 'site-content'
+  | 'programs'
+  | 'upcoming'
+  | 'registrations'
+  | 'stories'
+  | 'stats'
+  | 'achievements'
+  | 'team'
+  | 'testimonials'
+  | 'email-campaigns'
+  | 'users'
+  | 'activity'
+  | 'export';
+
+type Item = { key: ViewKey; label: string; icon: React.ComponentType<{ className?: string }> };
+type Group = { label: string; icon: React.ComponentType<{ className?: string }>; items: Item[] };
+
+const GROUPS: Group[] = [
+  {
+    label: 'Overview',
+    icon: LayoutDashboard,
+    items: [{ key: 'analytics', label: 'Analytics Dashboard', icon: BarChart3 }],
+  },
+  {
+    label: 'Fundraising',
+    icon: HeartHandshake,
+    items: [{ key: 'donations', label: 'Donations', icon: HeartHandshake }],
+  },
+  {
+    label: 'Community',
+    icon: Users,
+    items: [
+      { key: 'members', label: 'Members', icon: Users },
+      { key: 'contacts', label: 'Contact Messages', icon: MessageSquare },
+      { key: 'newsletter', label: 'Newsletter Subscribers', icon: Mail },
+    ],
+  },
+  {
+    label: 'Programs & Events',
+    icon: Calendar,
+    items: [
+      { key: 'programs', label: 'All Programs', icon: BookOpen },
+      { key: 'upcoming', label: 'Upcoming / Past Events', icon: CalendarCheck },
+      { key: 'registrations', label: 'Event Registrations', icon: ClipboardList },
+    ],
+  },
+  {
+    label: 'Content',
+    icon: FileText,
+    items: [
+      { key: 'blog', label: 'Blog Posts', icon: Newspaper },
+      { key: 'site-content', label: 'Site Content', icon: FileText },
+    ],
+  },
+  {
+    label: 'Impact',
+    icon: Sparkles,
+    items: [
+      { key: 'stories', label: 'Impact Stories', icon: ImageIcon },
+      { key: 'stats', label: 'Impact Stats', icon: BarChart3 },
+      { key: 'achievements', label: 'Achievements', icon: Trophy },
+    ],
+  },
+  {
+    label: 'People',
+    icon: UserCog,
+    items: [
+      { key: 'team', label: 'Team Members', icon: UserCog },
+      { key: 'testimonials', label: 'Testimonials', icon: Award },
+    ],
+  },
+  {
+    label: 'Communications',
+    icon: Send,
+    items: [{ key: 'email-campaigns', label: 'Email Campaigns', icon: Send }],
+  },
+  {
+    label: 'System',
+    icon: Settings,
+    items: [
+      { key: 'users', label: 'Users & Roles', icon: ShieldCheck },
+      { key: 'activity', label: 'Activity Log', icon: ScrollText },
+      { key: 'export', label: 'Export Data', icon: Download },
+    ],
+  },
+];
+
+const TITLES: Record<ViewKey, string> = {
+  analytics: 'Analytics Dashboard',
+  donations: 'Donations',
+  members: 'Members',
+  contacts: 'Contact Messages',
+  newsletter: 'Newsletter Subscribers',
+  blog: 'Blog Posts',
+  'site-content': 'Site Content',
+  programs: 'All Programs',
+  upcoming: 'Upcoming / Past Events',
+  registrations: 'Event Registrations',
+  stories: 'Impact Stories',
+  stats: 'Impact Stats',
+  achievements: 'Achievements',
+  team: 'Team Members',
+  testimonials: 'Testimonials',
+  'email-campaigns': 'Email Campaigns',
+  users: 'Users & Roles',
+  activity: 'Activity Log',
+  export: 'Export Data',
+};
+
 const Admin = () => {
   const { user, loading, isAdmin, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
+  const [view, setView] = useState<ViewKey>('analytics');
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(GROUPS.map((g) => [g.label, true])),
+  );
 
   useEffect(() => {
     if (loading) return;
-    
-    if (!user) {
-      navigate('/auth?next=/admin', { replace: true });
-    } else if (!isAdmin) {
-      navigate('/', { replace: true });
-    }
+    if (!user) navigate('/auth?next=/admin', { replace: true });
+    else if (!isAdmin) navigate('/', { replace: true });
   }, [loading, user, isAdmin, navigate]);
 
   if (loading) {
@@ -50,170 +202,102 @@ const Admin = () => {
     );
   }
 
-  if (!user || !isAdmin) {
-    return null;
-  }
+  if (!user || !isAdmin) return null;
+
+  const renderView = () => {
+    switch (view) {
+      case 'analytics': return <AnalyticsDashboard />;
+      case 'donations': return <DonationsManagement />;
+      case 'members': return <MembersManagement />;
+      case 'contacts': return <ContactsManagement />;
+      case 'newsletter': return <NewsletterManagement />;
+      case 'blog': return <BlogManagement />;
+      case 'site-content': return <SiteContentManagement />;
+      case 'programs': return <ProgramsManagement />;
+      case 'upcoming': return <UpcomingProgramsManagement />;
+      case 'registrations': return <EventRegistrationsManagement />;
+      case 'stories': return <ImpactStoriesManagement />;
+      case 'stats': return <ImpactStatsManagement />;
+      case 'achievements': return <AchievementsManagement />;
+      case 'team': return <TeamMembersManagement />;
+      case 'testimonials': return <TestimonialsManagement />;
+      case 'email-campaigns': return <EmailCampaignManagement />;
+      case 'users': return <UserRolesManagement isSuperAdmin={isSuperAdmin} />;
+      case 'activity': return <ActivityLogViewer />;
+      case 'export': return <ExportData />;
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
-      <main className="flex-1 container mx-auto px-3 sm:px-4 py-16 sm:py-20">
-        <h1 className="text-xl sm:text-2xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8">Admin Dashboard</h1>
-        
-        <Tabs defaultValue="analytics" className="space-y-3 sm:space-y-4">
-          <div className="overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
-            <TabsList className="inline-flex w-max min-w-full h-auto flex-wrap sm:flex-nowrap gap-1 p-1 bg-muted/50">
-              <TabsTrigger value="analytics" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Analytics</TabsTrigger>
-              <TabsTrigger value="data" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Data</TabsTrigger>
-              <TabsTrigger value="blog" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Blog</TabsTrigger>
-              <TabsTrigger value="programs" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Programs</TabsTrigger>
-              <TabsTrigger value="impact" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Impact</TabsTrigger>
-              <TabsTrigger value="people" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">People</TabsTrigger>
-              <TabsTrigger value="content" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">Content</TabsTrigger>
-              <TabsTrigger value="system" className="text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 py-1.5">System</TabsTrigger>
-            </TabsList>
-          </div>
+      <SidebarProvider>
+        <div className="flex flex-1 w-full pt-16">
+          <Sidebar collapsible="icon" className="border-r">
+            <SidebarContent>
+              {GROUPS.map((group) => {
+                const isOpen = openGroups[group.label] ?? true;
+                const GroupIcon = group.icon;
+                return (
+                  <Collapsible
+                    key={group.label}
+                    open={isOpen}
+                    onOpenChange={(o) => setOpenGroups((p) => ({ ...p, [group.label]: o }))}
+                  >
+                    <SidebarGroup>
+                      <SidebarGroupLabel asChild>
+                        <CollapsibleTrigger className="flex w-full items-center justify-between hover:text-foreground">
+                          <span className="flex items-center gap-2">
+                            <GroupIcon className="h-3.5 w-3.5" />
+                            {group.label}
+                          </span>
+                          {isOpen ? (
+                            <Minus className="h-3.5 w-3.5" />
+                          ) : (
+                            <Plus className="h-3.5 w-3.5" />
+                          )}
+                        </CollapsibleTrigger>
+                      </SidebarGroupLabel>
+                      <CollapsibleContent>
+                        <SidebarGroupContent>
+                          <SidebarMenu>
+                            {group.items.map((item) => {
+                              const Icon = item.icon;
+                              return (
+                                <SidebarMenuItem key={item.key}>
+                                  <SidebarMenuButton
+                                    onClick={() => setView(item.key)}
+                                    isActive={view === item.key}
+                                    tooltip={item.label}
+                                  >
+                                    <Icon className="h-4 w-4" />
+                                    <span>{item.label}</span>
+                                  </SidebarMenuButton>
+                                </SidebarMenuItem>
+                              );
+                            })}
+                          </SidebarMenu>
+                        </SidebarGroupContent>
+                      </CollapsibleContent>
+                    </SidebarGroup>
+                  </Collapsible>
+                );
+              })}
+            </SidebarContent>
+          </Sidebar>
 
-          {/* Analytics Tab */}
-          <TabsContent value="analytics">
-            <AnalyticsDashboard />
-          </TabsContent>
-
-          {/* Data Tab - Donations, Members, Contacts, Newsletter */}
-          <TabsContent value="data">
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <Tabs defaultValue="donations" className="space-y-4">
-                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
-                    <TabsTrigger value="donations" className="text-xs sm:text-sm">Donations</TabsTrigger>
-                    <TabsTrigger value="members" className="text-xs sm:text-sm">Members</TabsTrigger>
-                    <TabsTrigger value="contacts" className="text-xs sm:text-sm">Contacts</TabsTrigger>
-                    <TabsTrigger value="newsletter" className="text-xs sm:text-sm">Newsletter</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="donations">
-                    <DonationsManagement />
-                  </TabsContent>
-                  <TabsContent value="members">
-                    <MembersManagement />
-                  </TabsContent>
-                  <TabsContent value="contacts">
-                    <ContactsManagement />
-                  </TabsContent>
-                  <TabsContent value="newsletter">
-                    <NewsletterManagement />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Blog Tab */}
-          <TabsContent value="blog">
-            <BlogManagement />
-          </TabsContent>
-
-          {/* Programs Tab */}
-          <TabsContent value="programs">
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <Tabs defaultValue="all-programs" className="space-y-4">
-                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
-                    <TabsTrigger value="all-programs" className="text-xs sm:text-sm">All Programs</TabsTrigger>
-                    <TabsTrigger value="upcoming-programs" className="text-xs sm:text-sm">Upcoming</TabsTrigger>
-                    <TabsTrigger value="registrations" className="text-xs sm:text-sm">Registrations</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="all-programs">
-                    <ProgramsManagement />
-                  </TabsContent>
-                  <TabsContent value="upcoming-programs">
-                    <UpcomingProgramsManagement />
-                  </TabsContent>
-                  <TabsContent value="registrations">
-                    <EventRegistrationsManagement />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Impact Tab */}
-          <TabsContent value="impact">
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <Tabs defaultValue="stories" className="space-y-4">
-                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
-                    <TabsTrigger value="stories" className="text-xs sm:text-sm">Stories</TabsTrigger>
-                    <TabsTrigger value="stats" className="text-xs sm:text-sm">Stats</TabsTrigger>
-                    <TabsTrigger value="achievements" className="text-xs sm:text-sm">Achievements</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="stories">
-                    <ImpactStoriesManagement />
-                  </TabsContent>
-                  <TabsContent value="stats">
-                    <ImpactStatsManagement />
-                  </TabsContent>
-                  <TabsContent value="achievements">
-                    <AchievementsManagement />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* People Tab */}
-          <TabsContent value="people">
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <Tabs defaultValue="team" className="space-y-4">
-                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
-                    <TabsTrigger value="team" className="text-xs sm:text-sm">Team</TabsTrigger>
-                    <TabsTrigger value="testimonials" className="text-xs sm:text-sm">Testimonials</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="team">
-                    <TeamMembersManagement />
-                  </TabsContent>
-                  <TabsContent value="testimonials">
-                    <TestimonialsManagement />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Content Tab */}
-          <TabsContent value="content">
-            <SiteContentManagement />
-          </TabsContent>
-
-          {/* System Tab */}
-          <TabsContent value="system">
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <Tabs defaultValue="users" className="space-y-4">
-                  <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
-                    <TabsTrigger value="users" className="text-xs sm:text-sm">Users</TabsTrigger>
-                    <TabsTrigger value="email" className="text-xs sm:text-sm">Email</TabsTrigger>
-                    <TabsTrigger value="export" className="text-xs sm:text-sm">Export</TabsTrigger>
-                    <TabsTrigger value="activity" className="text-xs sm:text-sm">Activity</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="users">
-                    <UserRolesManagement isSuperAdmin={isSuperAdmin} />
-                  </TabsContent>
-                  <TabsContent value="email">
-                    <EmailCampaignManagement />
-                  </TabsContent>
-                  <TabsContent value="export">
-                    <ExportData />
-                  </TabsContent>
-                  <TabsContent value="activity">
-                    <ActivityLogViewer />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </main>
+          <main className="flex-1 min-w-0 bg-muted/20">
+            <div className="sticky top-16 z-10 bg-background/95 backdrop-blur border-b flex items-center gap-2 px-4 py-3">
+              <SidebarTrigger />
+              <div>
+                <p className="text-xs text-muted-foreground">Admin Dashboard</p>
+                <h1 className="text-lg sm:text-xl font-semibold leading-tight">{TITLES[view]}</h1>
+              </div>
+            </div>
+            <div className="p-3 sm:p-6">{renderView()}</div>
+          </main>
+        </div>
+      </SidebarProvider>
       <Footer />
     </div>
   );
