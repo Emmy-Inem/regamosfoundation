@@ -300,8 +300,18 @@ const Blog = () => {
                 </p>
               </div>
               {loading ? (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Loading blog posts...</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <Card key={i} className="overflow-hidden border-0 shadow-soft">
+                      <Skeleton className="w-full aspect-[16/10]" />
+                      <CardContent className="p-5 space-y-3">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-5 w-full" />
+                        <Skeleton className="h-4 w-5/6" />
+                        <Skeleton className="h-4 w-2/3" />
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               ) : filteredPosts.length === 0 ? (
                 <div className="text-center py-12">
