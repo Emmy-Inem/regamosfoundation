@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQuery } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PastEventHighlights from "@/components/PastEventHighlights";
@@ -8,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, User, ArrowRight, Search, X, Eye, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useBlogSearch } from "@/hooks/useBlogSearch";
