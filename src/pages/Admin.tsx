@@ -7,13 +7,14 @@ import {
   SidebarProvider,
   Sidebar,
   SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
@@ -42,6 +43,7 @@ import {
   ClipboardList,
   CalendarCheck,
   BookOpen,
+  ArrowLeft,
 } from 'lucide-react';
 
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
@@ -233,7 +235,11 @@ const Admin = () => {
       <Navigation />
       <SidebarProvider>
         <div className="flex flex-1 w-full pt-16">
-          <Sidebar collapsible="icon" className="border-r">
+          <Sidebar collapsible="none" className="border-r bg-sidebar w-64 shrink-0">
+            <SidebarHeader className="border-b border-sidebar-border p-4">
+              <p className="text-xs uppercase tracking-wider text-sidebar-foreground/60">Regamos</p>
+              <p className="text-sm font-semibold text-sidebar-foreground">Admin Console</p>
+            </SidebarHeader>
             <SidebarContent>
               {GROUPS.map((group) => {
                 const isOpen = openGroups[group.label] ?? true;
@@ -246,7 +252,7 @@ const Admin = () => {
                   >
                     <SidebarGroup>
                       <SidebarGroupLabel asChild>
-                        <CollapsibleTrigger className="flex w-full items-center justify-between hover:text-foreground">
+                        <CollapsibleTrigger className="flex w-full items-center justify-between hover:text-sidebar-foreground text-sidebar-foreground/70">
                           <span className="flex items-center gap-2">
                             <GroupIcon className="h-3.5 w-3.5" />
                             {group.label}
@@ -268,7 +274,6 @@ const Admin = () => {
                                   <SidebarMenuButton
                                     onClick={() => setView(item.key)}
                                     isActive={view === item.key}
-                                    tooltip={item.label}
                                   >
                                     <Icon className="h-4 w-4" />
                                     <span>{item.label}</span>
@@ -284,18 +289,22 @@ const Admin = () => {
                 );
               })}
             </SidebarContent>
+            <SidebarFooter className="border-t border-sidebar-border p-3">
+              <SidebarMenuButton onClick={() => navigate('/')}>
+                <ArrowLeft className="h-4 w-4" />
+                <span>Return to Website</span>
+              </SidebarMenuButton>
+            </SidebarFooter>
           </Sidebar>
 
           <main className="flex-1 min-w-0 bg-muted/20">
-            <div className="sticky top-16 z-10 bg-background/95 backdrop-blur border-b flex items-center gap-2 px-4 py-3">
-              <SidebarTrigger />
-              <div>
-                <p className="text-xs text-muted-foreground">Admin Dashboard</p>
-                <h1 className="text-lg sm:text-xl font-semibold leading-tight">{TITLES[view]}</h1>
-              </div>
+            <div className="sticky top-16 z-10 bg-background/95 backdrop-blur border-b px-4 py-3">
+              <p className="text-xs text-muted-foreground">Admin Dashboard</p>
+              <h1 className="text-lg sm:text-xl font-semibold leading-tight">{TITLES[view]}</h1>
             </div>
             <div className="p-3 sm:p-6">{renderView()}</div>
           </main>
+
         </div>
       </SidebarProvider>
       <Footer />
