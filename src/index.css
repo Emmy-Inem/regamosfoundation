@@ -85,6 +85,15 @@ All colors MUST be HSL.
     --ring: 152 65% 45%;
     
     --blur-bg: hsla(152, 65%, 8%, 0.7);
+
+    --sidebar-background: 152 65% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 152 65% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 152 40% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 152 25% 22%;
+    --sidebar-ring: 152 65% 45%;
   }
 }
 
