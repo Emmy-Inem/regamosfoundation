@@ -7,13 +7,14 @@ import {
   SidebarProvider,
   Sidebar,
   SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
@@ -42,6 +43,7 @@ import {
   ClipboardList,
   CalendarCheck,
   BookOpen,
+  ArrowLeft,
 } from 'lucide-react';
 
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
