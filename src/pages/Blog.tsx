@@ -88,8 +88,6 @@ const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -122,6 +120,20 @@ const Blog = () => {
     },
   ];
 
+  const { data: blogPosts = [], isLoading: loading } = useQuery({
+    queryKey: ["blog-posts-list"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('id, title, excerpt, image_url, category, author, published_at, view_count, created_at')
+        .order('published_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
   const displayPosts = blogPosts.length > 0 ? blogPosts : defaultPosts;
   const { searchQuery, setSearchQuery, searchResults, clearSearch, resultCount } = useBlogSearch(displayPosts);
 
@@ -142,10 +154,6 @@ const Blog = () => {
   };
 
   useEffect(() => {
-    fetchBlogPosts();
-  }, []);
-
-  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY < 100) {
@@ -162,23 +170,6 @@ const Blog = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  const fetchBlogPosts = async () => {
-    try {
-      // Only fetch fields needed for the card list — excluding `content`
-      // (avg 235 kB per post) cut the payload from ~2.8 MB to ~40 kB.
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('id, title, excerpt, image_url, category, author, published_at, view_count, created_at')
-        .order('published_at', { ascending: false });
-
-      if (error) throw error;
-      setBlogPosts(data || []);
-    } catch (error) {
-      console.error('Error fetching blog posts:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredPosts = selectedCategory === "All" 
     ? searchResults 
