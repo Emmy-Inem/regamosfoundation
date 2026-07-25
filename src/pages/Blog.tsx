@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQuery } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PastEventHighlights from "@/components/PastEventHighlights";
@@ -8,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, User, ArrowRight, Search, X, Eye, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useBlogSearch } from "@/hooks/useBlogSearch";
@@ -86,8 +88,6 @@ const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -120,6 +120,20 @@ const Blog = () => {
     },
   ];
 
+  const { data: blogPosts = [], isLoading: loading } = useQuery({
+    queryKey: ["blog-posts-list"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('id, title, excerpt, image_url, category, author, published_at, view_count, created_at')
+        .order('published_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
   const displayPosts = blogPosts.length > 0 ? blogPosts : defaultPosts;
   const { searchQuery, setSearchQuery, searchResults, clearSearch, resultCount } = useBlogSearch(displayPosts);
 
@@ -140,10 +154,6 @@ const Blog = () => {
   };
 
   useEffect(() => {
-    fetchBlogPosts();
-  }, []);
-
-  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY < 100) {
@@ -160,23 +170,6 @@ const Blog = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  const fetchBlogPosts = async () => {
-    try {
-      // Only fetch fields needed for the card list — excluding `content`
-      // (avg 235 kB per post) cut the payload from ~2.8 MB to ~40 kB.
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('id, title, excerpt, image_url, category, author, published_at, view_count, created_at')
-        .order('published_at', { ascending: false });
-
-      if (error) throw error;
-      setBlogPosts(data || []);
-    } catch (error) {
-      console.error('Error fetching blog posts:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredPosts = selectedCategory === "All" 
     ? searchResults 
@@ -307,8 +300,18 @@ const Blog = () => {
                 </p>
               </div>
               {loading ? (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Loading blog posts...</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <Card key={i} className="overflow-hidden border-0 shadow-soft">
+                      <Skeleton className="w-full aspect-[16/10]" />
+                      <CardContent className="p-5 space-y-3">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-5 w-full" />
+                        <Skeleton className="h-4 w-5/6" />
+                        <Skeleton className="h-4 w-2/3" />
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               ) : filteredPosts.length === 0 ? (
                 <div className="text-center py-12">
