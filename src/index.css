@@ -44,6 +44,15 @@ All colors MUST be HSL.
     --shadow-glow: 0 0 40px hsla(45, 100%, 45%, 0.3);
     --blur-bg: hsla(0, 0%, 100%, 0.7);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 152 65% 33%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 150 25% 94%;
+    --sidebar-accent-foreground: 152 65% 20%;
+    --sidebar-border: 150 15% 88%;
+    --sidebar-ring: 152 65% 33%;
   }
 
   .dark {
