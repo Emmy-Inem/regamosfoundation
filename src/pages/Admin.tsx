@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
+import { Button } from '@/components/ui/button';
+import logo from '@/assets/logo.png';
 import {
   SidebarProvider,
   Sidebar,
@@ -15,6 +15,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
@@ -44,6 +45,10 @@ import {
   CalendarCheck,
   BookOpen,
   ArrowLeft,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Home,
+  FolderOpen,
 } from 'lucide-react';
 
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
@@ -65,6 +70,7 @@ import { ExportData } from '@/components/admin/ExportData';
 import { EventRegistrationsManagement } from '@/components/admin/EventRegistrationsManagement';
 import UserRolesManagement from '@/components/admin/UserRolesManagement';
 import ActivityLogViewer from '@/components/admin/ActivityLogViewer';
+import MediaLibrary from '@/components/admin/MediaLibrary';
 
 type ViewKey =
   | 'analytics'
@@ -74,6 +80,7 @@ type ViewKey =
   | 'newsletter'
   | 'blog'
   | 'site-content'
+  | 'media'
   | 'programs'
   | 'upcoming'
   | 'registrations'
@@ -125,6 +132,7 @@ const GROUPS: Group[] = [
     items: [
       { key: 'blog', label: 'Blog Posts', icon: Newspaper },
       { key: 'site-content', label: 'Site Content', icon: FileText },
+      { key: 'media', label: 'Media Library', icon: FolderOpen },
     ],
   },
   {
@@ -168,6 +176,7 @@ const TITLES: Record<ViewKey, string> = {
   newsletter: 'Newsletter Subscribers',
   blog: 'Blog Posts',
   'site-content': 'Site Content',
+  media: 'Media Library',
   programs: 'All Programs',
   upcoming: 'Upcoming / Past Events',
   registrations: 'Event Registrations',
@@ -182,8 +191,23 @@ const TITLES: Record<ViewKey, string> = {
   export: 'Export Data',
 };
 
+const SidebarToggle = () => {
+  const { open, toggleSidebar } = useSidebar();
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleSidebar}
+      aria-label={open ? 'Close sidebar' : 'Open sidebar'}
+      className="h-8 w-8"
+    >
+      {open ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
+    </Button>
+  );
+};
+
 const Admin = () => {
-  const { user, loading, isAdmin, isSuperAdmin } = useAuth();
+  const { user, loading, isAdmin, isSuperAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const [view, setView] = useState<ViewKey>('analytics');
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
@@ -215,6 +239,7 @@ const Admin = () => {
       case 'newsletter': return <NewsletterManagement />;
       case 'blog': return <BlogManagement />;
       case 'site-content': return <SiteContentManagement />;
+      case 'media': return <MediaLibrary />;
       case 'programs': return <ProgramsManagement />;
       case 'upcoming': return <UpcomingProgramsManagement />;
       case 'registrations': return <EventRegistrationsManagement />;
@@ -231,84 +256,88 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navigation />
-      <SidebarProvider>
-        <div className="flex flex-1 w-full pt-16">
-          <Sidebar collapsible="none" className="border-r bg-sidebar w-64 shrink-0">
-            <SidebarHeader className="border-b border-sidebar-border p-4">
-              <p className="text-xs uppercase tracking-wider text-sidebar-foreground/60">Regamos</p>
-              <p className="text-sm font-semibold text-sidebar-foreground">Admin Console</p>
-            </SidebarHeader>
-            <SidebarContent>
-              {GROUPS.map((group) => {
-                const isOpen = openGroups[group.label] ?? true;
-                const GroupIcon = group.icon;
-                return (
-                  <Collapsible
-                    key={group.label}
-                    open={isOpen}
-                    onOpenChange={(o) => setOpenGroups((p) => ({ ...p, [group.label]: o }))}
-                  >
-                    <SidebarGroup>
-                      <SidebarGroupLabel asChild>
-                        <CollapsibleTrigger className="flex w-full items-center justify-between hover:text-sidebar-foreground text-sidebar-foreground/70">
-                          <span className="flex items-center gap-2">
-                            <GroupIcon className="h-3.5 w-3.5" />
-                            {group.label}
-                          </span>
-                          {isOpen ? (
-                            <Minus className="h-3.5 w-3.5" />
-                          ) : (
-                            <Plus className="h-3.5 w-3.5" />
-                          )}
-                        </CollapsibleTrigger>
-                      </SidebarGroupLabel>
-                      <CollapsibleContent>
-                        <SidebarGroupContent>
-                          <SidebarMenu>
-                            {group.items.map((item) => {
-                              const Icon = item.icon;
-                              return (
-                                <SidebarMenuItem key={item.key}>
-                                  <SidebarMenuButton
-                                    onClick={() => setView(item.key)}
-                                    isActive={view === item.key}
-                                  >
-                                    <Icon className="h-4 w-4" />
-                                    <span>{item.label}</span>
-                                  </SidebarMenuButton>
-                                </SidebarMenuItem>
-                              );
-                            })}
-                          </SidebarMenu>
-                        </SidebarGroupContent>
-                      </CollapsibleContent>
-                    </SidebarGroup>
-                  </Collapsible>
-                );
-              })}
-            </SidebarContent>
-            <SidebarFooter className="border-t border-sidebar-border p-3">
-              <SidebarMenuButton onClick={() => navigate('/')}>
-                <ArrowLeft className="h-4 w-4" />
-                <span>Return to Website</span>
-              </SidebarMenuButton>
-            </SidebarFooter>
-          </Sidebar>
-
-          <main className="flex-1 min-w-0 bg-muted/20">
-            <div className="sticky top-16 z-10 bg-background/95 backdrop-blur border-b px-4 py-3">
-              <p className="text-xs text-muted-foreground">Admin Dashboard</p>
-              <h1 className="text-lg sm:text-xl font-semibold leading-tight">{TITLES[view]}</h1>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <Sidebar collapsible="icon" className="border-r">
+          <SidebarHeader className="border-b border-sidebar-border p-3">
+            <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+              <img src={logo} alt="Regamos" className="h-8 w-8 rounded" />
+              <div className="group-data-[collapsible=icon]:hidden">
+                <p className="text-[10px] uppercase tracking-wider text-sidebar-foreground/60">Regamos</p>
+                <p className="text-sm font-semibold text-sidebar-foreground leading-tight">Admin Console</p>
+              </div>
             </div>
-            <div className="p-3 sm:p-6">{renderView()}</div>
-          </main>
+          </SidebarHeader>
+          <SidebarContent>
+            {GROUPS.map((group) => {
+              const isOpen = openGroups[group.label] ?? true;
+              const GroupIcon = group.icon;
+              return (
+                <Collapsible
+                  key={group.label}
+                  open={isOpen}
+                  onOpenChange={(o) => setOpenGroups((p) => ({ ...p, [group.label]: o }))}
+                >
+                  <SidebarGroup>
+                    <SidebarGroupLabel asChild>
+                      <CollapsibleTrigger className="flex w-full items-center justify-between hover:text-sidebar-foreground text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
+                        <span className="flex items-center gap-2">
+                          <GroupIcon className="h-3.5 w-3.5" />
+                          {group.label}
+                        </span>
+                        {isOpen ? <Minus className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+                      </CollapsibleTrigger>
+                    </SidebarGroupLabel>
+                    <CollapsibleContent forceMount className="group-data-[collapsible=icon]:!block data-[state=closed]:hidden">
+                      <SidebarGroupContent>
+                        <SidebarMenu>
+                          {group.items.map((item) => {
+                            const Icon = item.icon;
+                            return (
+                              <SidebarMenuItem key={item.key}>
+                                <SidebarMenuButton
+                                  onClick={() => setView(item.key)}
+                                  isActive={view === item.key}
+                                  tooltip={item.label}
+                                >
+                                  <Icon className="h-4 w-4" />
+                                  <span>{item.label}</span>
+                                </SidebarMenuButton>
+                              </SidebarMenuItem>
+                            );
+                          })}
+                        </SidebarMenu>
+                      </SidebarGroupContent>
+                    </CollapsibleContent>
+                  </SidebarGroup>
+                </Collapsible>
+              );
+            })}
+          </SidebarContent>
+          <SidebarFooter className="border-t border-sidebar-border p-2 gap-1">
+            <SidebarMenuButton onClick={() => navigate('/')} tooltip="Return to Website">
+              <Home className="h-4 w-4" />
+              <span>Return to Website</span>
+            </SidebarMenuButton>
+            <SidebarMenuButton onClick={() => signOut().then(() => navigate('/'))} tooltip="Sign out">
+              <ArrowLeft className="h-4 w-4" />
+              <span>Sign out</span>
+            </SidebarMenuButton>
+          </SidebarFooter>
+        </Sidebar>
 
-        </div>
-      </SidebarProvider>
-      <Footer />
-    </div>
+        <main className="flex-1 min-w-0 flex flex-col bg-muted/20">
+          <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b flex items-center gap-3 px-3 sm:px-4 py-2.5">
+            <SidebarToggle />
+            <div className="min-w-0">
+              <p className="text-[11px] text-muted-foreground leading-none mb-0.5">Admin Dashboard</p>
+              <h1 className="text-base sm:text-lg font-semibold leading-tight truncate">{TITLES[view]}</h1>
+            </div>
+          </header>
+          <div className="flex-1 p-3 sm:p-6">{renderView()}</div>
+        </main>
+      </div>
+    </SidebarProvider>
   );
 };
 
