@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import PastEventHighlights from "@/components/PastEventHighlights";
 import SocialShareButtons from "@/components/SocialShareButtons";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, GraduationCap, Heart, TrendingUp, Award, CheckCircle } from "lucide-react";
@@ -256,6 +257,9 @@ const Impact = () => {
             </div>
           </div>
         </section>
+
+        {/* Past Event Highlights - horizontal scroll */}
+        <PastEventHighlights limit={10} />
 
         {/* Achievements */}
         <section className="py-16 sm:py-20 md:py-24 bg-background">
