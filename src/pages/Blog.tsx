@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import PastEventHighlights from "@/components/PastEventHighlights";
+
 import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, User, ArrowRight, Search, X, Eye, ExternalLink } from "lucide-react";
@@ -352,8 +352,6 @@ const Blog = () => {
             </div>
           </section>
 
-          {/* Past Event Highlights */}
-          <PastEventHighlights />
 
           {/* Founder's Blog Section */}
           <section className="py-12 sm:py-16 md:py-20 bg-muted/30">
