@@ -99,7 +99,7 @@ export const EmailCampaignManagement = () => {
               <p>Regamos Foundation</p>
               <p>Email: regamosfoundation@gmail.com | Phone: 08023300639</p>
               <p>
-                <a href="https://regamosfoundation.lovable.app" style="color: #1F8A55;">Visit our website</a>
+                <a href="https://www.regamosfoundation.com.ng" style="color: #1F8A55;">Visit our website</a>
               </p>
             </div>
           </div>

@@ -188,7 +188,7 @@ const Programs = () => {
       <SEOHead 
         title="Our Programs"
         description="Explore Regamos Foundation programs: microcredit, skills training, mentorship, scholarships, and community development across Nigeria."
-        url="https://regamosfoundation.lovable.app/programs"
+        url="https://www.regamosfoundation.com.ng/programs"
       />
       <FAQSchema faqs={programsFaqs} />
       <div className="min-h-screen">

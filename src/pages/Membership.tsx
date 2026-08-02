@@ -127,7 +127,7 @@ const Membership = () => {
       <SEOHead 
         title="Membership"
         description="Join the Regamos Foundation community. Become a member to support our mission and gain access to exclusive resources and support programs."
-        url="https://regamosfoundation.lovable.app/membership"
+        url="https://www.regamosfoundation.com.ng/membership"
       />
       <div className="min-h-screen">
         <Navigation />

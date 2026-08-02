@@ -139,7 +139,7 @@ const Partner = () => {
       <SEOHead 
         title="Partner With Us"
         description="Collaborate with Regamos Foundation to create sustainable impact. Partner through healthcare, technology, human capital development, and more."
-        url="https://regamosfoundation.lovable.app/partner"
+        url="https://www.regamosfoundation.com.ng/partner"
       />
       <div className="min-h-screen">
         <Navigation />

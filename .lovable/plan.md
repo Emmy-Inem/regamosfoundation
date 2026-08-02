@@ -1,85 +1,41 @@
-## Goal
+## What's actually broken
 
-1. Swap the clearly AI-generated images on the site for free, royalty-free stock photos (Unsplash/Pexels), keeping the real event photos you've uploaded.
-2. Share a high-level list of missing features worth adding next (no implementation in this pass).
+Your custom domain is not served by Lovable. Verified just now:
 
-## Image audit — what gets replaced
+```text
+https://regamosfoundation.lovable.app/about       -> 200 OK   (Lovable, works)
+https://www.regamosfoundation.com.ng/about        -> 404      (server: Vercel)
+https://www.regamosfoundation.com.ng/             -> 200 OK   (server: Vercel)
+```
 
-Confirmed AI-generated decorative assets in `src/assets/` (these were created with the image model during the initial build):
+The app is a single-page React app: only `index.html` really exists. Lovable's hosting knows to serve `index.html` for any unknown path, so every route works there. The Vercel deployment does not, so anything other than `/` returns Vercel's 404 page. That's why only the homepage survives when you share a link.
 
-- `hero-bg.jpg` — homepage hero background
-- `community.jpg` — Mission/Programs section
-- `education.jpg` — Programs section
-- `empowerment.jpg` — Programs/About section
-- `impact-digital-library.jpg`
-- `impact-medical-outreach.jpg`
-- `impact-financial-literacy.jpg`
-- `impact-palm-seedlings.jpg`
-- `impact-menstrual-hygiene.jpg`
-- `impact-community-outreach.jpg`
-- `impact-child-protection.jpg`
-- `impact-life-skills.jpg`
-- `impact-hp-donation.jpg`
-- `impact-computer-training.jpg`
-- `impact-childrens-day.jpg`
-- `impact-roco-orphanage.jpg`
-- `impact-peculiar-saint.jpg`
+## Fix: SPA rewrite for Vercel
 
-Kept as-is:
-- `logo.png`, `regamos-academy-logo.png`
-- All event flyers uploaded to the `content-uploads` bucket (YEP 2026, Family Day 2026, etc.)
-- Any real photos stored in DB (`impact_stories.image_url`, `team_members.avatar_url`, `blog_posts.cover_image`)
+Add a `vercel.json` at the project root that tells Vercel to serve the app for every path:
 
-## How the swap works
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
 
-1. For each asset above, pick a topical, high-quality Unsplash photo (African women's empowerment, youth training, classroom, medical outreach, community gathering, hygiene/health, children at school, computer lab, etc.).
-2. Download into the same `src/assets/` paths (same filenames) so no imports change.
-3. Quick visual QA in the preview at mobile + desktop to confirm composition still reads well behind overlays.
-4. Add a short `CREDITS.md` in `src/assets/` listing each photo's Unsplash author + URL (Unsplash license doesn't require attribution but it's good practice).
+Important caveat: this only takes effect if the Vercel project is deploying **this** repository. If that Vercel site is an older copy or a separate export, the file will sit unused and links will still 404 — in that case the real fix is repointing the domain to Lovable (Project settings > Domains), which needs no config at all. After the change I'll re-test `/about` and a blog detail URL on the live domain and tell you plainly which of the two situations you're in.
 
-I will also re-check `impact_stories` rows in the database; any row whose `image_url` points to an obviously AI-rendered asset will be flagged in chat for you to decide whether to replace.
+I'll also add `public/_redirects` (`/* /index.html 200`) as a harmless fallback in case the domain ever moves to Netlify-style hosting.
 
-## Missing features — high-level list
+## Full sweep
 
-Donor experience
-- Recurring/monthly giving (Monnify subscription or Paystack Plans)
-- Auto-emailed PDF donation receipts + annual giving statements
-- Donor wall / "Thank you" page with opt-in public names
-- Dedication / in-honor-of / in-memory-of giving option
-- Multi-currency display (NGN, USD, GBP)
+1. **Routes** — load every route in a headless browser (home, about, programs, impact, blog, blog detail, events/:id, donate, volunteer, membership, partner, contact, privacy, terms, auth) and report any that error, 404, or show a blank screen.
+2. **Console/network** — collect JS errors and failed requests across those pages.
+3. **Metadata & SEO** — pull the current SEO findings, verify title/description/canonical/og tags, and confirm the sitemap lists real routes. Fix what's fixable in code.
+4. **Backend security** — run the security scan and database linter; report criticals and fix genuine ones (existing accepted risks in security memory stay accepted).
+5. **Mobile layout** — screenshot key pages at phone width and fix overflow or unreadable spots.
 
-Engagement & content
-- Site-wide search (blog + programs + impact stories)
-- Newsletter archive page (already sending — surface past issues)
-- Comment moderation queue UI in admin (currently guest comments are allowed)
-- Related posts + reading-time on blog detail
-- Volunteer hours tracker / volunteer portal login
+I'll report findings with evidence and fix the ones that are code-level; anything that needs a decision from you I'll list rather than guess.
 
-Programs & events
-- Online event registration with calendar (.ics) download
-- Post-event photo galleries linked from past events
-- Ticketing / paid workshop support
-- Sponsor logos carousel on event pages
+## Technical notes
 
-Admin & operations
-- Dashboard KPIs (donations this month, new members, blog views) — already partial, expand
-- CSV export with date filters on all tables
-- Audit-log search & filters
-- Two-factor auth for admin accounts
-- Scheduled blog publishing
-
-Trust, compliance & SEO
-- Annual report / financial transparency page (downloadable PDFs)
-- Accreditation / partner-logo strip
-- Cookie consent banner (GDPR/NDPR)
-- Schema.org `NGO` + `DonateAction` structured data on Donate page
-- Open Graph image per blog post (auto-generated)
-
-Accessibility & performance
-- Skip-to-content already exists — add language switcher (EN/Pidgin/French) groundwork
-- Image `srcset` + AVIF variants via a build step
-- Lighthouse CI in publish flow
-
-## Out of scope this round
-- No backend schema changes, no new pages, no auth changes.
-- Feature suggestions are advisory only — pick which ones you want and I'll plan them separately.
+- New files: `vercel.json`, `public/_redirects`.
+- No changes to app logic, routing, or the database schema for the link fix.
+- Sweep fixes will be scoped and listed individually before/as I make them.

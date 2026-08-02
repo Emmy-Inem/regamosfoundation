@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
 
   const url = new URL(req.url);
   const action = url.searchParams.get('action') ?? 'token';
-  const site = 'https://regamosfoundation.lovable.app/';
+  const site = 'https://www.regamosfoundation.com.ng/';
 
   if (action === 'token') {
     const r = await fetch('https://connector-gateway.lovable.dev/google_search_console/siteVerification/v1/token', {
@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
   }
 
   if (action === 'submit-sitemap') {
-    const sitemap = 'https://regamosfoundation.lovable.app/sitemap.xml';
+    const sitemap = 'https://www.regamosfoundation.com.ng/sitemap.xml';
     const r = await fetch(`https://connector-gateway.lovable.dev/google_search_console/webmasters/v3/sites/${encodeURIComponent(site)}/sitemaps/${encodeURIComponent(sitemap)}`, {
       method: 'PUT',
       headers: { 'Authorization': `Bearer ${LOVABLE}`, 'X-Connection-Api-Key': GSC },

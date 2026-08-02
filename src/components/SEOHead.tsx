@@ -17,8 +17,8 @@ const SEOHead = ({
   title = "Regamos Foundation — Empowering Lives in Nigeria",
   description = "Empowering widows, orphans, and youth in Nigeria through education, skills training, and community development. Donate or volunteer today.",
   keywords = "regamos foundation, widows empowerment, orphan care, youth development, community development, education, Nigeria NGO, charity, non-profit, donate, volunteer, empowerment programs",
-  image = "https://regamosfoundation.lovable.app/og-image.png",
-  url = "https://regamosfoundation.lovable.app",
+  image = "https://www.regamosfoundation.com.ng/og-image.png",
+  url = "https://www.regamosfoundation.com.ng",
   type = "website",
   author = "Regamos Foundation",
   publishedTime,
@@ -38,14 +38,14 @@ const SEOHead = ({
     "author": {
       "@type": "Organization",
       "name": author || siteName,
-      "url": "https://regamosfoundation.lovable.app"
+      "url": "https://www.regamosfoundation.com.ng"
     },
     "publisher": {
       "@type": "Organization",
       "name": siteName,
       "logo": {
         "@type": "ImageObject",
-        "url": "https://regamosfoundation.lovable.app/og-image.png"
+        "url": "https://www.regamosfoundation.com.ng/og-image.png"
       }
     },
     "datePublished": publishedTime,
@@ -63,8 +63,8 @@ const SEOHead = ({
     "@type": "NGO",
     "name": "Regamos Foundation",
     "alternateName": "Regamos Foundation Nigeria",
-    "url": "https://regamosfoundation.lovable.app",
-    "logo": "https://regamosfoundation.lovable.app/og-image.png",
+    "url": "https://www.regamosfoundation.com.ng",
+    "logo": "https://www.regamosfoundation.com.ng/og-image.png",
     "description": "Regamos Foundation empowers widows, orphans, abused girls, and youth through education, empowerment, and community development in Nigeria.",
     "foundingDate": "2020",
     "address": {
@@ -112,27 +112,27 @@ const SEOHead = ({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": siteName,
-    "url": "https://regamosfoundation.lovable.app",
+    "url": "https://www.regamosfoundation.com.ng",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://regamosfoundation.lovable.app/blog?search={search_term_string}",
+      "target": "https://www.regamosfoundation.com.ng/blog?search={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   };
 
   // Breadcrumb structured data
   const getBreadcrumbSchema = () => {
-    const pathSegments = url.replace("https://regamosfoundation.lovable.app", "").split("/").filter(Boolean);
+    const pathSegments = url.replace("https://www.regamosfoundation.com.ng", "").split("/").filter(Boolean);
     const items = [
       {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://regamosfoundation.lovable.app"
+        "item": "https://www.regamosfoundation.com.ng"
       }
     ];
 
-    let currentPath = "https://regamosfoundation.lovable.app";
+    let currentPath = "https://www.regamosfoundation.com.ng";
     pathSegments.forEach((segment, index) => {
       currentPath += `/${segment}`;
       items.push({

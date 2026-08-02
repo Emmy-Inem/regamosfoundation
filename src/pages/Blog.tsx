@@ -203,7 +203,7 @@ const Blog = () => {
       <SEOHead 
         title="Blog"
         description="Read inspiring stories, updates, and insights from Regamos Foundation's journey of empowering communities and transforming lives."
-        url="https://regamosfoundation.lovable.app/blog"
+        url="https://www.regamosfoundation.com.ng/blog"
       />
       <div className="min-h-screen">
         <Navigation />

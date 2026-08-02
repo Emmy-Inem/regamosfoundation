@@ -16,7 +16,7 @@ const DynamicSitemap = () => {
   }, []);
 
   const generateSitemap = async () => {
-    const baseUrl = 'https://regamosfoundation.lovable.app';
+    const baseUrl = 'https://www.regamosfoundation.com.ng';
     const today = new Date().toISOString().split('T')[0];
 
     // Static pages

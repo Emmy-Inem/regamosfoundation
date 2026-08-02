@@ -28,7 +28,7 @@ const TestimonialSchema = ({ testimonials, itemReviewed }: TestimonialSchemaProp
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": itemReviewed?.name || "Regamos Foundation",
-    "@id": "https://regamosfoundation.lovable.app/#organization",
+    "@id": "https://www.regamosfoundation.com.ng/#organization",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": averageRating.toFixed(1),

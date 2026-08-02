@@ -74,7 +74,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <!-- CTA Button -->
               <div style="text-align: center; margin: 30px 0;">
-                <a href="https://regamosfoundation.lovable.app/programs" 
+                <a href="https://www.regamosfoundation.com.ng/programs" 
                    style="display: inline-block; background: linear-gradient(135deg, #DAA520 0%, #FFD700 100%); color: #1a1a1a; text-decoration: none; padding: 14px 30px; border-radius: 25px; font-weight: bold; font-size: 16px;">
                   Explore Our Programs
                 </a>

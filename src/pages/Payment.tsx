@@ -78,7 +78,7 @@ const Payment = () => {
       <SEOHead 
         title="Payment"
         description="Complete your donation to Regamos Foundation. Choose between card payment or bank transfer."
-        url="https://regamosfoundation.lovable.app/payment"
+        url="https://www.regamosfoundation.com.ng/payment"
       />
       <div className="min-h-screen">
         <Navigation />

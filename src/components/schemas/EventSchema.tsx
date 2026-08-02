@@ -44,7 +44,7 @@ const EventSchema = ({
     "organizer": {
       "@type": "Organization",
       "name": organizer,
-      "url": "https://regamosfoundation.lovable.app"
+      "url": "https://www.regamosfoundation.com.ng"
     },
     ...(image && { "image": image }),
     ...(url && { "url": url }),

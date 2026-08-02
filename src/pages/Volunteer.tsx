@@ -85,7 +85,7 @@ const Volunteer = () => {
       <SEOHead 
         title="Volunteer With Us"
         description="Join Regamos Foundation as a volunteer and make a real difference in people's lives. Apply now to be part of our community impact initiatives."
-        url="https://regamosfoundation.lovable.app/volunteer"
+        url="https://www.regamosfoundation.com.ng/volunteer"
       />
       <div className="min-h-screen">
         <Navigation />

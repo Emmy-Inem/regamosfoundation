@@ -166,7 +166,7 @@ const Impact = () => {
       <SEOHead 
         title="Impact Stories"
         description="Real stories of transformation: widows empowered, youth educated, and communities strengthened across Nigeria by Regamos Foundation."
-        url="https://regamosfoundation.lovable.app/impact"
+        url="https://www.regamosfoundation.com.ng/impact"
       />
       <div className="min-h-screen">
         <Navigation />
@@ -245,7 +245,7 @@ const Impact = () => {
                       <p className="text-primary font-semibold mb-3 sm:mb-4 text-sm sm:text-base">{story.title}</p>
                       <p className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg mb-4">{story.story}</p>
                       <SocialShareButtons 
-                        url={`https://regamosfoundation.lovable.app/impact#${story.name.toLowerCase().replace(/\s+/g, '-')}`}
+                        url={`https://www.regamosfoundation.com.ng/impact#${story.name.toLowerCase().replace(/\s+/g, '-')}`}
                         title={`${story.name} - ${story.title}`}
                         description={story.story.substring(0, 120)}
                         compact
