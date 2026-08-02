@@ -53,7 +53,7 @@ const Hero = () => {
           alt="Empowering Communities"
           width={1920}
           height={1080}
-          fetchPriority="high"
+          {...{ fetchpriority: 'high' }}
           decoding="async"
           className="w-full h-full object-cover"
         />

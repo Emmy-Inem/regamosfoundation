@@ -47,15 +47,18 @@ Deno.serve(async (req) => {
       priority: '0.7',
     }))
 
-    // Fetch upcoming programs for event pages
-    const { data: upcomingPrograms } = await supabase
+    // Fetch programs — upcoming ones anchor on /programs, past ones have
+    // their own full event highlight page at /events/:id
+    const { data: programs } = await supabase
       .from('upcoming_programs')
-      .select('id, updated_at')
-      .eq('status', 'upcoming')
-      .order('start_date', { ascending: true })
+      .select('id, updated_at, status')
+      .order('start_date', { ascending: false })
 
-    const programUrls = (upcomingPrograms || []).map((program) => ({
-      loc: `${baseUrl}/programs#${program.id}`,
+    const programUrls = (programs || []).map((program) => ({
+      loc:
+        program.status === 'upcoming'
+          ? `${baseUrl}/programs#${program.id}`
+          : `${baseUrl}/events/${program.id}`,
       lastmod: program.updated_at.split('T')[0],
       changefreq: 'weekly',
       priority: '0.6',
