@@ -65,7 +65,7 @@ const EventHighlight = () => {
         <Navigation />
         <div className="container mx-auto px-4 py-24 text-center">
           <h1 className="text-2xl font-bold mb-4">Event not found</h1>
-          <Button onClick={() => navigate("/blog")}>Back to Blog</Button>
+          <Button onClick={() => navigate("/impact")}>Back to Impact</Button>
         </div>
         <Footer />
       </div>
@@ -85,10 +85,10 @@ const EventHighlight = () => {
 
       <main className="container mx-auto px-4 py-8 sm:py-12 max-w-5xl">
         <Link
-          to="/blog"
+          to="/impact"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-6"
         >
-          <ArrowLeft className="h-4 w-4" /> Back to Blog
+          <ArrowLeft className="h-4 w-4" /> Back to Impact
         </Link>
 
         <header className="mb-8">
