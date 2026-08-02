@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
       <SEOHead 
         title="Privacy Policy"
         description="Read Regamos Foundation's privacy policy to understand how we collect, use, and protect your personal information."
-        url="https://regamosfoundation.lovable.app/privacy-policy"
+        url="https://www.regamosfoundation.com.ng/privacy-policy"
       />
       <div className="min-h-screen">
         <Navigation />

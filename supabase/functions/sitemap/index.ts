@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const baseUrl = 'https://regamosfoundation.lovable.app'
+    const baseUrl = 'https://www.regamosfoundation.com.ng'
     const today = new Date().toISOString().split('T')[0]
 
     // Static pages

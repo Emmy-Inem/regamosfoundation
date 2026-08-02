@@ -144,7 +144,7 @@ const Donate = () => {
       <SEOHead 
         title="Donate"
         description="Support Regamos Foundation's mission to empower widows, orphans, and youth. Your donation creates lasting impact in communities across Nigeria."
-        url="https://regamosfoundation.lovable.app/donate"
+        url="https://www.regamosfoundation.com.ng/donate"
       />
       <FAQSchema faqs={donateFaqs} />
       <div className="min-h-screen">

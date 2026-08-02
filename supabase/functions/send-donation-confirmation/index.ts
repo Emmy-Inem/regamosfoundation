@@ -73,7 +73,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <!-- CTA Button -->
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://regamosfoundation.lovable.app/impact" style="display: inline-block; background-color: #16a34a; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                <a href="https://www.regamosfoundation.com.ng/impact" style="display: inline-block; background-color: #16a34a; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px;">
                   See Your Impact
                 </a>
               </div>

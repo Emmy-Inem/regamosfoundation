@@ -102,7 +102,7 @@ const Contact = () => {
       <SEOHead 
         title="Contact Us"
         description="Get in touch with Regamos Foundation. Contact us to learn more about our programs, volunteer opportunities, or partnership possibilities."
-        url="https://regamosfoundation.lovable.app/contact"
+        url="https://www.regamosfoundation.com.ng/contact"
       />
       <FAQSchema faqs={contactFaqs} />
       <div className="min-h-screen">

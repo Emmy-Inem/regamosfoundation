@@ -8,7 +8,7 @@ const TermsOfService = () => {
       <SEOHead 
         title="Terms of Service"
         description="Read Regamos Foundation's terms of service to understand the rules and regulations governing the use of our website and services."
-        url="https://regamosfoundation.lovable.app/terms-of-service"
+        url="https://www.regamosfoundation.com.ng/terms-of-service"
       />
       <div className="min-h-screen">
         <Navigation />

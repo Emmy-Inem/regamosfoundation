@@ -14,7 +14,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://regamosfoundation.lovable.app/sitemap.xml
+Sitemap: https://www.regamosfoundation.com.ng/sitemap.xml
 
 # Disallow admin and auth pages
 Disallow: /admin
