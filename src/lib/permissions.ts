@@ -143,8 +143,7 @@ export const ALL_PERMISSIONS: Permission[] = [
 ];
 
 export function permissionsForRole(role: AppRole): Permission[] {
-  if (role === 'admin') return ALL_PERMISSIONS.filter((p) => p !== 'users');
-  if (role === 'super_admin') return ALL_PERMISSIONS;
+  if (role === 'admin' || role === 'super_admin') return ALL_PERMISSIONS;
   return ROLE_PERMISSIONS[role] ?? [];
 }
 
