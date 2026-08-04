@@ -128,18 +128,24 @@ export function useAuth() {
     return { error };
   };
 
-  const isAdmin = userRole === 'admin' || userRole === 'super_admin';
-  const isSuperAdmin = userRole === 'super_admin';
+  const isAdmin = roles.includes('admin') || roles.includes('super_admin');
+  const isSuperAdmin = roles.includes('super_admin');
+  const isStaff = roles.some(isStaffRole);
+  const can = (permission: Permission) => hasPermission(roles, permission);
 
   return {
     user,
     session,
     loading: loading || roleLoading,
     userRole,
+    roles,
+    can,
+    isStaff,
     signUp,
     signIn,
     signOut,
     isAdmin,
     isSuperAdmin,
+
   };
 }
