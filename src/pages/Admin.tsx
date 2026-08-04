@@ -287,7 +287,7 @@ const Admin = () => {
             </div>
           </SidebarHeader>
           <SidebarContent>
-            {GROUPS.map((group) => {
+            {visibleGroups.map((group) => {
               const isOpen = openGroups[group.label] ?? true;
               const GroupIcon = group.icon;
               return (
