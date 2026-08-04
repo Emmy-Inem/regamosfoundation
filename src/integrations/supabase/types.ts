@@ -621,6 +621,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_manage: {
+        Args: { _area: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -629,9 +633,17 @@ export type Database = {
         Returns: boolean
       }
       increment_view_count: { Args: { post_id: string }; Returns: undefined }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "member" | "user" | "super_admin"
+      app_role:
+        | "admin"
+        | "member"
+        | "user"
+        | "super_admin"
+        | "content_editor"
+        | "program_manager"
+        | "communications_officer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -759,7 +771,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "member", "user", "super_admin"],
+      app_role: [
+        "admin",
+        "member",
+        "user",
+        "super_admin",
+        "content_editor",
+        "program_manager",
+        "communications_officer",
+      ],
     },
   },
 } as const

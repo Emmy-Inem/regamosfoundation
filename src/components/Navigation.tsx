@@ -12,7 +12,7 @@ const Navigation = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
-  const { user, signOut, isAdmin } = useAuth();
+  const { user, signOut, isStaff } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +52,7 @@ const Navigation = () => {
     { name: "Impact", path: "/impact" },
     { name: "Blog", path: "/blog" },
     { name: "Contact", path: "/contact" },
-    ...(isAdmin ? [{ name: "Admin", path: "/admin" }] : []),
+    ...(isStaff ? [{ name: "Admin", path: "/admin" }] : []),
   ];
 
   return (

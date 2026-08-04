@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { AppRole, Permission, hasPermission, isStaffRole } from '@/lib/permissions';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -8,6 +9,7 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
   const [roleLoading, setRoleLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [roles, setRoles] = useState<AppRole[]>([]);
 
   const fetchUserRole = useCallback(async (userId: string): Promise<void> => {
     try {
@@ -15,20 +17,25 @@ export function useAuth() {
         .from('user_roles')
         .select('role')
         .eq('user_id', userId);
-      
+
       if (data && !error && data.length > 0) {
-        // Check if user has super_admin or admin role
-        const superAdminRole = data.find(r => r.role === 'super_admin');
-        const adminRole = data.find(r => r.role === 'admin');
-        setUserRole(superAdminRole ? 'super_admin' : adminRole ? 'admin' : data[0].role);
+        const list = data.map((r) => r.role as AppRole);
+        setRoles(list);
+        // Primary role for display / legacy checks
+        const superAdminRole = list.find((r) => r === 'super_admin');
+        const adminRole = list.find((r) => r === 'admin');
+        setUserRole(superAdminRole ? 'super_admin' : adminRole ? 'admin' : list[0]);
       } else {
+        setRoles([]);
         setUserRole(null);
       }
     } catch (err) {
       console.error('Error fetching user role:', err);
+      setRoles([]);
       setUserRole(null);
     }
   }, []);
+
 
   useEffect(() => {
     let mounted = true;
@@ -81,8 +88,10 @@ export function useAuth() {
           }, 0);
         } else {
           setUserRole(null);
+          setRoles([]);
           setRoleLoading(false);
         }
+
       }
     );
 
@@ -121,18 +130,24 @@ export function useAuth() {
     return { error };
   };
 
-  const isAdmin = userRole === 'admin' || userRole === 'super_admin';
-  const isSuperAdmin = userRole === 'super_admin';
+  const isAdmin = roles.includes('admin') || roles.includes('super_admin');
+  const isSuperAdmin = roles.includes('super_admin');
+  const isStaff = roles.some(isStaffRole);
+  const can = (permission: Permission) => hasPermission(roles, permission);
 
   return {
     user,
     session,
     loading: loading || roleLoading,
     userRole,
+    roles,
+    can,
+    isStaff,
     signUp,
     signIn,
     signOut,
     isAdmin,
     isSuperAdmin,
+
   };
 }
