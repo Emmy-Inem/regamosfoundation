@@ -88,8 +88,10 @@ export function useAuth() {
           }, 0);
         } else {
           setUserRole(null);
+          setRoles([]);
           setRoleLoading(false);
         }
+
       }
     );
 
