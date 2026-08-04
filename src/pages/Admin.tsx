@@ -349,7 +349,7 @@ const Admin = () => {
             <SidebarToggle />
             <div className="min-w-0">
               <p className="text-[11px] text-muted-foreground leading-none mb-0.5">Admin Dashboard</p>
-              <h1 className="text-base sm:text-lg font-semibold leading-tight truncate">{TITLES[view]}</h1>
+              <h1 className="text-base sm:text-lg font-semibold leading-tight truncate">{activeView ? TITLES[activeView] : 'Admin'}</h1>
             </div>
           </header>
           <div className="flex-1 p-3 sm:p-6">{renderView()}</div>
