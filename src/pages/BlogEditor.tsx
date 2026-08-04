@@ -17,7 +17,8 @@ import { useActivityLog } from '@/hooks/useActivityLog';
 
 const BlogEditor = () => {
   const { id } = useParams();
-  const { user, loading: authLoading, isAdmin } = useAuth();
+  const { user, loading: authLoading, can } = useAuth();
+  const canEditBlog = can('blog');
   const navigate = useNavigate();
   const { toast } = useToast();
   const { logActivity } = useActivityLog();
@@ -32,16 +33,16 @@ const BlogEditor = () => {
   });
 
   useEffect(() => {
-    if (!authLoading && (!user || !isAdmin)) {
+    if (!authLoading && (!user || !canEditBlog)) {
       navigate('/auth?next=/blog-editor', { replace: true });
     }
-  }, [user, authLoading, isAdmin, navigate]);
+  }, [user, authLoading, canEditBlog, navigate]);
 
   useEffect(() => {
-    if (id && user && isAdmin) {
+    if (id && user && canEditBlog) {
       fetchPost();
     }
-  }, [id, user, isAdmin]);
+  }, [id, user, canEditBlog]);
 
   const fetchPost = async () => {
     try {
@@ -148,7 +149,7 @@ const BlogEditor = () => {
     );
   }
 
-  if (!user || !isAdmin) {
+  if (!user || !canEditBlog) {
     return null;
   }
 
