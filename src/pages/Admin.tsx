@@ -207,9 +207,17 @@ const SidebarToggle = () => {
 };
 
 const Admin = () => {
-  const { user, loading, isAdmin, isSuperAdmin, signOut } = useAuth();
+  const { user, loading, isAdmin, isSuperAdmin, isStaff, can, signOut } = useAuth();
   const navigate = useNavigate();
-  const [view, setView] = useState<ViewKey>('analytics');
+
+  const visibleGroups = GROUPS
+    .map((g) => ({ ...g, items: g.items.filter((i) => can(i.key)) }))
+    .filter((g) => g.items.length > 0);
+
+  const firstAllowed = visibleGroups[0]?.items[0]?.key;
+  const [view, setView] = useState<ViewKey | undefined>(undefined);
+  const activeView = view && can(view) ? view : firstAllowed;
+
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(GROUPS.map((g) => [g.label, true])),
   );
@@ -217,8 +225,8 @@ const Admin = () => {
   useEffect(() => {
     if (loading) return;
     if (!user) navigate('/auth?next=/admin', { replace: true });
-    else if (!isAdmin) navigate('/', { replace: true });
-  }, [loading, user, isAdmin, navigate]);
+    else if (!isStaff) navigate('/', { replace: true });
+  }, [loading, user, isStaff, navigate]);
 
   if (loading) {
     return (
@@ -228,10 +236,19 @@ const Admin = () => {
     );
   }
 
-  if (!user || !isAdmin) return null;
+  if (!user || !isStaff) return null;
 
   const renderView = () => {
-    switch (view) {
+    if (!activeView) {
+      return (
+        <div className="rounded-lg border bg-background p-8 text-center">
+          <ShieldCheck className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+          <p className="font-medium">No sections available</p>
+          <p className="text-sm text-muted-foreground">Your role does not grant access to any admin section yet.</p>
+        </div>
+      );
+    }
+    switch (activeView) {
       case 'analytics': return <AnalyticsDashboard />;
       case 'donations': return <DonationsManagement />;
       case 'members': return <MembersManagement />;
@@ -249,11 +266,12 @@ const Admin = () => {
       case 'team': return <TeamMembersManagement />;
       case 'testimonials': return <TestimonialsManagement />;
       case 'email-campaigns': return <EmailCampaignManagement />;
-      case 'users': return <UserRolesManagement isSuperAdmin={isSuperAdmin} />;
+      case 'users': return <UserRolesManagement isSuperAdmin={isSuperAdmin} isAdmin={isAdmin} />;
       case 'activity': return <ActivityLogViewer />;
       case 'export': return <ExportData />;
     }
   };
+
 
   return (
     <SidebarProvider>
