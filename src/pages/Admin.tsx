@@ -315,7 +315,7 @@ const Admin = () => {
                               <SidebarMenuItem key={item.key}>
                                 <SidebarMenuButton
                                   onClick={() => setView(item.key)}
-                                  isActive={view === item.key}
+                                  isActive={activeView === item.key}
                                   tooltip={item.label}
                                 >
                                   <Icon className="h-4 w-4" />
