@@ -52,7 +52,7 @@ const Navigation = () => {
     { name: "Impact", path: "/impact" },
     { name: "Blog", path: "/blog" },
     { name: "Contact", path: "/contact" },
-    ...(isAdmin ? [{ name: "Admin", path: "/admin" }] : []),
+    ...(isStaff ? [{ name: "Admin", path: "/admin" }] : []),
   ];
 
   return (
