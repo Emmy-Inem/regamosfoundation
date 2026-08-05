@@ -109,6 +109,7 @@ const ROLE_PERMISSIONS: Partial<Record<AppRole, Permission[]>> = {
   content_editor: [
     'blog',
     'site-content',
+    'site-images',
     'media',
     'stories',
     'stats',
