@@ -13,14 +13,12 @@ Allow: /
 User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: https://www.regamosfoundation.com.ng/sitemap.xml
-
-# Disallow admin and auth pages
+# Disallow admin, auth and transactional pages
 Disallow: /admin
 Disallow: /auth
 Disallow: /payment
 Disallow: /blog-editor
+Disallow: /oauth/consent
 
-# Crawl delay for non-major bots
-Crawl-delay: 1
+# Sitemaps
+Sitemap: https://www.regamosfoundation.com.ng/sitemap.xml
