@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -10,7 +11,6 @@ import { Users, Check, Heart, BookOpen, Briefcase, UserPlus } from "lucide-react
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import membershipHero from "@/assets/pages/membership-hero.jpg";
 
 const membershipSchema = z.object({
   firstName: z.string().trim().min(2, "First name must be at least 2 characters").max(50),
@@ -23,6 +23,8 @@ const membershipSchema = z.object({
 });
 
 const Membership = () => {
+  const { img } = useSiteImages();
+
   const [selectedCategory, setSelectedCategory] = useState<"widow" | "youth" | null>(null);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -135,7 +137,7 @@ const Membership = () => {
         {/* Hero Section */}
         <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img src={membershipHero} alt="Community in Nigeria" className="w-full h-full object-cover" />
+            <img src={img("page.membership.hero")} alt="Community in Nigeria" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
           </div>
           <div className="container mx-auto px-4 relative z-10">

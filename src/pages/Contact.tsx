@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
@@ -12,7 +13,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import contactHero from "@/assets/pages/contact-hero.jpg";
 
 const contactFaqs = [
   {
@@ -38,6 +38,8 @@ const contactFaqs = [
 ];
 
 const Contact = () => {
+  const { img } = useSiteImages();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -111,7 +113,7 @@ const Contact = () => {
         {/* Hero Section */}
         <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img src={contactHero} alt="Aid and outreach" className="w-full h-full object-cover" />
+            <img src={img("page.contact.hero")} alt="Aid and outreach" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
           </div>
           <div className="container mx-auto px-4 relative z-10">

@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
@@ -13,9 +14,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useBlogSearch } from "@/hooks/useBlogSearch";
-import educationImg from "@/assets/blog-education.jpg";
-import empowermentImg from "@/assets/blog-empowerment.jpg";
-import communityImg from "@/assets/blog-community.jpg";
 
 const stripHtml = (html: string) => {
   if (!html) return '';
@@ -83,6 +81,8 @@ const BlogCard = ({ post, onClick, featured = false }: { post: any; onClick: () 
 );
 
 const Blog = () => {
+  const { img } = useSiteImages();
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -97,7 +97,7 @@ const Blog = () => {
     {
       title: "Empowering Widows: A Path to Economic Independence",
       excerpt: "Discover how our widow empowerment program is helping women rebuild their lives through vocational training and microfinance opportunities.",
-      image: empowermentImg,
+      image: img("blog.fallback.empowerment"),
       author: "Regamos Team",
       date: "March 15, 2024",
       category: "Empowerment",
@@ -105,7 +105,7 @@ const Blog = () => {
     {
       title: "The Importance of Education for Orphans",
       excerpt: "Education is a fundamental right. Learn about our scholarship programs and how they're changing the trajectory of orphaned children's lives.",
-      image: educationImg,
+      image: img("blog.fallback.education"),
       author: "Regamos Team",
       date: "March 10, 2024",
       category: "Education",
@@ -113,7 +113,7 @@ const Blog = () => {
     {
       title: "Building Sustainable Communities Together",
       excerpt: "Community development requires collaboration. See how we're working with local leaders to create lasting change in rural areas.",
-      image: communityImg,
+      image: img("blog.fallback.community"),
       author: "Regamos Team",
       date: "March 5, 2024",
       category: "Community",

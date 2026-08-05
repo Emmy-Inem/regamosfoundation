@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -5,12 +6,10 @@ import * as LucideIcons from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import educationImg from "@/assets/home-education.jpg";
-import empowermentImg from "@/assets/home-empowerment.jpg";
-import communityImg from "@/assets/home-community.jpg";
-import youthImg from "@/assets/home-youth.jpg";
 
 const Programs = () => {
+  const { img } = useSiteImages();
+
   const { data: programs, isLoading } = useQuery({
     queryKey: ["programs-preview"],
     queryFn: async () => {
@@ -31,7 +30,7 @@ const Programs = () => {
       title: "Education & Advocacy",
       description:
         "Providing educational support, scholarships, and advocacy programs to ensure every child has access to quality education.",
-      image_url: educationImg,
+      image_url: img("home.program.education"),
       color: "primary",
     },
     {
@@ -39,7 +38,7 @@ const Programs = () => {
       title: "Widow Empowerment",
       description:
         "Comprehensive support programs including vocational training, microloans, and community building for widows.",
-      image_url: empowermentImg,
+      image_url: img("home.program.empowerment"),
       color: "accent",
     },
     {
@@ -47,7 +46,7 @@ const Programs = () => {
       title: "Community Development",
       description:
         "Creating sustainable communities through infrastructure, health initiatives, and economic empowerment programs.",
-      image_url: communityImg,
+      image_url: img("home.program.community"),
       color: "primary",
     },
     {
@@ -55,7 +54,7 @@ const Programs = () => {
       title: "Youth Skills Training",
       description:
         "Equipping young people with practical skills, mentorship, and opportunities for economic independence and growth.",
-      image_url: youthImg,
+      image_url: img("home.program.youth"),
       color: "accent",
     },
   ];
@@ -93,7 +92,7 @@ const Programs = () => {
           ) : (
             displayPrograms.map((program, index) => {
               const Icon = getIcon(program.icon_name);
-              const imageUrl = program.image_url || educationImg;
+              const imageUrl = program.image_url || img("home.program.education");
               
               return (
                 <Card

@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import EventCalendar from "@/components/EventCalendar";
@@ -23,11 +24,10 @@ import {
   UserPlus,
   BadgeCheck
 } from "lucide-react";
-import educationImg from "@/assets/education.jpg";
-import empowermentImg from "@/assets/empowerment.jpg";
-import communityImg from "@/assets/community.jpg";
 
 const Programs = () => {
+  const { img } = useSiteImages();
+
   const empowermentPrograms = [
     {
       icon: Coins,
@@ -103,7 +103,7 @@ const Programs = () => {
       title: "Women Empowerment",
       description:
         "We believe that women are key actors in improving household livelihoods and industry competitiveness. We develop realistic and locally relevant gender-inclusion strategies, support women-owned and women-operated businesses, and build the skills and self-confidence of adolescent girls and young women to empower them to make important decisions about their economic and social well-being.",
-      image: empowermentImg,
+      image: img("programs.empowerment"),
       color: "primary",
       features: [
         "Enterprise development training",
@@ -117,7 +117,7 @@ const Programs = () => {
       title: "Youth Development",
       description:
         "We promote positive youth development by providing young people with the knowledge and skills they need to fulfil their potential. We work with local partners to design asset-based interventions and deliver demand-driven products and services that increase young people's ability to obtain meaningful work, engage in value chains, access finance, and become leaders in their communities.",
-      image: educationImg,
+      image: img("programs.education"),
       color: "accent",
       features: [
         "Digital skills and computer training",
@@ -131,7 +131,7 @@ const Programs = () => {
       title: "Community Development",
       description:
         "We work to create sustainable communities through infrastructure improvements, health initiatives, economic empowerment programs, and capacity building for local organizations. Our community-based programmes create safe and enabling communities for women and vulnerable children.",
-      image: communityImg,
+      image: img("programs.community"),
       color: "primary",
       features: [
         "Infrastructure development projects",
@@ -145,7 +145,7 @@ const Programs = () => {
       title: "Shelter & Protection",
       description:
         "Safe shelter and protection services for abused girls and vulnerable women, providing a secure environment for healing and recovery. We provide psychological support and counselling services.",
-      image: empowermentImg,
+      image: img("programs.empowerment"),
       color: "accent",
       features: [
         "Emergency shelter and safe houses",

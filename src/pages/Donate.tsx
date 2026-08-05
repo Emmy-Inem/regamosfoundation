@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
@@ -18,9 +19,10 @@ import {
 } from "@/components/ui/dialog";
 import { Heart, Check, Users, GraduationCap, Home, Sparkles, Copy, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import donateHero from "@/assets/pages/donate-hero.jpg";
 
 const Donate = () => {
+  const { img } = useSiteImages();
+
   const navigate = useNavigate();
   const [selectedAmount, setSelectedAmount] = useState<number | null>(5000);
   const [customAmount, setCustomAmount] = useState("");
@@ -153,7 +155,7 @@ const Donate = () => {
         {/* Hero Section */}
         <section className="relative pt-32 pb-16 overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img src={donateHero} alt="Volunteers distributing aid in Africa" className="w-full h-full object-cover" />
+            <img src={img("page.donate.hero")} alt="Volunteers distributing aid in Africa" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
           </div>
           <div className="container mx-auto px-4 relative z-10">
