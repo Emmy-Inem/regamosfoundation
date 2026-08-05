@@ -129,6 +129,7 @@ export const ALL_PERMISSIONS: Permission[] = [
   'newsletter',
   'blog',
   'site-content',
+  'site-images',
   'media',
   'programs',
   'upcoming',
