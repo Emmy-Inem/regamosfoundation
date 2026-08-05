@@ -18,6 +18,7 @@ export type Permission =
   | 'newsletter'
   | 'blog'
   | 'site-content'
+  | 'site-images'
   | 'media'
   | 'programs'
   | 'upcoming'
