@@ -71,6 +71,7 @@ import { EventRegistrationsManagement } from '@/components/admin/EventRegistrati
 import UserRolesManagement from '@/components/admin/UserRolesManagement';
 import ActivityLogViewer from '@/components/admin/ActivityLogViewer';
 import MediaLibrary from '@/components/admin/MediaLibrary';
+import SiteImagesManagement from '@/components/admin/SiteImagesManagement';
 
 type ViewKey =
   | 'analytics'
@@ -80,6 +81,7 @@ type ViewKey =
   | 'newsletter'
   | 'blog'
   | 'site-content'
+  | 'site-images'
   | 'media'
   | 'programs'
   | 'upcoming'
@@ -132,6 +134,7 @@ const GROUPS: Group[] = [
     items: [
       { key: 'blog', label: 'Blog Posts', icon: Newspaper },
       { key: 'site-content', label: 'Site Content', icon: FileText },
+      { key: 'site-images', label: 'Site Images', icon: ImageIcon },
       { key: 'media', label: 'Media Library', icon: FolderOpen },
     ],
   },
@@ -176,6 +179,7 @@ const TITLES: Record<ViewKey, string> = {
   newsletter: 'Newsletter Subscribers',
   blog: 'Blog Posts',
   'site-content': 'Site Content',
+  'site-images': 'Site Images',
   media: 'Media Library',
   programs: 'All Programs',
   upcoming: 'Upcoming / Past Events',
@@ -256,6 +260,7 @@ const Admin = () => {
       case 'newsletter': return <NewsletterManagement />;
       case 'blog': return <BlogManagement />;
       case 'site-content': return <SiteContentManagement />;
+      case 'site-images': return <SiteImagesManagement />;
       case 'media': return <MediaLibrary />;
       case 'programs': return <ProgramsManagement />;
       case 'upcoming': return <UpcomingProgramsManagement />;

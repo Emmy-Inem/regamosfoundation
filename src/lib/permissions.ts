@@ -18,6 +18,7 @@ export type Permission =
   | 'newsletter'
   | 'blog'
   | 'site-content'
+  | 'site-images'
   | 'media'
   | 'programs'
   | 'upcoming'
@@ -108,6 +109,7 @@ const ROLE_PERMISSIONS: Partial<Record<AppRole, Permission[]>> = {
   content_editor: [
     'blog',
     'site-content',
+    'site-images',
     'media',
     'stories',
     'stats',
@@ -127,6 +129,7 @@ export const ALL_PERMISSIONS: Permission[] = [
   'newsletter',
   'blog',
   'site-content',
+  'site-images',
   'media',
   'programs',
   'upcoming',

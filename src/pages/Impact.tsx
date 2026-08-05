@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
@@ -5,21 +6,10 @@ import PastEventHighlights from "@/components/PastEventHighlights";
 import SocialShareButtons from "@/components/SocialShareButtons";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, GraduationCap, Heart, TrendingUp, Award, CheckCircle } from "lucide-react";
-import digitalLibraryImg from "@/assets/impact-digital-library.jpg";
-import medicalOutreachImg from "@/assets/impact-medical-outreach.jpg";
-import financialLiteracyImg from "@/assets/impact-financial-literacy.jpg";
-import palmSeedlingsImg from "@/assets/impact-palm-seedlings.jpg";
-import menstrualHygieneImg from "@/assets/impact-menstrual-hygiene.jpg";
-import communityOutreachImg from "@/assets/impact-community-outreach.jpg";
-import childProtectionImg from "@/assets/impact-child-protection.jpg";
-import lifeSkillsImg from "@/assets/impact-life-skills.jpg";
-import hpDonationImg from "@/assets/impact-hp-donation.jpg";
-import computerTrainingImg from "@/assets/impact-computer-training.jpg";
-import childrensDayImg from "@/assets/impact-childrens-day.jpg";
-import rocoOrphanageImg from "@/assets/impact-roco-orphanage.jpg";
-import peculiarSaintImg from "@/assets/impact-peculiar-saint.jpg";
 
 const Impact = () => {
+  const { img } = useSiteImages();
+
   const stats = [
     { icon: Users, number: "2,000+", label: "Youth Empowered", color: "primary" },
     { icon: Heart, number: "800+", label: "Women & Widows Impacted", color: "accent" },
@@ -31,7 +21,7 @@ const Impact = () => {
     {
       name: "Digital Library at Arrow of God Orphanage",
       title: "Transforming Lives Through Technology",
-      image: digitalLibraryImg,
+      image: img("impact.digital-library"),
       story:
         "In partnership with HP Foundation and Global Shapers, Regamos Foundation commissioned a Digital Library at the Arrow of God Orphanage. This project included digital library refurbishment, training of all children aged 12-18 years, and teacher/staff training on computer skills. The project commenced February 2021 and was successfully completed in August 2021.",
       impact: "100+ children trained",
@@ -39,7 +29,7 @@ const Impact = () => {
     {
       name: "Health & Wealth Initiative",
       title: "Free Medical Outreach in Mbioto 1",
-      image: medicalOutreachImg,
+      image: img("impact.medical-outreach"),
       story:
         "As part of our Health and Wealth initiative for 300 women empowerment program in Mbioto 1, Etinan LGA, Akwa Ibom State, we organized a free medical service and drug administration at the Mbioto 1 Health Centre. The village Head and council chiefs were happy to receive the drugs donated by Regamos Foundation for the women and people of the community.",
       impact: "300+ women served",
@@ -47,7 +37,7 @@ const Impact = () => {
     {
       name: "Financial Literacy Empowerment",
       title: "Access Bank Partnership",
-      image: financialLiteracyImg,
+      image: img("impact.financial-literacy"),
       story:
         "Access Bank, led by their Abuja team and Uyo office with their Regional Manager, partnered with us to empower 300 women on Financial Literacy skills during our Health and Wealth initiative. The Bank gave out free gifts, opened accounts for the women, empowered selected youth on POS business, and promised to create a POS point in the village.",
       impact: "300 women empowered",
@@ -55,7 +45,7 @@ const Impact = () => {
     {
       name: "Sustainable Livelihoods",
       title: "Palm Seedlings Distribution",
-      image: palmSeedlingsImg,
+      image: img("impact.palm-seedlings"),
       story:
         "Sematex LM Services led by the Managing Director, Mr. Aniefiok Ekanem, donated water packs and 100 palm seedlings to farmers during our Health and Wealth community initiative in Mbioto 1. This initiative supports Regamos Foundation's 300 women empowerment initiative by providing sustainable livelihood opportunities.",
       impact: "100 seedlings distributed",
@@ -63,7 +53,7 @@ const Impact = () => {
     {
       name: "Pad A Girl Project",
       title: "World Menstrual Hygiene Day",
-      image: menstrualHygieneImg,
+      image: img("impact.menstrual-hygiene"),
       story:
         "Regamos Foundation partnered with Visionary Women to celebrate World Menstrual Hygiene Day. We distributed 150 pads to girls at Gbangapi Secondary School, Minna, Niger State. We educated them on the importance of menstrual hygiene, how to track their menstrual cycle, and the importance of being a female child. At Regamos Foundation, our priority is to make sure that the female child sees a bright future for herself.",
       impact: "150 girls reached",
@@ -71,7 +61,7 @@ const Impact = () => {
     {
       name: "Community Empowerment",
       title: "Transforming Lives Together",
-      image: communityOutreachImg,
+      image: img("impact.community-outreach"),
       story:
         "At Regamos Foundation we are passionate about transforming lives. With the support of His Excellencies, the Deputy Governor, and the Chairman of our Advisory Board, along with the entire Regamos Foundation team, we continue to reach more communities and change lives for the better.",
       impact: "Multiple communities",
@@ -79,7 +69,7 @@ const Impact = () => {
     {
       name: "Speak Out Against Sexual Abuse",
       title: "Child Protection Network Campaign",
-      image: childProtectionImg,
+      image: img("impact.child-protection"),
       story:
         "Regamos Foundation in celebration of the Child Protection Network (CPN) Lagos State week had a 'Speak out against sexual abuse' sensitisation campaign for Secondary School students in Ibeju Lekki, Lagos Nigeria. Joining our foundation in this sensitisation campaign was the Ibeju Lekki CPN Coordinator. The students were equipped with knowledge on how to stay safe and report incidences of sexual abuse.",
       impact: "100+ students educated",
@@ -87,7 +77,7 @@ const Impact = () => {
     {
       name: "Life Skills Training",
       title: "Destiny Trust Orphanage",
-      image: lifeSkillsImg,
+      image: img("impact.life-skills"),
       story:
         "Life Skills Training for Orphanages at Destiny Trust Orphanage on the topic of Self Awareness. We taught 5 reasons why Self Awareness is important: Self Reflection, Strength and Weaknesses, Manage your emotions, Consider others, and Take criticism. Empowering children with essential life skills for their future.",
       impact: "20+ children trained",
@@ -95,7 +85,7 @@ const Impact = () => {
     {
       name: "HP Foundation Partnership",
       title: "Technology for Education",
-      image: hpDonationImg,
+      image: img("impact.hp-donation"),
       story:
         "Thank you Global Shapers Community, HP Foundation and Codesparks for making this a reality. Through this incredible partnership, we were able to provide computers and technology resources to support education and digital literacy for orphanages and underserved communities, transforming lives through technology.",
       impact: "Multiple computers donated",
@@ -103,7 +93,7 @@ const Impact = () => {
     {
       name: "Computer Training Program",
       title: "Arrow of God Orphanage",
-      image: computerTrainingImg,
+      image: img("impact.computer-training"),
       story:
         "Regamos Foundation training the teachers of Arrow of God Orphanage on the basic components of the computer system. The training covered areas such as input devices and output devices processing, software, hardware and storage devices. This is the first of the three weeks training to be conducted by the foundation in Arrows of God Orphanage.",
       impact: "Teachers empowered",
@@ -111,7 +101,7 @@ const Impact = () => {
     {
       name: "Children's Day Celebration",
       title: "UDV Orphanage",
-      image: childrensDayImg,
+      image: img("impact.childrens-day"),
       story:
         "Regamos Foundation in partnership with Tee Dee Foodies and Parker's Global Foundation celebrated Children's Day with children in UDV Orphanage. The children had plenty to eat and drink. They sang, played and were celebrated. From all of us at Regamos Foundation we wish every child out there a 'Happy Children's Day'.",
       impact: "30+ children celebrated",
@@ -119,7 +109,7 @@ const Impact = () => {
     {
       name: "Life Skills at Roco Orphanage",
       title: "Self Awareness Module",
-      image: rocoOrphanageImg,
+      image: img("impact.roco-orphanage"),
       story:
         "Regamos Foundation life skills training program at Roco orphanage. Today's module was Self Awareness. It was an impactful session where children learned about understanding themselves and their potential. The training helps orphans develop essential skills for navigating life's challenges.",
       impact: "25+ children trained",
@@ -127,7 +117,7 @@ const Impact = () => {
     {
       name: "Peculiar Saint Orphanage",
       title: "Communication & Self Awareness",
-      image: peculiarSaintImg,
+      image: img("impact.peculiar-saint"),
       story:
         "We were at Peculiar Saint Orphanage to empower the children on life skills training. We taught them Communication skills and Self Awareness. It was facilitated by our Founder/Executive Director, Dr. Regina Inem and our intern, Praise from a Private University. Building foundations for brighter futures.",
       impact: "15+ children empowered",

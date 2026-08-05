@@ -1,12 +1,14 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Heart, Users, Sparkles } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import heroImage from "@/assets/hero-bg.jpg";
 
 const Hero = () => {
+  const { img } = useSiteImages();
+
   const { data: stats } = useQuery({
     queryKey: ["hero-stats"],
     queryFn: async () => {
@@ -49,7 +51,7 @@ const Hero = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src={heroImage}
+          src={img("home.hero")}
           alt="Empowering Communities"
           width={1920}
           height={1080}

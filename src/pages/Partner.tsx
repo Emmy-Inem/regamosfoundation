@@ -1,3 +1,4 @@
+import { useSiteImages } from "@/hooks/useSiteImages";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
@@ -10,9 +11,10 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import partnerHero from "@/assets/pages/partner-hero.jpg";
 
 const Partner = () => {
+  const { img } = useSiteImages();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: "",
@@ -147,7 +149,7 @@ const Partner = () => {
           {/* Hero Section */}
           <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <img src={partnerHero} alt="Business partners shaking hands" className="w-full h-full object-cover" />
+              <img src={img("page.partner.hero")} alt="Business partners shaking hands" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background" />
             </div>
             <div className="container mx-auto px-4 relative z-10">
