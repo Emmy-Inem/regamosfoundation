@@ -65,7 +65,7 @@ function generateSitemap(entries: SitemapEntry[]) {
 }
 
 async function main() {
-  const posts = await fetchRows("blog_posts", "id", "&is_published=eq.true");
+  const posts = await fetchRows("blog_posts", "id", "&published_at=not.is.null");
   const blogEntries: SitemapEntry[] = posts.map((p) => ({
     path: `/blog/${p.id}`,
     changefreq: "weekly",
