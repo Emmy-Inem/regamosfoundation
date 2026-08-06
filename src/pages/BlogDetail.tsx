@@ -12,6 +12,13 @@ import { toast } from 'sonner';
 
 const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
 
+/** Estimated reading time in minutes (225 wpm) */
+const readingTime = (html: string) => {
+  const words = stripHtml(html).trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 225));
+};
+
+
 /** Remove the cover image from post body to avoid duplication */
 const processContent = (html: string, coverUrl?: string | null): string => {
   if (!html) return '';
