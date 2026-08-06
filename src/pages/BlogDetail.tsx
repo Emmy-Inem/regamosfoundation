@@ -295,7 +295,8 @@ const BlogDetail = () => {
                   <span className="hidden sm:inline">Copy Link</span>
                 </Button>
               </div>
-            </div>
+            </header>
+
 
             {/* Content */}
             <Card className="border-0 shadow-soft">
