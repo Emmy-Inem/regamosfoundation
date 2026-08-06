@@ -126,6 +126,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.regamosfoundation.com.ng/blog/3ac87ff3-dc00-428a-b69f-d3ce09a73162</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.regamosfoundation.com.ng/events/6267c762-1b62-4105-8d4e-aa700ad6d293</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
