@@ -59,6 +59,7 @@ const BlogDetail = () => {
   const [post, setPost] = useState<any>(null);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -66,6 +67,18 @@ const BlogDetail = () => {
       incrementViewCount();
     }
   }, [id]);
+
+  // Reading progress indicator
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(scrollable > 0 ? Math.min(100, (window.scrollY / scrollable) * 100) : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
 
   const incrementViewCount = async () => {
     if (!id) return;
