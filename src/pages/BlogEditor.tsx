@@ -23,6 +23,8 @@ const BlogEditor = () => {
   const { toast } = useToast();
   const { logActivity } = useActivityLog();
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
