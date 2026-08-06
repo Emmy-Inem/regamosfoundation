@@ -5,12 +5,19 @@ import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, User, ArrowLeft, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
+
+/** Estimated reading time in minutes (225 wpm) */
+const readingTime = (html: string) => {
+  const words = stripHtml(html).trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 225));
+};
+
 
 /** Remove the cover image from post body to avoid duplication */
 const processContent = (html: string, coverUrl?: string | null): string => {
@@ -52,6 +59,7 @@ const BlogDetail = () => {
   const [post, setPost] = useState<any>(null);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -59,6 +67,18 @@ const BlogDetail = () => {
       incrementViewCount();
     }
   }, [id]);
+
+  // Reading progress indicator
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(scrollable > 0 ? Math.min(100, (window.scrollY / scrollable) * 100) : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
 
   const incrementViewCount = async () => {
     if (!id) return;
@@ -148,8 +168,15 @@ const BlogDetail = () => {
         author={post.author || 'Regamos Foundation'}
       />
       <Navigation />
+      {/* Reading progress */}
+      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
+        <div
+          className="h-full bg-accent transition-[width] duration-150"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
       <main className="flex-1 py-16 sm:py-20">
-        <div className="container mx-auto px-4 max-w-4xl">
+        <div className="container mx-auto px-4 max-w-3xl">
           <Button
             variant="ghost"
             className="mb-4 sm:mb-6 text-sm"
@@ -159,56 +186,65 @@ const BlogDetail = () => {
             Back to Blog
           </Button>
 
-          <article className="space-y-6 sm:space-y-8">
+          <article className="space-y-8 sm:space-y-10">
             {/* Header */}
-            <div className="space-y-3 sm:space-y-4">
-              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <span className="inline-block px-2 py-0.5 sm:px-3 sm:py-1 bg-accent text-white text-xs sm:text-sm font-semibold rounded-full">
-                  {post.category}
-                </span>
-                <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground flex-wrap">
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span>
-                      {post.published_at 
-                        ? new Date(post.published_at).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })
-                        : 'Date not available'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <User className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span>{post.author || 'Regamos Foundation'}</span>
-                  </div>
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span>{post.view_count || 0} reads</span>
-                  </div>
-                </div>
-              </div>
+            <header className="space-y-4 sm:space-y-5">
+              <span className="inline-block px-3 py-1 bg-accent text-white text-xs sm:text-sm font-semibold rounded-full">
+                {post.category}
+              </span>
 
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight text-balance">
                 {post.title}
               </h1>
 
-              {/* Featured Image — full, uncropped, after title */}
-              {post.image_url && (
-                <div className="rounded-lg overflow-hidden bg-muted">
-                  <img
-                    src={post.image_url}
-                    alt={post.title}
-                    className="w-full h-auto object-contain"
-                  />
-                </div>
-              )}
-
-              {/* Excerpt as plain text summary */}
-              <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
+              {/* Excerpt as standfirst */}
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
                 {stripHtml(post.excerpt)}
               </p>
+
+              <div className="flex items-center gap-3 sm:gap-5 text-xs sm:text-sm text-muted-foreground flex-wrap border-y border-border py-3">
+                <div className="flex items-center gap-1.5">
+                  <User className="h-4 w-4" />
+                  <span className="font-medium text-foreground">{post.author || 'Regamos Foundation'}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4" />
+                  <span>
+                    {post.published_at
+                      ? new Date(post.published_at).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })
+                      : 'Date not available'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-4 w-4" />
+                  <span>{readingTime(post.content)} min read</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Eye className="h-4 w-4" />
+                  <span>{post.view_count || 0} reads</span>
+                </div>
+              </div>
+
+              {/* Featured Image — full, uncropped, after title */}
+              {post.image_url && (
+                <figure className="space-y-2">
+                  <div className="rounded-xl overflow-hidden bg-muted shadow-soft">
+                    <img
+                      src={post.image_url}
+                      alt={post.title}
+                      className="w-full h-auto object-contain"
+                    />
+                  </div>
+                  <figcaption className="text-xs sm:text-sm text-muted-foreground italic text-center">
+                    {post.title}
+                  </figcaption>
+                </figure>
+              )}
+
 
               {/* Social Sharing Buttons */}
               <div className="flex flex-wrap gap-2 pt-3 sm:pt-4">
@@ -259,17 +295,27 @@ const BlogDetail = () => {
                   <span className="hidden sm:inline">Copy Link</span>
                 </Button>
               </div>
-            </div>
+            </header>
+
 
             {/* Content */}
-            <Card className="border-0 shadow-soft">
-              <CardContent className="p-4 sm:p-6 md:p-8 lg:p-12">
-                <div 
-                  className="blog-content prose prose-sm sm:prose-base md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
-                  dangerouslySetInnerHTML={{ __html: processContent(post.content, post.image_url) }}
-                />
-              </CardContent>
-            </Card>
+            <div
+              className="blog-content max-w-none"
+              dangerouslySetInnerHTML={{ __html: processContent(post.content, post.image_url) }}
+            />
+
+            {/* Closing CTA */}
+            <div className="rounded-xl border border-border bg-muted/40 p-6 sm:p-8 text-center space-y-3">
+              <h2 className="text-xl sm:text-2xl font-bold">Support this work</h2>
+              <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto">
+                Every story here is made possible by people who give, volunteer and partner with Regamos Foundation.
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center pt-1">
+                <Button variant="cta" onClick={() => navigate('/donate')}>Donate</Button>
+                <Button variant="outline" onClick={() => navigate('/volunteer')}>Volunteer</Button>
+              </div>
+            </div>
+
 
             {/* Related Posts Section */}
             {relatedPosts.length > 0 && (

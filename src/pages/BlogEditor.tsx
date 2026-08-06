@@ -23,6 +23,8 @@ const BlogEditor = () => {
   const { toast } = useToast();
   const { logActivity } = useActivityLog();
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
@@ -196,13 +198,43 @@ const BlogEditor = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="content">Content *</Label>
-                  <RichTextEditor
-                    value={formData.content}
-                    onChange={(value) => handleChange('content', value)}
-                    placeholder="Write your blog post content here with full formatting options"
-                  />
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <Label htmlFor="content">Content *</Label>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span>
+                        {Math.max(
+                          1,
+                          Math.round(
+                            (formData.content.replace(/<[^>]*>/g, '').trim().split(/\s+/).filter(Boolean).length) / 225
+                          )
+                        )}{' '}
+                        min read
+                      </span>
+                      <Button type="button" variant="outline" size="sm" onClick={() => setShowPreview((p) => !p)}>
+                        {showPreview ? 'Back to editing' : 'Preview'}
+                      </Button>
+                    </div>
+                  </div>
+                  {showPreview ? (
+                    <div className="rounded-lg border border-border bg-background p-4 sm:p-6">
+                      <div
+                        className="blog-content max-w-none"
+                        dangerouslySetInnerHTML={{ __html: formData.content || '<p>Nothing to preview yet.</p>' }}
+                      />
+                    </div>
+                  ) : (
+                    <RichTextEditor
+                      value={formData.content}
+                      onChange={(value) => handleChange('content', value)}
+                      placeholder="Write your blog post content here with full formatting options"
+                    />
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Tip: use Heading 2 for sections, quotes for highlights, and the image button to place photos
+                    between paragraphs — they upload automatically and display full width.
+                  </p>
                 </div>
+
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
