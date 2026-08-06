@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, User, ArrowLeft, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
