@@ -299,14 +299,23 @@ const BlogDetail = () => {
 
 
             {/* Content */}
-            <Card className="border-0 shadow-soft">
-              <CardContent className="p-4 sm:p-6 md:p-8 lg:p-12">
-                <div 
-                  className="blog-content prose prose-sm sm:prose-base md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-ul:text-foreground prose-ol:text-foreground prose-li:text-foreground"
-                  dangerouslySetInnerHTML={{ __html: processContent(post.content, post.image_url) }}
-                />
-              </CardContent>
-            </Card>
+            <div
+              className="blog-content max-w-none"
+              dangerouslySetInnerHTML={{ __html: processContent(post.content, post.image_url) }}
+            />
+
+            {/* Closing CTA */}
+            <div className="rounded-xl border border-border bg-muted/40 p-6 sm:p-8 text-center space-y-3">
+              <h2 className="text-xl sm:text-2xl font-bold">Support this work</h2>
+              <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto">
+                Every story here is made possible by people who give, volunteer and partner with Regamos Foundation.
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center pt-1">
+                <Button variant="cta" onClick={() => navigate('/donate')}>Donate</Button>
+                <Button variant="outline" onClick={() => navigate('/volunteer')}>Volunteer</Button>
+              </div>
+            </div>
+
 
             {/* Related Posts Section */}
             {relatedPosts.length > 0 && (
