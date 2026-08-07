@@ -163,6 +163,8 @@ export function RichTextEditor({
     "link",
     "image",
     "video",
+    "divider",
+
   ];
 
   const plainText = value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").trim();
