@@ -149,6 +149,27 @@ const BlogDetail = () => {
         .limit(3);
       
       setRelatedPosts(related || []);
+
+      // Previous / next post by publish date
+      const anchor = data.published_at || data.created_at;
+      const [{ data: prev }, { data: next }] = await Promise.all([
+        supabase
+          .from('blog_posts')
+          .select('id, title, image_url')
+          .lt('published_at', anchor)
+          .order('published_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('blog_posts')
+          .select('id, title, image_url')
+          .gt('published_at', anchor)
+          .order('published_at', { ascending: true })
+          .limit(1)
+          .maybeSingle(),
+      ]);
+      setSiblings({ prev: prev || null, next: next || null });
+
     } catch (error) {
       console.error('Error fetching blog post:', error);
       toast.error('Failed to load blog post');
