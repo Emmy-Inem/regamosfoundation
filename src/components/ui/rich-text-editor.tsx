@@ -1,11 +1,22 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Heading2, Heading3, Quote, List, Minus, ImagePlus, Link2 } from "lucide-react";
+
+// Register an <hr> block embed so writers can visually separate sections
+const BlockEmbed = Quill.import("blots/block/embed") as any;
+class DividerBlot extends BlockEmbed {}
+DividerBlot.blotName = "divider";
+DividerBlot.tagName = "hr";
+if (!(Quill as any).imports["formats/divider"]) {
+  Quill.register("formats/divider", DividerBlot as any);
+}
+
+
 
 interface RichTextEditorProps {
   value: string;
