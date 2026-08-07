@@ -83,7 +83,9 @@ export type Database = {
           excerpt: string
           id: string
           image_url: string | null
+          is_featured: boolean
           published_at: string | null
+          status: string
           title: string
           updated_at: string
           view_count: number | null
@@ -96,7 +98,9 @@ export type Database = {
           excerpt: string
           id?: string
           image_url?: string | null
+          is_featured?: boolean
           published_at?: string | null
+          status?: string
           title: string
           updated_at?: string
           view_count?: number | null
@@ -109,7 +113,9 @@ export type Database = {
           excerpt?: string
           id?: string
           image_url?: string | null
+          is_featured?: boolean
           published_at?: string | null
+          status?: string
           title?: string
           updated_at?: string
           view_count?: number | null

@@ -47,6 +47,15 @@ const STRUCTURE_TEMPLATES: { name: string; description: string; html: string }[]
   },
 ];
 
+const DRAFT_KEY = (id?: string) => `regamos-blog-draft-${id || 'new'}`;
+
+/** <input type="datetime-local"> value from an ISO string (local time) */
+const toLocalInput = (iso?: string | null) => {
+  const d = iso ? new Date(iso) : new Date();
+  const off = d.getTimezoneOffset();
+  return new Date(d.getTime() - off * 60000).toISOString().slice(0, 16);
+};
+
 const BlogEditor = () => {
   const { id } = useParams();
   const { user, loading: authLoading, can } = useAuth();
@@ -56,6 +65,8 @@ const BlogEditor = () => {
   const { logActivity } = useActivityLog();
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -64,6 +75,9 @@ const BlogEditor = () => {
     category: '',
     author: 'Regamos Foundation',
     image_url: '',
+    status: 'published',
+    is_featured: false,
+    published_at: toLocalInput(),
   });
 
   useEffect(() => {
@@ -73,10 +87,32 @@ const BlogEditor = () => {
   }, [user, authLoading, canEditBlog, navigate]);
 
   useEffect(() => {
-    if (id && user && canEditBlog) {
+    if (!user || !canEditBlog) return;
+    if (id) {
       fetchPost();
+    } else {
+      // Restore an unsaved local draft for a brand new post
+      const raw = localStorage.getItem(DRAFT_KEY());
+      if (raw) {
+        try {
+          const saved = JSON.parse(raw);
+          setFormData((prev) => ({ ...prev, ...saved }));
+          toast({ title: 'Draft restored', description: 'We recovered your unsaved work on this device.' });
+        } catch { /* ignore malformed draft */ }
+      }
+      setHydrated(true);
     }
   }, [id, user, canEditBlog]);
+
+  // Local autosave so nothing is lost on refresh or accidental navigation
+  useEffect(() => {
+    if (!hydrated) return;
+    const t = setTimeout(() => {
+      localStorage.setItem(DRAFT_KEY(id), JSON.stringify(formData));
+      setSavedAt(new Date());
+    }, 1200);
+    return () => clearTimeout(t);
+  }, [formData, hydrated, id]);
 
   const fetchPost = async () => {
     try {
@@ -96,8 +132,12 @@ const BlogEditor = () => {
           category: data.category,
           author: data.author || 'Regamos Foundation',
           image_url: data.image_url || '',
+          status: (data as any).status || 'published',
+          is_featured: Boolean((data as any).is_featured),
+          published_at: toLocalInput(data.published_at),
         });
       }
+      setHydrated(true);
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -108,64 +148,85 @@ const BlogEditor = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+
+  const savePost = async (status: 'draft' | 'published') => {
+    if (!formData.title.trim() || !formData.category) {
+      toast({
+        variant: 'destructive',
+        title: 'Missing details',
+        description: 'A title and category are required before saving.',
+      });
+      return;
+    }
+
     setLoading(true);
 
+    const payload = {
+      title: formData.title,
+      excerpt: formData.excerpt,
+      content: formData.content,
+      category: formData.category,
+      author: formData.author,
+      image_url: formData.image_url,
+      status,
+      is_featured: formData.is_featured,
+      published_at: new Date(formData.published_at).toISOString(),
+    };
+
     try {
+      let postId = id;
+
       if (id) {
-        const { error } = await supabase
-          .from('blog_posts')
-          .update(formData)
-          .eq('id', id);
-
+        const { error } = await supabase.from('blog_posts').update(payload).eq('id', id);
         if (error) throw error;
-
-        await logActivity({
-          entityType: 'blog_post',
-          actionType: 'updated',
-          entityId: id,
-          entityName: formData.title,
-          details: { category: formData.category, author: formData.author },
-        });
-
-        toast({ title: 'Success!', description: 'Blog post updated successfully.' });
       } else {
-        const { data, error } = await supabase.from('blog_posts').insert([
-          {
-            ...formData,
-            published_at: new Date().toISOString(),
-          },
-        ]).select().single();
-
+        const { data, error } = await supabase.from('blog_posts').insert([payload]).select().single();
         if (error) throw error;
-
-        await logActivity({
-          entityType: 'blog_post',
-          actionType: 'created',
-          entityId: data?.id,
-          entityName: formData.title,
-          details: { category: formData.category, author: formData.author },
-        });
-
-        toast({ title: 'Success!', description: 'Blog post published successfully.' });
+        postId = data?.id;
       }
 
-      navigate('/blog');
+      await logActivity({
+        entityType: 'blog_post',
+        actionType: id ? 'updated' : 'created',
+        entityId: postId,
+        entityName: formData.title,
+        details: { category: formData.category, author: formData.author, status },
+      });
+
+      localStorage.removeItem(DRAFT_KEY(id));
+
+      const scheduled = status === 'published' && new Date(payload.published_at) > new Date();
+      toast({
+        title: 'Saved',
+        description:
+          status === 'draft'
+            ? 'Saved as a draft — only blog managers can see it.'
+            : scheduled
+              ? `Scheduled to go live on ${new Date(payload.published_at).toLocaleString()}.`
+              : 'Blog post is live.',
+      });
+
+      navigate(status === 'draft' ? '/admin' : postId ? `/blog/${postId}` : '/blog');
     } catch (error: any) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.message || `Failed to ${id ? 'update' : 'publish'} blog post.`,
+        description: error.message || 'Failed to save blog post.',
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    savePost('published');
+  };
+
+  const handleChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
 
   const applyTemplate = (html: string) => {
     const hasContent = formData.content.replace(/<[^>]*>/g, '').trim().length > 0;
@@ -362,21 +423,75 @@ const BlogEditor = () => {
               </CardContent>
             </Card>
 
-            <div className="flex flex-col sm:flex-row gap-4 pb-4">
-              <Button type="submit" variant="cta" className="flex-1" disabled={loading}>
+            {/* Step 4 — Publishing */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">4. Publishing</CardTitle>
+                <CardDescription>
+                  Choose when this post goes live. Drafts and future dates stay hidden from visitors.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="published_at">Publish date &amp; time</Label>
+                  <Input
+                    id="published_at"
+                    type="datetime-local"
+                    value={formData.published_at}
+                    onChange={(e) => handleChange('published_at', e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Set a future date to schedule the post.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3 rounded-lg border border-border p-4">
+                  <input
+                    id="is_featured"
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 accent-[hsl(var(--primary))]"
+                    checked={formData.is_featured}
+                    onChange={(e) => handleChange('is_featured', e.target.checked)}
+                  />
+                  <div>
+                    <Label htmlFor="is_featured" className="cursor-pointer">Pin to the top of the blog</Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Featured posts appear first in the blog listing.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex flex-col sm:flex-row items-center gap-4 pb-4">
+              <Button type="submit" variant="cta" className="flex-1 w-full" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    {id ? 'Updating...' : 'Publishing...'}
+                    Saving...
                   </>
                 ) : (
-                  id ? 'Update Blog Post' : 'Publish Blog Post'
+                  new Date(formData.published_at) > new Date() ? 'Schedule Post' : id ? 'Update & Publish' : 'Publish Blog Post'
                 )}
               </Button>
-              <Button type="button" variant="outline" onClick={() => navigate('/admin')}>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full sm:w-auto"
+                disabled={loading}
+                onClick={() => savePost('draft')}
+              >
+                Save as Draft
+              </Button>
+              <Button type="button" variant="ghost" className="w-full sm:w-auto" onClick={() => navigate('/admin')}>
                 Cancel
               </Button>
+              {savedAt && (
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  Autosaved {savedAt.toLocaleTimeString()}
+                </span>
+              )}
             </div>
+
           </form>
         </div>
       </main>

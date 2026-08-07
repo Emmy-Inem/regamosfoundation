@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, User, ArrowLeft, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye, Clock } from 'lucide-react';
+import { Calendar, User, ArrowLeft, ArrowRight, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye, Clock, ArrowUp, ListTree } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
+
 
 /** Estimated reading time in minutes (225 wpm) */
 const readingTime = (html: string) => {
@@ -53,13 +54,45 @@ const processContent = (html: string, coverUrl?: string | null): string => {
   return processed;
 };
 
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 60);
+
+/** Add anchor ids to h2/h3 headings and return the table of contents */
+const buildToc = (html: string) => {
+  const headings: { id: string; text: string; level: number }[] = [];
+  const used = new Set<string>();
+
+  const withIds = html.replace(
+    /<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi,
+    (_match, level: string, attrs: string, inner: string) => {
+      const text = stripHtml(inner).trim();
+      if (!text) return _match;
+      let id = slugify(text) || `section-${headings.length + 1}`;
+      let n = 2;
+      while (used.has(id)) id = `${id}-${n++}`;
+      used.add(id);
+      headings.push({ id, text, level: Number(level) });
+      return `<h${level}${attrs} id="${id}">${inner}</h${level}>`;
+    }
+  );
+
+  return { html: withIds, headings };
+};
+
 const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<any>(null);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
+  const [siblings, setSiblings] = useState<{ prev: any | null; next: any | null }>({ prev: null, next: null });
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+
 
   useEffect(() => {
     if (id) {
@@ -116,6 +149,27 @@ const BlogDetail = () => {
         .limit(3);
       
       setRelatedPosts(related || []);
+
+      // Previous / next post by publish date
+      const anchor = data.published_at || data.created_at;
+      const [{ data: prev }, { data: next }] = await Promise.all([
+        supabase
+          .from('blog_posts')
+          .select('id, title, image_url')
+          .lt('published_at', anchor)
+          .order('published_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('blog_posts')
+          .select('id, title, image_url')
+          .gt('published_at', anchor)
+          .order('published_at', { ascending: true })
+          .limit(1)
+          .maybeSingle(),
+      ]);
+      setSiblings({ prev: prev || null, next: next || null });
+
     } catch (error) {
       console.error('Error fetching blog post:', error);
       toast.error('Failed to load blog post');
@@ -142,6 +196,38 @@ const BlogDetail = () => {
     toast.success('Link copied to clipboard!');
   };
 
+  const { html: contentHtml, headings } = useMemo(
+    () => buildToc(processContent(post?.content || '', post?.image_url)),
+    [post?.content, post?.image_url]
+  );
+
+  const articleSchema = useMemo(() => {
+    if (!post) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: stripHtml(post.excerpt || '').substring(0, 200),
+      image: post.image_url ? [post.image_url] : undefined,
+      datePublished: post.published_at || post.created_at,
+      dateModified: post.updated_at || post.published_at || post.created_at,
+      articleSection: post.category,
+      author: { '@type': 'Organization', name: post.author || 'Regamos Foundation' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Regamos Foundation',
+        url: 'https://www.regamosfoundation.com.ng',
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': currentUrl },
+      wordCount: stripHtml(post.content || '').trim().split(/\s+/).filter(Boolean).length,
+    };
+  }, [post, currentUrl]);
+
+  const scrollToHeading = (headingId: string) => {
+    document.getElementById(headingId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -167,7 +253,14 @@ const BlogDetail = () => {
         type="article"
         author={post.author || 'Regamos Foundation'}
       />
+      {articleSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+      )}
       <Navigation />
+
       {/* Reading progress */}
       <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
         <div
@@ -298,11 +391,39 @@ const BlogDetail = () => {
             </header>
 
 
+            {/* Table of contents */}
+            {headings.length >= 3 && (
+              <nav
+                aria-label="Table of contents"
+                className="rounded-xl border border-border bg-muted/40 p-5 sm:p-6"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <ListTree className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-semibold uppercase tracking-wide">In this article</span>
+                </div>
+                <ol className="space-y-1.5">
+                  {headings.map((h, i) => (
+                    <li key={h.id} className={h.level === 3 ? 'pl-5' : ''}>
+                      <button
+                        type="button"
+                        onClick={() => scrollToHeading(h.id)}
+                        className="text-left text-sm text-muted-foreground hover:text-primary transition-smooth"
+                      >
+                        <span className="text-primary font-semibold mr-2">{i + 1}.</span>
+                        {h.text}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
             {/* Content */}
             <div
               className="blog-content max-w-none"
-              dangerouslySetInnerHTML={{ __html: processContent(post.content, post.image_url) }}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
+
 
             {/* Closing CTA */}
             <div className="rounded-xl border border-border bg-muted/40 p-6 sm:p-8 text-center space-y-3">
@@ -315,6 +436,40 @@ const BlogDetail = () => {
                 <Button variant="outline" onClick={() => navigate('/volunteer')}>Volunteer</Button>
               </div>
             </div>
+
+            {/* Previous / next post */}
+            {(siblings.prev || siblings.next) && (
+              <nav className="grid sm:grid-cols-2 gap-4" aria-label="More articles">
+                {siblings.prev ? (
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/blog/${siblings.prev.id}`)}
+                    className="group text-left rounded-xl border border-border p-4 transition-smooth hover:border-primary hover:shadow-soft"
+                  >
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                      <ArrowLeft className="h-3 w-3" /> Previous article
+                    </span>
+                    <span className="block font-semibold text-sm line-clamp-2 group-hover:text-primary">
+                      {siblings.prev.title}
+                    </span>
+                  </button>
+                ) : <span className="hidden sm:block" />}
+                {siblings.next && (
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/blog/${siblings.next.id}`)}
+                    className="group text-left sm:text-right rounded-xl border border-border p-4 transition-smooth hover:border-primary hover:shadow-soft"
+                  >
+                    <span className="flex sm:justify-end items-center gap-1 text-xs text-muted-foreground mb-1">
+                      Next article <ArrowRight className="h-3 w-3" />
+                    </span>
+                    <span className="block font-semibold text-sm line-clamp-2 group-hover:text-primary">
+                      {siblings.next.title}
+                    </span>
+                  </button>
+                )}
+              </nav>
+            )}
 
 
             {/* Related Posts Section */}
@@ -370,7 +525,18 @@ const BlogDetail = () => {
           </article>
         </div>
       </main>
+      {progress > 15 && (
+        <button
+          type="button"
+          aria-label="Back to top"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 z-50 h-11 w-11 rounded-full bg-primary text-primary-foreground shadow-glow flex items-center justify-center transition-smooth hover:scale-105"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
+      )}
       <Footer />
+
     </div>
   );
 };

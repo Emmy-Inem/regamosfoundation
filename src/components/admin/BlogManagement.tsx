@@ -98,7 +98,16 @@ export function BlogManagement() {
                     <div className="flex items-center gap-3 mb-2 flex-wrap">
                       <h3 className="font-semibold text-base sm:text-lg">{post.title}</h3>
                       <Badge variant="outline">{post.category}</Badge>
+                      {(post as any).status === 'draft' ? (
+                        <Badge variant="secondary">Draft</Badge>
+                      ) : new Date(post.published_at || post.created_at) > new Date() ? (
+                        <Badge variant="secondary">Scheduled</Badge>
+                      ) : (
+                        <Badge>Published</Badge>
+                      )}
+                      {(post as any).is_featured && <Badge variant="outline">Featured</Badge>}
                     </div>
+
                     <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{post.excerpt?.replace(/<[^>]*>/g, '') || ''}</p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
                       <span>By {post.author}</span>
