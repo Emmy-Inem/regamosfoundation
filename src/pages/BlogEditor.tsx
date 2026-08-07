@@ -47,6 +47,15 @@ const STRUCTURE_TEMPLATES: { name: string; description: string; html: string }[]
   },
 ];
 
+const DRAFT_KEY = (id?: string) => `regamos-blog-draft-${id || 'new'}`;
+
+/** <input type="datetime-local"> value from an ISO string (local time) */
+const toLocalInput = (iso?: string | null) => {
+  const d = iso ? new Date(iso) : new Date();
+  const off = d.getTimezoneOffset();
+  return new Date(d.getTime() - off * 60000).toISOString().slice(0, 16);
+};
+
 const BlogEditor = () => {
   const { id } = useParams();
   const { user, loading: authLoading, can } = useAuth();
@@ -56,6 +65,8 @@ const BlogEditor = () => {
   const { logActivity } = useActivityLog();
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -64,6 +75,9 @@ const BlogEditor = () => {
     category: '',
     author: 'Regamos Foundation',
     image_url: '',
+    status: 'published',
+    is_featured: false,
+    published_at: toLocalInput(),
   });
 
   useEffect(() => {
@@ -73,10 +87,32 @@ const BlogEditor = () => {
   }, [user, authLoading, canEditBlog, navigate]);
 
   useEffect(() => {
-    if (id && user && canEditBlog) {
+    if (!user || !canEditBlog) return;
+    if (id) {
       fetchPost();
+    } else {
+      // Restore an unsaved local draft for a brand new post
+      const raw = localStorage.getItem(DRAFT_KEY());
+      if (raw) {
+        try {
+          const saved = JSON.parse(raw);
+          setFormData((prev) => ({ ...prev, ...saved }));
+          toast({ title: 'Draft restored', description: 'We recovered your unsaved work on this device.' });
+        } catch { /* ignore malformed draft */ }
+      }
+      setHydrated(true);
     }
   }, [id, user, canEditBlog]);
+
+  // Local autosave so nothing is lost on refresh or accidental navigation
+  useEffect(() => {
+    if (!hydrated) return;
+    const t = setTimeout(() => {
+      localStorage.setItem(DRAFT_KEY(id), JSON.stringify(formData));
+      setSavedAt(new Date());
+    }, 1200);
+    return () => clearTimeout(t);
+  }, [formData, hydrated, id]);
 
   const fetchPost = async () => {
     try {
@@ -96,8 +132,12 @@ const BlogEditor = () => {
           category: data.category,
           author: data.author || 'Regamos Foundation',
           image_url: data.image_url || '',
+          status: (data as any).status || 'published',
+          is_featured: Boolean((data as any).is_featured),
+          published_at: toLocalInput(data.published_at),
         });
       }
+      setHydrated(true);
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -107,6 +147,7 @@ const BlogEditor = () => {
       navigate('/admin');
     }
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
