@@ -171,13 +171,16 @@ All colors MUST be HSL.
 
 /* Rich Text Editor Styles */
 .rich-text-editor .ql-container {
-  min-height: 300px;
+  min-height: var(--editor-min-height, 300px);
   font-size: 16px;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
 }
 
 .rich-text-editor .ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
   background: hsl(var(--muted));
@@ -190,12 +193,76 @@ All colors MUST be HSL.
 
 .rich-text-editor .ql-editor {
   color: hsl(var(--foreground));
+  padding: 1.5rem 1.25rem 3rem;
+  line-height: 1.8;
+}
+
+@media (min-width: 768px) {
+  .rich-text-editor .ql-editor {
+    padding: 2rem 2.25rem 4rem;
+    font-size: 1.0625rem;
+  }
+}
+
+/* Give the writer real structure while typing */
+.rich-text-editor .ql-editor p { margin-bottom: 1.15em; }
+.rich-text-editor .ql-editor h2 {
+  font-size: 1.6em;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1.6em 0 0.5em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid hsl(var(--border));
+}
+.rich-text-editor .ql-editor h3 {
+  font-size: 1.3em;
+  font-weight: 700;
+  margin: 1.4em 0 0.45em;
+}
+.rich-text-editor .ql-editor h4 {
+  font-size: 1.12em;
+  font-weight: 600;
+  margin: 1.25em 0 0.4em;
+}
+.rich-text-editor .ql-editor blockquote {
+  border-left: 4px solid hsl(var(--primary));
+  background: hsl(var(--primary) / 0.06);
+  padding: 0.85em 1.1em;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+  margin: 1.5em 0;
+}
+.rich-text-editor .ql-editor ul,
+.rich-text-editor .ql-editor ol { margin-bottom: 1.15em; }
+.rich-text-editor .ql-editor li { margin-bottom: 0.35em; }
+.rich-text-editor .ql-editor hr {
+  border: 0;
+  height: 1px;
+  background: hsl(var(--border));
+  margin: 2em 0;
+}
+.rich-text-editor .ql-editor img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.5em auto;
 }
 
 .rich-text-editor .ql-editor.ql-blank::before {
   color: hsl(var(--muted-foreground));
   font-style: normal;
+  left: 1.25rem;
+  right: 1.25rem;
 }
+
+@media (min-width: 768px) {
+  .rich-text-editor .ql-editor.ql-blank::before {
+    left: 2.25rem;
+    right: 2.25rem;
+  }
+}
+
 
 .dark .rich-text-editor .ql-toolbar {
   background: hsl(var(--muted));
