@@ -54,13 +54,45 @@ const processContent = (html: string, coverUrl?: string | null): string => {
   return processed;
 };
 
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 60);
+
+/** Add anchor ids to h2/h3 headings and return the table of contents */
+const buildToc = (html: string) => {
+  const headings: { id: string; text: string; level: number }[] = [];
+  const used = new Set<string>();
+
+  const withIds = html.replace(
+    /<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi,
+    (_match, level: string, attrs: string, inner: string) => {
+      const text = stripHtml(inner).trim();
+      if (!text) return _match;
+      let id = slugify(text) || `section-${headings.length + 1}`;
+      let n = 2;
+      while (used.has(id)) id = `${id}-${n++}`;
+      used.add(id);
+      headings.push({ id, text, level: Number(level) });
+      return `<h${level}${attrs} id="${id}">${inner}</h${level}>`;
+    }
+  );
+
+  return { html: withIds, headings };
+};
+
 const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<any>(null);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
+  const [siblings, setSiblings] = useState<{ prev: any | null; next: any | null }>({ prev: null, next: null });
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+
 
   useEffect(() => {
     if (id) {
