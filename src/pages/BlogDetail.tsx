@@ -525,7 +525,18 @@ const BlogDetail = () => {
           </article>
         </div>
       </main>
+      {progress > 15 && (
+        <button
+          type="button"
+          aria-label="Back to top"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 z-50 h-11 w-11 rounded-full bg-primary text-primary-foreground shadow-glow flex items-center justify-center transition-smooth hover:scale-105"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
+      )}
       <Footer />
+
     </div>
   );
 };
