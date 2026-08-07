@@ -149,64 +149,84 @@ const BlogEditor = () => {
   };
 
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const savePost = async (status: 'draft' | 'published') => {
+    if (!formData.title.trim() || !formData.category) {
+      toast({
+        variant: 'destructive',
+        title: 'Missing details',
+        description: 'A title and category are required before saving.',
+      });
+      return;
+    }
+
     setLoading(true);
 
+    const payload = {
+      title: formData.title,
+      excerpt: formData.excerpt,
+      content: formData.content,
+      category: formData.category,
+      author: formData.author,
+      image_url: formData.image_url,
+      status,
+      is_featured: formData.is_featured,
+      published_at: new Date(formData.published_at).toISOString(),
+    };
+
     try {
+      let postId = id;
+
       if (id) {
-        const { error } = await supabase
-          .from('blog_posts')
-          .update(formData)
-          .eq('id', id);
-
+        const { error } = await supabase.from('blog_posts').update(payload).eq('id', id);
         if (error) throw error;
-
-        await logActivity({
-          entityType: 'blog_post',
-          actionType: 'updated',
-          entityId: id,
-          entityName: formData.title,
-          details: { category: formData.category, author: formData.author },
-        });
-
-        toast({ title: 'Success!', description: 'Blog post updated successfully.' });
       } else {
-        const { data, error } = await supabase.from('blog_posts').insert([
-          {
-            ...formData,
-            published_at: new Date().toISOString(),
-          },
-        ]).select().single();
-
+        const { data, error } = await supabase.from('blog_posts').insert([payload]).select().single();
         if (error) throw error;
-
-        await logActivity({
-          entityType: 'blog_post',
-          actionType: 'created',
-          entityId: data?.id,
-          entityName: formData.title,
-          details: { category: formData.category, author: formData.author },
-        });
-
-        toast({ title: 'Success!', description: 'Blog post published successfully.' });
+        postId = data?.id;
       }
 
-      navigate('/blog');
+      await logActivity({
+        entityType: 'blog_post',
+        actionType: id ? 'updated' : 'created',
+        entityId: postId,
+        entityName: formData.title,
+        details: { category: formData.category, author: formData.author, status },
+      });
+
+      localStorage.removeItem(DRAFT_KEY(id));
+
+      const scheduled = status === 'published' && new Date(payload.published_at) > new Date();
+      toast({
+        title: 'Saved',
+        description:
+          status === 'draft'
+            ? 'Saved as a draft — only blog managers can see it.'
+            : scheduled
+              ? `Scheduled to go live on ${new Date(payload.published_at).toLocaleString()}.`
+              : 'Blog post is live.',
+      });
+
+      navigate(status === 'draft' ? '/admin' : postId ? `/blog/${postId}` : '/blog');
     } catch (error: any) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.message || `Failed to ${id ? 'update' : 'publish'} blog post.`,
+        description: error.message || 'Failed to save blog post.',
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    savePost('published');
+  };
+
+  const handleChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
 
   const applyTemplate = (html: string) => {
     const hasContent = formData.content.replace(/<[^>]*>/g, '').trim().length > 0;
