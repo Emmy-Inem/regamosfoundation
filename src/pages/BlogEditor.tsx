@@ -423,21 +423,75 @@ const BlogEditor = () => {
               </CardContent>
             </Card>
 
-            <div className="flex flex-col sm:flex-row gap-4 pb-4">
-              <Button type="submit" variant="cta" className="flex-1" disabled={loading}>
+            {/* Step 4 — Publishing */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">4. Publishing</CardTitle>
+                <CardDescription>
+                  Choose when this post goes live. Drafts and future dates stay hidden from visitors.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="published_at">Publish date &amp; time</Label>
+                  <Input
+                    id="published_at"
+                    type="datetime-local"
+                    value={formData.published_at}
+                    onChange={(e) => handleChange('published_at', e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Set a future date to schedule the post.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3 rounded-lg border border-border p-4">
+                  <input
+                    id="is_featured"
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 accent-[hsl(var(--primary))]"
+                    checked={formData.is_featured}
+                    onChange={(e) => handleChange('is_featured', e.target.checked)}
+                  />
+                  <div>
+                    <Label htmlFor="is_featured" className="cursor-pointer">Pin to the top of the blog</Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Featured posts appear first in the blog listing.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex flex-col sm:flex-row items-center gap-4 pb-4">
+              <Button type="submit" variant="cta" className="flex-1 w-full" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    {id ? 'Updating...' : 'Publishing...'}
+                    Saving...
                   </>
                 ) : (
-                  id ? 'Update Blog Post' : 'Publish Blog Post'
+                  new Date(formData.published_at) > new Date() ? 'Schedule Post' : id ? 'Update & Publish' : 'Publish Blog Post'
                 )}
               </Button>
-              <Button type="button" variant="outline" onClick={() => navigate('/admin')}>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full sm:w-auto"
+                disabled={loading}
+                onClick={() => savePost('draft')}
+              >
+                Save as Draft
+              </Button>
+              <Button type="button" variant="ghost" className="w-full sm:w-auto" onClick={() => navigate('/admin')}>
                 Cancel
               </Button>
+              {savedAt && (
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  Autosaved {savedAt.toLocaleTimeString()}
+                </span>
+              )}
             </div>
+
           </form>
         </div>
       </main>
