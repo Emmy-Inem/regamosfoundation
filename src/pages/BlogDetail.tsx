@@ -196,6 +196,38 @@ const BlogDetail = () => {
     toast.success('Link copied to clipboard!');
   };
 
+  const { html: contentHtml, headings } = useMemo(
+    () => buildToc(processContent(post?.content || '', post?.image_url)),
+    [post?.content, post?.image_url]
+  );
+
+  const articleSchema = useMemo(() => {
+    if (!post) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: stripHtml(post.excerpt || '').substring(0, 200),
+      image: post.image_url ? [post.image_url] : undefined,
+      datePublished: post.published_at || post.created_at,
+      dateModified: post.updated_at || post.published_at || post.created_at,
+      articleSection: post.category,
+      author: { '@type': 'Organization', name: post.author || 'Regamos Foundation' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Regamos Foundation',
+        url: 'https://www.regamosfoundation.com.ng',
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': currentUrl },
+      wordCount: stripHtml(post.content || '').trim().split(/\s+/).filter(Boolean).length,
+    };
+  }, [post, currentUrl]);
+
+  const scrollToHeading = (headingId: string) => {
+    document.getElementById(headingId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
