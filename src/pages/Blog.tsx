@@ -125,7 +125,8 @@ const Blog = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('id, title, excerpt, image_url, category, author, published_at, view_count, created_at')
+        .select('id, title, excerpt, image_url, category, author, published_at, view_count, created_at, is_featured')
+        .order('is_featured', { ascending: false })
         .order('published_at', { ascending: false });
       if (error) throw error;
       return data || [];
