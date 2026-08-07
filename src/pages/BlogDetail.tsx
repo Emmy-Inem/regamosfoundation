@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, User, ArrowLeft, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye, Clock } from 'lucide-react';
+import { Calendar, User, ArrowLeft, ArrowRight, Facebook, Twitter, MessageCircle, Link2, Linkedin, Eye, Clock, ArrowUp, ListTree } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const stripHtml = (html: string) => html?.replace(/<[^>]*>/g, '') || '';
+
 
 /** Estimated reading time in minutes (225 wpm) */
 const readingTime = (html: string) => {
