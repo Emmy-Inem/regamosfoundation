@@ -253,7 +253,14 @@ const BlogDetail = () => {
         type="article"
         author={post.author || 'Regamos Foundation'}
       />
+      {articleSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+      )}
       <Navigation />
+
       {/* Reading progress */}
       <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
         <div
