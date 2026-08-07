@@ -384,11 +384,39 @@ const BlogDetail = () => {
             </header>
 
 
+            {/* Table of contents */}
+            {headings.length >= 3 && (
+              <nav
+                aria-label="Table of contents"
+                className="rounded-xl border border-border bg-muted/40 p-5 sm:p-6"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <ListTree className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-semibold uppercase tracking-wide">In this article</span>
+                </div>
+                <ol className="space-y-1.5">
+                  {headings.map((h, i) => (
+                    <li key={h.id} className={h.level === 3 ? 'pl-5' : ''}>
+                      <button
+                        type="button"
+                        onClick={() => scrollToHeading(h.id)}
+                        className="text-left text-sm text-muted-foreground hover:text-primary transition-smooth"
+                      >
+                        <span className="text-primary font-semibold mr-2">{i + 1}.</span>
+                        {h.text}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
             {/* Content */}
             <div
               className="blog-content max-w-none"
-              dangerouslySetInnerHTML={{ __html: processContent(post.content, post.image_url) }}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
+
 
             {/* Closing CTA */}
             <div className="rounded-xl border border-border bg-muted/40 p-6 sm:p-8 text-center space-y-3">
