@@ -430,6 +430,40 @@ const BlogDetail = () => {
               </div>
             </div>
 
+            {/* Previous / next post */}
+            {(siblings.prev || siblings.next) && (
+              <nav className="grid sm:grid-cols-2 gap-4" aria-label="More articles">
+                {siblings.prev ? (
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/blog/${siblings.prev.id}`)}
+                    className="group text-left rounded-xl border border-border p-4 transition-smooth hover:border-primary hover:shadow-soft"
+                  >
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                      <ArrowLeft className="h-3 w-3" /> Previous article
+                    </span>
+                    <span className="block font-semibold text-sm line-clamp-2 group-hover:text-primary">
+                      {siblings.prev.title}
+                    </span>
+                  </button>
+                ) : <span className="hidden sm:block" />}
+                {siblings.next && (
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/blog/${siblings.next.id}`)}
+                    className="group text-left sm:text-right rounded-xl border border-border p-4 transition-smooth hover:border-primary hover:shadow-soft"
+                  >
+                    <span className="flex sm:justify-end items-center gap-1 text-xs text-muted-foreground mb-1">
+                      Next article <ArrowRight className="h-3 w-3" />
+                    </span>
+                    <span className="block font-semibold text-sm line-clamp-2 group-hover:text-primary">
+                      {siblings.next.title}
+                    </span>
+                  </button>
+                )}
+              </nav>
+            )}
+
 
             {/* Related Posts Section */}
             {relatedPosts.length > 0 && (
