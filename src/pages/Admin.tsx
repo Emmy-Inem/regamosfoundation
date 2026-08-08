@@ -73,11 +73,15 @@ import UserRolesManagement from '@/components/admin/UserRolesManagement';
 import ActivityLogViewer from '@/components/admin/ActivityLogViewer';
 import MediaLibrary from '@/components/admin/MediaLibrary';
 import SiteImagesManagement from '@/components/admin/SiteImagesManagement';
+import VolunteerApplicationsManagement from '@/components/admin/VolunteerApplicationsManagement';
+import PartnershipEnquiriesManagement from '@/components/admin/PartnershipEnquiriesManagement';
 
 type ViewKey =
   | 'analytics'
   | 'donations'
   | 'members'
+  | 'volunteers'
+  | 'partners'
   | 'contacts'
   | 'newsletter'
   | 'blog'
@@ -116,6 +120,8 @@ const GROUPS: Group[] = [
     icon: Users,
     items: [
       { key: 'members', label: 'Members', icon: Users },
+      { key: 'volunteers', label: 'Volunteer Applications', icon: HeartHandshake },
+      { key: 'partners', label: 'Partnership Enquiries', icon: Users },
       { key: 'contacts', label: 'Contact Messages', icon: MessageSquare },
       { key: 'newsletter', label: 'Newsletter Subscribers', icon: Mail },
     ],
