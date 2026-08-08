@@ -20,6 +20,8 @@ const Volunteer = () => {
     fullName: "",
     email: "",
     phone: "",
+    areasOfInterest: "",
+    availability: "",
     skills: "",
     motivation: "",
   });
@@ -28,17 +30,18 @@ const Volunteer = () => {
     e.preventDefault();
     if (isSubmitting) return;
     setIsSubmitting(true);
-    
+
     try {
       const { error } = await supabase
-        .from('members')
+        .from('volunteer_applications')
         .insert([{
           full_name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
+          areas_of_interest: formData.areasOfInterest,
+          availability: formData.availability,
           skills: formData.skills,
           motivation: formData.motivation,
-          membership_type: 'volunteer',
         }]);
 
       if (error) throw error;
@@ -48,6 +51,8 @@ const Volunteer = () => {
         fullName: "",
         email: "",
         phone: "",
+        areasOfInterest: "",
+        availability: "",
         skills: "",
         motivation: "",
       });
