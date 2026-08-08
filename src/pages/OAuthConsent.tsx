@@ -1,3 +1,4 @@
+import SEOHead from '@/components/SEOHead';
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -83,6 +84,12 @@ const OAuthConsent = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead
+        title="Authorise App Access"
+        description="Review and approve an application requesting access to your Regamos Foundation account."
+        url="https://www.regamosfoundation.com.ng/.lovable/oauth/consent"
+        noIndex
+      />
       <Navigation />
       <main className="flex-1 flex items-center justify-center py-24 px-4">
         <Card className="w-full max-w-md">

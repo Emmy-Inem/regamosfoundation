@@ -1,3 +1,4 @@
+import SEOHead from '@/components/SEOHead';
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -127,6 +128,12 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead
+        title="Sign In or Create an Account"
+        description="Sign in to your Regamos Foundation account to manage your membership and stay connected with our programmes."
+        url="https://www.regamosfoundation.com.ng/auth"
+        noIndex
+      />
       <Navigation />
       <main className="flex-1 flex items-center justify-center py-24 sm:py-20 px-4">
         <Card className="w-full max-w-md">

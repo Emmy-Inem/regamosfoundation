@@ -385,6 +385,48 @@ export type Database = {
         }
         Relationships: []
       }
+      partnership_enquiries: {
+        Row: {
+          contact_person: string
+          created_at: string
+          email: string
+          id: string
+          internal_notes: string | null
+          message: string
+          organization_name: string
+          partnership_type: string | null
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          contact_person: string
+          created_at?: string
+          email: string
+          id?: string
+          internal_notes?: string | null
+          message: string
+          organization_name: string
+          partnership_type?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          contact_person?: string
+          created_at?: string
+          email?: string
+          id?: string
+          internal_notes?: string | null
+          message?: string
+          organization_name?: string
+          partnership_type?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -619,6 +661,51 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      volunteer_applications: {
+        Row: {
+          areas_of_interest: string | null
+          availability: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          internal_notes: string | null
+          motivation: string | null
+          phone: string | null
+          skills: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          areas_of_interest?: string | null
+          availability?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          internal_notes?: string | null
+          motivation?: string | null
+          phone?: string | null
+          skills?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          areas_of_interest?: string | null
+          availability?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          internal_notes?: string | null
+          motivation?: string | null
+          phone?: string | null
+          skills?: string | null
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }

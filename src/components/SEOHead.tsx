@@ -11,6 +11,7 @@ interface SEOHeadProps {
   publishedTime?: string;
   modifiedTime?: string;
   section?: string;
+  noIndex?: boolean;
 }
 
 const SEOHead = ({
@@ -24,6 +25,7 @@ const SEOHead = ({
   publishedTime,
   modifiedTime,
   section,
+  noIndex = false,
 }: SEOHeadProps) => {
   const fullTitle = title.includes("Regamos Foundation") ? title : `${title} | Regamos Foundation`;
   const siteName = "Regamos Foundation";
@@ -158,7 +160,14 @@ const SEOHead = ({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content={author} />
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta
+        name="robots"
+        content={
+          noIndex
+            ? "noindex, nofollow"
+            : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        }
+      />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="3 days" />
       <meta name="distribution" content="global" />

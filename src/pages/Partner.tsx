@@ -32,12 +32,14 @@ const Partner = () => {
     
     try {
       const { error } = await supabase
-        .from('contact_submissions')
+        .from('partnership_enquiries')
         .insert([{
-          name: `${formData.organizationName} (${formData.contactName})`,
+          organization_name: formData.organizationName,
+          contact_person: formData.contactName,
           email: formData.email,
           phone: formData.phone,
-          message: `Partnership Type: ${formData.partnershipType}\n\n${formData.message}`,
+          partnership_type: formData.partnershipType,
+          message: formData.message,
         }]);
 
       if (error) throw error;

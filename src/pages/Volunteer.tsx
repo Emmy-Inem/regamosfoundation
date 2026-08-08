@@ -20,6 +20,8 @@ const Volunteer = () => {
     fullName: "",
     email: "",
     phone: "",
+    areasOfInterest: "",
+    availability: "",
     skills: "",
     motivation: "",
   });
@@ -28,17 +30,18 @@ const Volunteer = () => {
     e.preventDefault();
     if (isSubmitting) return;
     setIsSubmitting(true);
-    
+
     try {
       const { error } = await supabase
-        .from('members')
+        .from('volunteer_applications')
         .insert([{
           full_name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
+          areas_of_interest: formData.areasOfInterest,
+          availability: formData.availability,
           skills: formData.skills,
           motivation: formData.motivation,
-          membership_type: 'volunteer',
         }]);
 
       if (error) throw error;
@@ -48,6 +51,8 @@ const Volunteer = () => {
         fullName: "",
         email: "",
         phone: "",
+        areasOfInterest: "",
+        availability: "",
         skills: "",
         motivation: "",
       });
@@ -176,6 +181,28 @@ const Volunteer = () => {
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
                           required 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="areasOfInterest" className="text-sm font-medium">
+                          Areas of Interest
+                        </label>
+                        <Input
+                          id="areasOfInterest"
+                          placeholder="e.g., Education, Outreach, Media, Events"
+                          value={formData.areasOfInterest}
+                          onChange={(e) => setFormData({ ...formData, areasOfInterest: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="availability" className="text-sm font-medium">
+                          Availability
+                        </label>
+                        <Input
+                          id="availability"
+                          placeholder="e.g., Weekends, 5 hours a week"
+                          value={formData.availability}
+                          onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
                         />
                       </div>
                       <div className="space-y-2">

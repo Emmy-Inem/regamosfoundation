@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import SEOHead from '@/components/SEOHead';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -72,11 +73,15 @@ import UserRolesManagement from '@/components/admin/UserRolesManagement';
 import ActivityLogViewer from '@/components/admin/ActivityLogViewer';
 import MediaLibrary from '@/components/admin/MediaLibrary';
 import SiteImagesManagement from '@/components/admin/SiteImagesManagement';
+import VolunteerApplicationsManagement from '@/components/admin/VolunteerApplicationsManagement';
+import PartnershipEnquiriesManagement from '@/components/admin/PartnershipEnquiriesManagement';
 
 type ViewKey =
   | 'analytics'
   | 'donations'
   | 'members'
+  | 'volunteers'
+  | 'partners'
   | 'contacts'
   | 'newsletter'
   | 'blog'
@@ -115,6 +120,8 @@ const GROUPS: Group[] = [
     icon: Users,
     items: [
       { key: 'members', label: 'Members', icon: Users },
+      { key: 'volunteers', label: 'Volunteer Applications', icon: HeartHandshake },
+      { key: 'partners', label: 'Partnership Enquiries', icon: Users },
       { key: 'contacts', label: 'Contact Messages', icon: MessageSquare },
       { key: 'newsletter', label: 'Newsletter Subscribers', icon: Mail },
     ],
@@ -175,6 +182,8 @@ const TITLES: Record<ViewKey, string> = {
   analytics: 'Analytics Dashboard',
   donations: 'Donations',
   members: 'Members',
+  volunteers: 'Volunteer Applications',
+  partners: 'Partnership Enquiries',
   contacts: 'Contact Messages',
   newsletter: 'Newsletter Subscribers',
   blog: 'Blog Posts',
@@ -256,6 +265,8 @@ const Admin = () => {
       case 'analytics': return <AnalyticsDashboard />;
       case 'donations': return <DonationsManagement />;
       case 'members': return <MembersManagement />;
+      case 'volunteers': return <VolunteerApplicationsManagement />;
+      case 'partners': return <PartnershipEnquiriesManagement />;
       case 'contacts': return <ContactsManagement />;
       case 'newsletter': return <NewsletterManagement />;
       case 'blog': return <BlogManagement />;
@@ -279,6 +290,13 @@ const Admin = () => {
 
 
   return (
+    <>
+    <SEOHead
+      title="Admin Console"
+      description="Private administration console for Regamos Foundation staff."
+      url="https://www.regamosfoundation.com.ng/admin"
+      noIndex
+    />
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <Sidebar collapsible="icon" className="border-r">
@@ -361,6 +379,7 @@ const Admin = () => {
         </main>
       </div>
     </SidebarProvider>
+    </>
   );
 };
 
