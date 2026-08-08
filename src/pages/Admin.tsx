@@ -182,6 +182,8 @@ const TITLES: Record<ViewKey, string> = {
   analytics: 'Analytics Dashboard',
   donations: 'Donations',
   members: 'Members',
+  volunteers: 'Volunteer Applications',
+  partners: 'Partnership Enquiries',
   contacts: 'Contact Messages',
   newsletter: 'Newsletter Subscribers',
   blog: 'Blog Posts',
