@@ -184,6 +184,28 @@ const Volunteer = () => {
                         />
                       </div>
                       <div className="space-y-2">
+                        <label htmlFor="areasOfInterest" className="text-sm font-medium">
+                          Areas of Interest
+                        </label>
+                        <Input
+                          id="areasOfInterest"
+                          placeholder="e.g., Education, Outreach, Media, Events"
+                          value={formData.areasOfInterest}
+                          onChange={(e) => setFormData({ ...formData, areasOfInterest: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="availability" className="text-sm font-medium">
+                          Availability
+                        </label>
+                        <Input
+                          id="availability"
+                          placeholder="e.g., Weekends, 5 hours a week"
+                          value={formData.availability}
+                          onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
                         <label htmlFor="skills" className="text-sm font-medium">
                           Skills & Experience
                         </label>
