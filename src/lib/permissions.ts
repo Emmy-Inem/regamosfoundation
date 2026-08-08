@@ -14,6 +14,8 @@ export type Permission =
   | 'analytics'
   | 'donations'
   | 'members'
+  | 'volunteers'
+  | 'partners'
   | 'contacts'
   | 'newsletter'
   | 'blog'
@@ -118,13 +120,15 @@ const ROLE_PERMISSIONS: Partial<Record<AppRole, Permission[]>> = {
     'testimonials',
   ],
   program_manager: ['programs', 'upcoming', 'registrations', 'achievements', 'media'],
-  communications_officer: ['newsletter', 'email-campaigns', 'contacts', 'blog', 'media'],
+  communications_officer: ['newsletter', 'email-campaigns', 'contacts', 'partners', 'blog', 'media'],
 };
 
 export const ALL_PERMISSIONS: Permission[] = [
   'analytics',
   'donations',
   'members',
+  'volunteers',
+  'partners',
   'contacts',
   'newsletter',
   'blog',
