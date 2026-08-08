@@ -265,6 +265,8 @@ const Admin = () => {
       case 'analytics': return <AnalyticsDashboard />;
       case 'donations': return <DonationsManagement />;
       case 'members': return <MembersManagement />;
+      case 'volunteers': return <VolunteerApplicationsManagement />;
+      case 'partners': return <PartnershipEnquiriesManagement />;
       case 'contacts': return <ContactsManagement />;
       case 'newsletter': return <NewsletterManagement />;
       case 'blog': return <BlogManagement />;
