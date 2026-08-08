@@ -279,6 +279,13 @@ const Admin = () => {
 
 
   return (
+    <>
+    <SEOHead
+      title="Admin Console"
+      description="Private administration console for Regamos Foundation staff."
+      url="https://www.regamosfoundation.com.ng/admin"
+      noIndex
+    />
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <Sidebar collapsible="icon" className="border-r">

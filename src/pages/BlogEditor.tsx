@@ -249,6 +249,12 @@ const BlogEditor = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead
+        title="Blog Editor"
+        description="Private editor for creating and publishing Regamos Foundation blog posts."
+        url="https://www.regamosfoundation.com.ng/blog-editor"
+        noIndex
+      />
       <Navigation />
       <main className="flex-1 py-20 px-4">
         <div className="container mx-auto max-w-5xl">
