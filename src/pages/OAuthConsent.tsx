@@ -1,3 +1,4 @@
+import SEOHead from '@/components/SEOHead';
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";

@@ -368,6 +368,7 @@ const Admin = () => {
         </main>
       </div>
     </SidebarProvider>
+    </>
   );
 };
 
