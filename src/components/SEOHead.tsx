@@ -11,6 +11,7 @@ interface SEOHeadProps {
   publishedTime?: string;
   modifiedTime?: string;
   section?: string;
+  noIndex?: boolean;
 }
 
 const SEOHead = ({
@@ -24,6 +25,7 @@ const SEOHead = ({
   publishedTime,
   modifiedTime,
   section,
+  noIndex = false,
 }: SEOHeadProps) => {
   const fullTitle = title.includes("Regamos Foundation") ? title : `${title} | Regamos Foundation`;
   const siteName = "Regamos Foundation";
