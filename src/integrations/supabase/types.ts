@@ -532,6 +532,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean
+          member_type: string
           role: string
           social_links: Json | null
           updated_at: string
@@ -544,6 +545,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          member_type?: string
           role: string
           social_links?: Json | null
           updated_at?: string
@@ -556,6 +558,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          member_type?: string
           role?: string
           social_links?: Json | null
           updated_at?: string
