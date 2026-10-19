@@ -318,6 +318,7 @@ const About = () => {
 
         {/* Team Section */}
         <TeamSection />
+        <TeamSection memberType="advisory" />
       </main>
       <Footer />
     </div>

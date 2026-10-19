@@ -95,6 +95,7 @@ type ViewKey =
   | 'stats'
   | 'achievements'
   | 'team'
+  | 'advisory'
   | 'testimonials'
   | 'email-campaigns'
   | 'users'
@@ -159,6 +160,7 @@ const GROUPS: Group[] = [
     icon: UserCog,
     items: [
       { key: 'team', label: 'Team Members', icon: UserCog },
+      { key: 'advisory', label: 'Advisory Board', icon: Users },
       { key: 'testimonials', label: 'Testimonials', icon: Award },
     ],
   },
@@ -197,6 +199,7 @@ const TITLES: Record<ViewKey, string> = {
   stats: 'Impact Stats',
   achievements: 'Achievements',
   team: 'Team Members',
+  advisory: 'Advisory Board',
   testimonials: 'Testimonials',
   'email-campaigns': 'Email Campaigns',
   users: 'Users & Roles',
@@ -280,6 +283,7 @@ const Admin = () => {
       case 'stats': return <ImpactStatsManagement />;
       case 'achievements': return <AchievementsManagement />;
       case 'team': return <TeamMembersManagement />;
+      case 'advisory': return <TeamMembersManagement memberType="advisory" />;
       case 'testimonials': return <TestimonialsManagement />;
       case 'email-campaigns': return <EmailCampaignManagement />;
       case 'users': return <UserRolesManagement isSuperAdmin={isSuperAdmin} isAdmin={isAdmin} />;
