@@ -22,7 +22,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { useActivityLog } from "@/hooks/useActivityLog";
 
-const TeamMembersManagement = () => {
+interface TeamMembersManagementProps {
+  memberType?: "team" | "advisory";
+}
+
+const TeamMembersManagement = ({ memberType = "team" }: TeamMembersManagementProps) => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -39,17 +43,19 @@ const TeamMembersManagement = () => {
     },
     display_order: 0,
     is_active: true,
+    member_type: memberType,
   });
 
   const queryClient = useQueryClient();
   const { logActivity } = useActivityLog();
 
   const { data: teamMembers, isLoading } = useQuery({
-    queryKey: ["team-members"],
+    queryKey: ["team-members", memberType],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("team_members")
         .select("*")
+        .eq("member_type", memberType)
         .order("display_order", { ascending: true });
       
       if (error) throw error;
@@ -151,6 +157,7 @@ const TeamMembersManagement = () => {
       },
       display_order: 0,
       is_active: true,
+      member_type: memberType,
     });
     setShowForm(false);
     setEditingId(null);
@@ -170,6 +177,7 @@ const TeamMembersManagement = () => {
       },
       display_order: member.display_order,
       is_active: member.is_active,
+      member_type: memberType,
     });
     setEditingId(member.id);
     setShowForm(true);
@@ -195,10 +203,12 @@ const TeamMembersManagement = () => {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
-        <h2 className="text-xl sm:text-2xl font-bold">Team Members Management</h2>
+        <h2 className="text-xl sm:text-2xl font-bold">
+          {memberType === "advisory" ? "Advisory Board Management" : "Team Members Management"}
+        </h2>
         <Button onClick={() => setShowForm(!showForm)} size="sm" className="w-full sm:w-auto">
           <Plus className="h-4 w-4 mr-2" />
-          {showForm ? "Cancel" : "Add Team Member"}
+          {showForm ? "Cancel" : memberType === "advisory" ? "Add Board Member" : "Add Team Member"}
         </Button>
       </div>
 
@@ -305,7 +315,7 @@ const TeamMembersManagement = () => {
               {(createMutation.isPending || updateMutation.isPending) && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {editingId ? "Update" : "Create"} Team Member
+              {editingId ? "Update" : "Create"} {memberType === "advisory" ? "Board Member" : "Team Member"}
             </Button>
           </form>
         </Card>

@@ -3,13 +3,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Loader2, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 
-const TeamSection = () => {
+interface TeamSectionProps {
+  memberType?: "team" | "advisory";
+}
+
+const TeamSection = ({ memberType = "team" }: TeamSectionProps) => {
   const { data: teamMembers, isLoading } = useQuery({
-    queryKey: ["team-members-public"],
+    queryKey: ["team-members-public", memberType],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("team_members")
         .select("*")
+        .eq("member_type", memberType)
         .eq("is_active", true)
         .order("display_order", { ascending: true });
       
@@ -30,13 +35,19 @@ const TeamSection = () => {
     return null;
   }
 
+  const isAdvisoryBoard = memberType === "advisory";
+
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10 sm:mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">Our Team</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">
+            {isAdvisoryBoard ? "Advisory Board" : "Our Team"}
+          </h2>
           <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-2">
-            Meet the dedicated individuals working to make a difference in our communities
+            {isAdvisoryBoard
+              ? "Meet the leaders and professionals guiding Regamos Foundation’s mission and impact."
+              : "Meet the dedicated individuals working to make a difference in our communities"}
           </p>
         </div>
 
