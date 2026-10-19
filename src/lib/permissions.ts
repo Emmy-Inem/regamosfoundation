@@ -29,6 +29,7 @@ export type Permission =
   | 'stats'
   | 'achievements'
   | 'team'
+  | 'advisory'
   | 'testimonials'
   | 'email-campaigns'
   | 'users'
@@ -117,6 +118,7 @@ const ROLE_PERMISSIONS: Partial<Record<AppRole, Permission[]>> = {
     'stats',
     'achievements',
     'team',
+    'advisory',
     'testimonials',
   ],
   program_manager: ['programs', 'upcoming', 'registrations', 'achievements', 'media'],
@@ -142,6 +144,7 @@ export const ALL_PERMISSIONS: Permission[] = [
   'stats',
   'achievements',
   'team',
+  'advisory',
   'testimonials',
   'email-campaigns',
   'users',
